@@ -36,11 +36,18 @@ button:hover:not(:disabled){filter:brightness(1.06);transform:translateY(-1px)}
 button.secondary{background:#fff;color:var(--ink);border:1px solid var(--line);box-shadow:none}button.ghost{background:transparent;color:var(--pink);box-shadow:none;padding:7px 8px}button.danger{background:var(--red)}button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none;transform:none}
 .setup{background:#fff3cd;border-color:#ffd36b;color:#5e4300;font-weight:800;border:1px solid var(--line);box-shadow:var(--shadow);border-radius:var(--radius);padding:16px;margin:14px 0}
 
-.status-strip{background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);border-radius:18px;padding:12px 16px;margin:14px 0}
+.status-strip{background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);border-radius:16px;padding:10px 14px;margin:12px 0;width:fit-content;max-width:100%}
 .status-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.status-progress{flex:1;min-width:220px;font-weight:800;font-size:14px}
-.status-progress b{font-size:18px;color:var(--pink)}
-.status-progress .progressbar{margin-top:6px;height:8px}
+.status-progress{flex:1;min-width:220px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.status-progress .progress-text{font-size:13px;font-weight:800;color:var(--ink);white-space:nowrap}
+.status-progress .progress-text b{font-size:15px;color:var(--pink)}
+.dot-grid{display:flex;flex-wrap:wrap;gap:6px;max-width:220px}
+.dot-grid .dot{width:14px;height:14px;border-radius:50%;background:var(--pink2);border:1.5px solid var(--line);transition:background .3s ease,border-color .3s ease;flex-shrink:0}
+.dot-grid .dot.filled{background:var(--pink);border-color:var(--pink)}
+.avatar-stack{display:flex;align-items:center;flex-shrink:0}
+.avatar-stack .stack-avatar{width:32px;height:32px;border-radius:50%;background:var(--pink2);border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:950;color:var(--dark);margin-left:-10px;box-shadow:0 2px 5px rgba(194,61,112,.2);flex-shrink:0}
+.avatar-stack .stack-avatar:first-child{margin-left:0}
+.avatar-stack .stack-avatar.stack-more{background:var(--pink);color:#fff;font-size:11px}
 .top-countdown{display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--pink),#ffc7dd);color:#fff;border-radius:999px;padding:8px 16px;font-weight:800;font-size:13px;white-space:nowrap;box-shadow:0 8px 18px color-mix(in srgb,var(--pink) 35%,transparent)}
 .top-countdown b{font-size:16px;color:#fff;font-variant-numeric:tabular-nums}
 .status-announce{margin-top:10px;background:var(--dark);color:#fff;border-radius:12px;padding:9px 12px;font-size:13px;font-weight:700;overflow-wrap:anywhere}
@@ -76,6 +83,7 @@ select option{color:var(--ink);font-size:16px;padding:8px}
   .wrap{padding:14px}
   .cards{grid-template-columns:1fr}
   .dept-grid{columns:1}
+  .status-strip{width:100%}
   .status-row{flex-direction:column;align-items:stretch}
   .status-row button{width:100%}
   .brand h1{font-size:24px}
@@ -101,7 +109,11 @@ select option{color:var(--ink);font-size:16px;padding:8px}
 
   <section class="status-strip">
     <div class="status-row">
-      <div class="status-progress"><b id="joined">0</b>/<span id="totalSlots">17</span> คนลงตำแหน่งแล้ว<div class="progressbar"><span id="progressFill"></span></div></div>
+      <div class="status-progress">
+        <div class="dot-grid" id="dotGrid"></div>
+        <div class="progress-text"><b id="joined">0</b>/<span id="totalSlots">18</span> คนลงตำแหน่งแล้ว</div>
+      </div>
+      <div class="avatar-stack" id="avatarStack"></div>
       <div class="top-countdown" id="topCountdown" style="display:none"><span id="topCountdownLabel"></span><b id="topCountdownText">--:--:--</b></div>
       <button class="secondary muted-btn" onclick="showRules()">ℹ️ วิธีใช้งาน</button>
     </div>
@@ -246,7 +258,10 @@ function renderLiveBanner(){
   const total=ROSTER.length, joined=state.entries.length, pct=total?Math.min(100,Math.round(joined/total*100)):0;
   document.getElementById('joined').textContent=joined;
   document.getElementById('totalSlots').textContent=total;
-  document.getElementById('progressFill').style.width=pct+'%';
+  const dotGrid=document.getElementById('dotGrid');
+  if(dotGrid)dotGrid.innerHTML=Array.from({length:total}).map((_,i)=>`<span class="dot ${i<joined?'filled':''}"></span>`).join('');
+  const avatarStack=document.getElementById('avatarStack');
+  if(avatarStack){const MAX_SHOW=8,shown=state.entries.slice(0,MAX_SHOW),extra=state.entries.length-shown.length;avatarStack.innerHTML=shown.map(e=>`<span class="stack-avatar" title="${e.name} · ${roleName(e.role)}">${initials(e.name)}</span>`).join('')+(extra>0?`<span class="stack-avatar stack-more">+${extra}</span>`:'')}
   const bar=document.getElementById('announceBar'), txt=document.getElementById('announceText');
   if(state.announcement){bar.style.display='block';txt.textContent='📢 '+state.announcement;}else{bar.style.display='none';}
   const tb=document.getElementById('trialBanner');if(tb)tb.style.display=state.trialMode?'block':'none';
