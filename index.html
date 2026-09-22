@@ -50,7 +50,13 @@ button.secondary{background:#fff;color:var(--ink);border:1px solid var(--line);b
 .avatar-stack .stack-avatar.stack-more{background:var(--pink);color:#fff;font-size:11px}
 .top-countdown{display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--pink),#ffc7dd);color:#fff;border-radius:999px;padding:8px 16px;font-weight:800;font-size:13px;white-space:nowrap;box-shadow:0 8px 18px color-mix(in srgb,var(--pink) 35%,transparent)}
 .top-countdown b{font-size:16px;color:#fff;font-variant-numeric:tabular-nums}
-.status-announce{margin-top:10px;background:var(--dark);color:#fff;border-radius:12px;padding:9px 12px;font-size:13px;font-weight:700;overflow-wrap:anywhere}
+.announce-card{background:linear-gradient(135deg,#fff0f6,#ffe0ec);border:1px solid var(--pink);border-left:6px solid var(--pink);border-radius:16px;padding:14px 16px;margin:14px 0;display:flex;gap:12px;align-items:flex-start;box-shadow:var(--shadow);animation:announceIn .3s ease;min-width:0}
+.announce-card .announce-icon{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--dark));color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 4px 10px rgba(194,61,112,.35)}
+.announce-card .announce-body{flex:1;min-width:0}
+.announce-card .announce-label{font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;color:var(--dark);margin-bottom:3px}
+.announce-card .announce-text{font-size:14px;font-weight:700;color:var(--ink);overflow-wrap:anywhere;line-height:1.5;transition:opacity .35s ease,transform .35s ease}
+.announce-card .announce-text.fade-out{opacity:0;transform:translateY(-4px)}
+@keyframes announceIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
 .trial-banner{background:var(--yellow);color:#5e4300;font-weight:900;text-align:center;padding:12px 16px;border-radius:16px;margin:14px 0;box-shadow:var(--shadow);overflow-wrap:anywhere}
 @keyframes finalWarnBlink{0%,100%{opacity:1}50%{opacity:.5}}
 
@@ -100,8 +106,10 @@ select option{color:var(--ink);font-size:16px;padding:8px}
   .modal-card{padding:16px;border-radius:20px}
   .panel{padding:14px}
   .admin-section{padding:12px}
+  .announce-card{padding:12px}
+  .announce-card .announce-icon{width:32px;height:32px;font-size:15px}
 }
-@media print{body{background:#fff}.top,.status-strip,.side,.dept-grid,.trial-banner,.modal:not(#callSheetModal){display:none!important}#callSheetModal{position:static;display:block;background:#fff}.modal-card{box-shadow:none;max-width:100%;border-radius:0}}
+@media print{body{background:#fff}.top,.status-strip,.announce-card,.side,.dept-grid,.trial-banner,.modal:not(#callSheetModal){display:none!important}#callSheetModal{position:static;display:block;background:#fff}.modal-card{box-shadow:none;max-width:100%;border-radius:0}}
 
 </style>
 </head>
@@ -118,6 +126,14 @@ select option{color:var(--ink);font-size:16px;padding:8px}
 
   <div class="setup" id="setupWarn" style="display:none">⚠️ ยังไม่ได้ใส่ Firebase Config ในไฟล์ index.html — ดูคอมเมนต์ "TODO: FIREBASE CONFIG" ในโค้ดด้านล่าง</div>
 
+  <div class="announce-card" id="announceBar" style="display:none">
+    <div class="announce-icon">📢</div>
+    <div class="announce-body">
+      <div class="announce-label">ประกาศ</div>
+      <div class="announce-text" id="announceText"></div>
+    </div>
+  </div>
+
   <section class="status-strip">
     <div class="status-row">
       <div class="status-progress">
@@ -128,7 +144,6 @@ select option{color:var(--ink);font-size:16px;padding:8px}
       <div class="top-countdown" id="topCountdown" style="display:none"><span id="topCountdownLabel"></span><b id="topCountdownText">--:--:--</b></div>
       <button class="secondary muted-btn" onclick="showRules()">ℹ️ วิธีใช้งาน</button>
     </div>
-    <div class="status-announce" id="announceBar" style="display:none"><span id="announceText"></span></div>
   </section>
 
   <div class="trial-banner" id="trialBanner" style="display:none">🧪 ตอนนี้เป็น <b>โหมดทดลอง</b> — ข้อมูลที่ลงตอนนี้จะถูกล้างทิ้งก่อนเปิดใช้งานจริง ลองกดเล่นได้เต็มที่!</div>
@@ -145,7 +160,7 @@ select option{color:var(--ink);font-size:16px;padding:8px}
       <div class="admin-section"><h3>➕ เพิ่มคนลงตำแหน่งโดยตรง</h3><p class="small" style="margin:0 0 10px">สำหรับ Admin ใส่ให้เลย ไม่ต้องรอให้เจ้าตัวมากดเอง</p><div class="field"><label>เลือกชื่อ</label><select id="quickAddName"></select></div><div class="field"><label>เลือกตำแหน่ง</label><select id="quickAddRole"></select></div><div class="admin-actions"><button onclick="adminQuickAdd()">เพิ่มเข้าตำแหน่ง</button></div></div>
       <div class="admin-section"><h3>🔒 ล็อกตำแหน่ง</h3><p class="small" style="margin:0 0 10px">เลือก "ปิดตำแหน่ง (ไม่ระบุคน)" เพื่อปิดตำแหน่งนี้ไม่ให้ใครเลือกได้เลย หรือเลือกชื่อคนถ้าต้องการกั้กไว้ให้คนใดคนหนึ่งโดยเฉพาะ</p><div class="field"><label>เลือกตำแหน่งที่จะล็อก</label><select id="lockRoleSelect"></select></div><div class="field"><label>ล็อกไว้ให้ใคร (ไม่เลือก = ปิดตำแหน่ง)</label><select id="lockNameSelect"></select></div><div class="admin-actions"><button onclick="adminLockRole()">🔒 ล็อก/ปิดตำแหน่ง</button></div><div id="lockedRolesList" class="mini-list" style="margin-top:12px"></div></div>
       <div class="admin-section"><h3>🧪 โหมดทดลอง</h3><p class="small" style="margin:0 0 10px">เปิดไว้ให้ทีมกดลองเลือกตำแหน่งเล่นๆ ก่อนของจริง ระบบจะแท็กข้อมูลที่ลงตอนนี้ไว้ ลบทิ้งทีหลังได้โดยไม่กระทบข้อมูลจริง</p><div class="admin-actions"><button onclick="toggleTrialMode()" id="trialToggleBtn" class="secondary">🧪 เปิด/ปิดโหมดทดลอง</button><button onclick="clearTrialData()" class="danger">🗑️ ล้างข้อมูลทดลองทั้งหมด</button></div></div>
-      <div class="admin-section"><h3>📢 ประกาศหน้าเว็บ</h3><div class="field"><label>ข้อความประกาศ</label><input id="announcementInput" placeholder="เช่น ขอให้ทุกคนลงตำแหน่งก่อน 20:00"></div><div class="admin-actions"><button onclick="saveAnnouncement()">Publish</button><button onclick="clearAnnouncement()" class="secondary">ล้างประกาศ</button></div></div>
+      <div class="admin-section"><h3>📢 ประกาศหน้าเว็บ</h3><p class="small" style="margin:0 0 10px">เพิ่มได้หลายข้อความ ระบบจะเลื่อนสลับแสดงให้อัตโนมัติทุก 4 วินาที</p><div class="field"><label>ข้อความประกาศใหม่</label><input id="announcementInput" placeholder="เช่น ขอให้ทุกคนลงตำแหน่งก่อน 20:00" onkeydown="if(event.key==='Enter')addAnnouncement()"></div><div class="admin-actions"><button onclick="addAnnouncement()">➕ เพิ่มประกาศ</button><button onclick="clearAnnouncement()" class="secondary">ล้างทั้งหมด</button></div><div id="announcementList" class="mini-list" style="margin-top:12px"></div></div>
       <div class="admin-section"><h3>👥 จำนวนช่องตำแหน่ง</h3><div id="roleAdminControls" class="time-grid"></div></div>
       <div class="admin-section"><h3>⏰ ตั้งเวลาเปิด/ปิด</h3><div class="time-grid"><div class="field"><label>เวลาเปิดลงตำแหน่ง</label><input id="scheduleStart" type="datetime-local" oninput="markScheduleDirty()"></div><div class="field"><label>เวลาปิดลงตำแหน่ง</label><input id="scheduleEnd" type="datetime-local" oninput="markScheduleDirty()"></div><div class="admin-actions"><button onclick="saveSchedule()">บันทึกเวลา</button><button onclick="clearSchedule()" class="secondary">ล้างเวลา</button></div></div></div>
       <div class="admin-section"><h3>📄 ข้อมูล Call Sheet</h3><div class="csb-callinfo-grid"><div class="field"><label>วันที่ถ่ายทำ</label><input id="csDate" type="date"></div><div class="field"><label>เวลา Call Time</label><input id="csCallTime" type="time"></div><div class="field"><label>เวลาเลิกกอง (โดยประมาณ)</label><input id="csWrapTime" type="time"></div><div class="field"><label>สถานที่ถ่ายทำ</label><input id="csLocation" placeholder="เช่น อาคาร SPU"></div></div><div class="field"><label>หมายเหตุ / อุปกรณ์ที่ต้องเตรียม</label><input id="csNotes" placeholder="เช่น นำกล้อง ขาตั้งกล้อง ไฟ LED"></div><div class="admin-actions"><button onclick="saveCallSheetInfo()">บันทึก Call Sheet</button></div></div><div class="admin-section"><h3>📋 รายชื่อ / รหัสแก้ไข</h3><div class="table-scroll"><table class="table"><thead><tr><th>ชื่อ</th><th>ตำแหน่ง</th><th></th></tr></thead><tbody id="adminTable"></tbody></table></div></div></div>
@@ -197,6 +212,7 @@ const ADMIN_KEY = "Focus3256"; // เปลี่ยนรหัสผู้ด�
 const roles=[
   {id:'producer',emoji:'🗂️',name:'Producer',max:1},
   {id:'pm',emoji:'📅',name:'Production Manager',max:1},
+  {id:'locman',emoji:'📍',name:'Location Manager',max:1},
   {id:'director',emoji:'🎬',name:'Director',max:1},
   {id:'script',emoji:'📝',name:'Scriptwriter',max:1},
   {id:'runner',emoji:'📋',name:'Assistant Director 1',max:1},
@@ -216,7 +232,7 @@ const roles=[
 ];
 // จัดกลุ่มตำแหน่งเป็นหมวดหมู่แผนก สำหรับแสดงผลเป็นส่วนๆ
 const DEPARTMENTS=[
-  {name:'กำกับ / โปรดักชั่น',ids:['producer','pm','director','script','runner','ad2']},
+  {name:'กำกับ / โปรดักชั่น',ids:['producer','pm','locman','director','script','runner','ad2']},
   {name:'ฝ่ายกล้อง',ids:['dop','camoperator','focuspuller','camassist']},
   {name:'ไฟ / ไฟฟ้า',ids:['gaffer','bestboy']},
   {name:'เสียง',ids:['sound']},
@@ -252,8 +268,9 @@ function lockedStudentId(roleId){const v=state.lockedRoles?.[roleId];return v&&v
 function isRoleClosed(roleId){return state.lockedRoles?.[roleId]==='*'}
 function isRoleLocked(roleId){return !!state.lockedRoles?.[roleId]}
 function lockedName(roleId){const sid=lockedStudentId(roleId);return sid?(ROSTER.find(p=>p.id===sid)?.name||''):''}
+function lockedRoleForStudent(studentId){if(!studentId)return null;const entry=Object.entries(state.lockedRoles||{}).find(([,v])=>v===studentId);return entry?entry[0]:null}
 let db=null,isAdmin=false,lastCode='',selectedRoleId='';
-let state={open:true,scheduleStart:'',scheduleEnd:'',announcement:'',roleCaps:{},lockedRoles:{},entries:[],callSheet:{},trialMode:false};
+let state={open:true,scheduleStart:'',scheduleEnd:'',announcements:[],roleCaps:{},lockedRoles:{},entries:[],callSheet:{},trialMode:false};
 restoreAdminSession();
 const entryCol=()=>collection(db,'cmm21167','settings','entries');
 const entryDoc=(id)=>doc(db,'cmm21167','settings','entries',id);
@@ -262,7 +279,7 @@ const isConfigured=()=>!firebaseConfig.apiKey.includes('PASTE_')&&!firebaseConfi
 if(!isConfigured()){document.getElementById('setupWarn').style.display='block'}else{const app=initializeApp(firebaseConfig);db=getFirestore(app);initOnline();}
 
 async function initOnline(){
-  onSnapshot(settingsDoc(),snap=>{const data=snap.exists()?snap.data():{};state.open=data.open!==false;const oldStart=state.scheduleStart||'',oldEnd=state.scheduleEnd||'';state.scheduleStart=data.scheduleStart||'';state.scheduleEnd=data.scheduleEnd||'';state.announcement=data.announcement||'';state.roleCaps=data.roleCaps||{};state.lockedRoles=data.lockedRoles||{};state.callSheet=data.callSheet||{};state.trialMode=!!data.trialMode;syncScheduleInputs(oldStart!==state.scheduleStart||oldEnd!==state.scheduleEnd);syncAnnouncementInput();syncCallSheetInputs();render();});
+  onSnapshot(settingsDoc(),snap=>{const data=snap.exists()?snap.data():{};state.open=data.open!==false;const oldStart=state.scheduleStart||'',oldEnd=state.scheduleEnd||'';state.scheduleStart=data.scheduleStart||'';state.scheduleEnd=data.scheduleEnd||'';state.announcements=Array.isArray(data.announcements)?data.announcements.filter(Boolean):(data.announcement?[data.announcement]:[]);state.roleCaps=data.roleCaps||{};state.lockedRoles=data.lockedRoles||{};state.callSheet=data.callSheet||{};state.trialMode=!!data.trialMode;syncScheduleInputs(oldStart!==state.scheduleStart||oldEnd!==state.scheduleEnd);syncCallSheetInputs();render();});
   onSnapshot(entryCol(),snap=>{state.entries=snap.docs.map(d=>({id:d.id,...d.data()})).filter(e=>!e.removed);render();});
 }
 function norm(s){return(s||'').trim().toLowerCase()}function roleName(id){return roles.find(r=>r.id===id)?.name||id}function roleMax(id){const r=roles.find(x=>x.id===id);return Math.max(0,Number(state.roleCaps?.[id]??r.max))}function roleFree(id){return roleMax(id)-state.entries.filter(e=>e.role===id).length}
@@ -281,9 +298,28 @@ function renderLiveBanner(){
   if(dotGrid)dotGrid.innerHTML=Array.from({length:total}).map((_,i)=>`<span class="dot ${i<joined?'filled':''}"></span>`).join('');
   const avatarStack=document.getElementById('avatarStack');
   if(avatarStack){const MAX_SHOW=8,shown=state.entries.slice(0,MAX_SHOW),extra=state.entries.length-shown.length;avatarStack.innerHTML=shown.map(e=>`<span class="stack-avatar" title="${e.name} · ${roleName(e.role)}">${initials(e.name)}</span>`).join('')+(extra>0?`<span class="stack-avatar stack-more">+${extra}</span>`:'')}
-  const bar=document.getElementById('announceBar'), txt=document.getElementById('announceText');
-  if(state.announcement){bar.style.display='block';txt.textContent='📢 '+state.announcement;}else{bar.style.display='none';}
+  renderAnnounceCard();
   const tb=document.getElementById('trialBanner');if(tb)tb.style.display=state.trialMode?'block':'none';
+}
+let annIndex=0,annTimer=null,annLastKey='';
+function renderAnnounceCard(){
+  const bar=document.getElementById('announceBar'),txt=document.getElementById('announceText');
+  if(!bar||!txt)return;
+  const anns=(state.announcements||[]).filter(Boolean);
+  if(!anns.length){bar.style.display='none';if(annTimer){clearInterval(annTimer);annTimer=null}annIndex=0;annLastKey='';return}
+  bar.style.display='flex';
+  const key=anns.join('|');
+  if(key!==annLastKey){annLastKey=key;annIndex=0;txt.textContent=anns[0];txt.classList.remove('fade-out')}
+  if(anns.length>1){
+    if(!annTimer){
+      annTimer=setInterval(()=>{
+        const cur=(state.announcements||[]).filter(Boolean);
+        if(cur.length<=1){clearInterval(annTimer);annTimer=null;return}
+        txt.classList.add('fade-out');
+        setTimeout(()=>{annIndex=(annIndex+1)%cur.length;txt.textContent=cur[annIndex];txt.classList.remove('fade-out')},350);
+      },4000);
+    }
+  } else if(annTimer){clearInterval(annTimer);annTimer=null}
 }
 function renderCards(){
   const cardHTML=r=>{
@@ -316,6 +352,8 @@ function renderActivity(){const el=document.getElementById('activityFeed'),rows=
 function renderAdmin(){const roleCtl=document.getElementById('roleAdminControls');if(roleCtl)roleCtl.innerHTML=roles.map(r=>{const max=roleMax(r.id),used=state.entries.filter(e=>e.role===r.id).length;return`<div class="slot"><div><div class="name">${r.emoji} ${r.name}</div><div class="small">ใช้แล้ว ${used}/${max}</div></div><div class="admin-actions"><button class="secondary" onclick="changeRoleCap('${r.id}',-1)" ${max<=used?'disabled':''}>-</button><button class="secondary" onclick="changeRoleCap('${r.id}',1)">+</button></div></div>`}).join('');
   document.getElementById('adminTable').innerHTML=state.entries.map(e=>`<tr><td>${e.trial?'🧪 ':''}${e.name}<br><span class="small">รหัส: ${e.code}</span></td><td>${roleName(e.role)}</td><td><button class="ghost" onclick="openAdminEdit('${e.id}')">แก้ไข</button><button class="ghost" onclick="copyText('${e.code}')">Copy</button><button class="ghost" onclick="adminDelete('${e.id}')">ลบ</button></td></tr>`).join('')||'<tr><td colspan="3" class="small">ยังไม่มีข้อมูล</td></tr>';
   const trialBtn=document.getElementById('trialToggleBtn');if(trialBtn)trialBtn.textContent=state.trialMode?'🧪 ปิดโหมดทดลอง (กำลังเปิดอยู่)':'🧪 เปิดโหมดทดลอง';
+  const annList=document.getElementById('announcementList');
+  if(annList){const anns=state.announcements||[];annList.innerHTML=anns.length?anns.map((a,i)=>`<div class="mini-row"><div class="name" style="overflow-wrap:anywhere;font-weight:700">${a}</div><button class="ghost" onclick="removeAnnouncement(${i})">ลบ</button></div>`).join(''):'<div class="small">ยังไม่มีประกาศ</div>'}
   const qaName=document.getElementById('quickAddName');
   if(qaName){const taken=new Set(state.entries.map(e=>e.studentId).filter(Boolean));qaName.innerHTML=ROSTER.map(p=>`<option value="${p.id}" ${taken.has(p.id)?'disabled':''}>${p.name}${taken.has(p.id)?' (ลงแล้ว)':''}</option>`).join('')}
   const qaRole=document.getElementById('quickAddRole');
@@ -327,10 +365,10 @@ function renderAdmin(){const roleCtl=document.getElementById('roleAdminControls'
   const lockedList=document.getElementById('lockedRolesList');
   if(lockedList){const locked=roles.filter(r=>isRoleLocked(r.id));lockedList.innerHTML=locked.length?locked.map(r=>`<div class="mini-row"><div><div class="name">${isRoleClosed(r.id)?'🚫':'🔒'} ${r.name}</div><div class="small">${isRoleClosed(r.id)?'ปิดตำแหน่ง (ไม่ระบุคน)':'ล็อกไว้ให้ '+lockedName(r.id)}</div></div><button class="ghost" onclick="adminUnlockRole('${r.id}')">ปลดล็อก</button></div>`).join(''):'<div class="small">ยังไม่มีตำแหน่งที่ล็อกไว้</div>'}
 }
-function buildNameOptions(roleId){const taken=new Set(state.entries.map(e=>e.studentId).filter(Boolean));const lockedFor=roleId?lockedStudentId(roleId):null;const list=lockedFor?ROSTER.filter(p=>p.id===lockedFor):ROSTER;return '<option value="">— เลือกชื่อ —</option>'+list.map(p=>`<option value="${p.id}" ${taken.has(p.id)?'disabled':''}>${p.name}${taken.has(p.id)?' (เลือกไปแล้ว)':''}</option>`).join('')}
+function buildNameOptions(roleId){const taken=new Set(state.entries.map(e=>e.studentId).filter(Boolean));const lockedFor=roleId?lockedStudentId(roleId):null;const list=lockedFor?ROSTER.filter(p=>p.id===lockedFor):ROSTER.filter(p=>{const lr=lockedRoleForStudent(p.id);return !lr||lr===roleId});return '<option value="">— เลือกชื่อ —</option>'+list.map(p=>{const lr=lockedRoleForStudent(p.id);const blocked=lr&&lr!==roleId;return`<option value="${p.id}" ${taken.has(p.id)||blocked?'disabled':''}>${p.name}${taken.has(p.id)?' (เลือกไปแล้ว)':(blocked?' (ถูกล็อกไว้ตำแหน่งอื่น)':'')}</option>`}).join('')}
 function openSignup(roleId){selectedRoleId=roleId;const r=roles.find(x=>x.id===roleId);const closed=isRoleClosed(roleId);const lockedFor=lockedStudentId(roleId);document.getElementById('signupTitle').textContent=`${r.emoji} ${r.name}`;document.getElementById('signupInfo').textContent=closed?'🚫 ตำแหน่งนี้ถูกปิดไว้':(lockedFor?'🔒 ตำแหน่งนี้ถูกล็อกไว้':`เหลือ ${Math.max(0,roleFree(roleId))} ที่ จากทั้งหมด ${roleMax(roleId)} ที่`);document.getElementById('signupName').innerHTML=buildNameOptions(roleId);show('signupModal')}
 async function confirmSignup(){const studentId=document.getElementById('signupName').value;if(!selectedRoleId)return toast('กรุณาเลือกตำแหน่ง');if(!studentId)return toast('กรุณาเลือกชื่อก่อน');const person=ROSTER.find(p=>p.id===studentId);await selectRole(selectedRoleId,person.name,studentId)}
-async function selectRole(roleId,name,studentId){if(!db)return toast('ยังไม่ได้ตั้งค่า Firebase');if(!effectiveOpen())return toast(getOpenStatus().label);if(!name)return toast('กรุณาเลือกชื่อก่อน');if(isRoleClosed(roleId))return toast('ตำแหน่งนี้ถูกปิดไว้');if(lockedStudentId(roleId)&&lockedStudentId(roleId)!==studentId)return toast('ตำแหน่งนี้ถูกล็อกไว้สำหรับ '+lockedName(roleId)+' แล้ว');const code=makeCode(),entryId=crypto.randomUUID();try{await runTransaction(db,async(tx)=>{const snaps=await getDocs(entryCol()),entries=snaps.docs.map(d=>d.data()).filter(e=>!e.removed);if(studentId&&entries.some(e=>e.studentId===studentId))throw new Error('คุณเลือกตำแหน่งไปแล้ว');if(!studentId&&entries.some(e=>norm(e.name)===norm(name)))throw new Error('ชื่อนี้เลือกตำแหน่งไปแล้ว');if(entries.filter(e=>e.role===roleId).length>=roleMax(roleId))throw new Error('ตำแหน่งนี้เต็มแล้ว');tx.set(entryDoc(entryId),{name,studentId:studentId||null,role:roleId,code,edited:false,trial:!!state.trialMode,time:new Date().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'}),createdAt:serverTimestamp()})});lastCode=code;localStorage.setItem('cmm21167_my_entry',JSON.stringify({id:entryId,name,code,role:roleId,studentId}));closeModal('signupModal');document.getElementById('successText').innerHTML=(state.trialMode?'<b>🧪 นี่คือการลงตำแหน่งแบบทดลอง</b><br>':'')+`ชื่อ <b>${name}</b><br>ตำแหน่ง <b>${roleName(roleId)}</b><br>รหัสแก้ไขของคุณคือ`;document.getElementById('editCodeBox').textContent=code;show('successModal')}catch(e){toast(e.message||'เลือกไม่สำเร็จ')}}
+async function selectRole(roleId,name,studentId){if(!db)return toast('ยังไม่ได้ตั้งค่า Firebase');if(!effectiveOpen())return toast(getOpenStatus().label);if(!name)return toast('กรุณาเลือกชื่อก่อน');if(isRoleClosed(roleId))return toast('ตำแหน่งนี้ถูกปิดไว้');if(lockedStudentId(roleId)&&lockedStudentId(roleId)!==studentId)return toast('ตำแหน่งนี้ถูกล็อกไว้สำหรับ '+lockedName(roleId)+' แล้ว');const forcedRole=studentId?lockedRoleForStudent(studentId):null;if(forcedRole&&forcedRole!==roleId)return toast('คุณถูกล็อกไว้ที่ตำแหน่ง '+roleName(forcedRole)+' เท่านั้น เลือกตำแหน่งอื่นไม่ได้');const code=makeCode(),entryId=crypto.randomUUID();try{await runTransaction(db,async(tx)=>{const snaps=await getDocs(entryCol()),entries=snaps.docs.map(d=>d.data()).filter(e=>!e.removed);if(studentId&&entries.some(e=>e.studentId===studentId))throw new Error('คุณเลือกตำแหน่งไปแล้ว');if(!studentId&&entries.some(e=>norm(e.name)===norm(name)))throw new Error('ชื่อนี้เลือกตำแหน่งไปแล้ว');if(entries.filter(e=>e.role===roleId).length>=roleMax(roleId))throw new Error('ตำแหน่งนี้เต็มแล้ว');tx.set(entryDoc(entryId),{name,studentId:studentId||null,role:roleId,code,edited:false,trial:!!state.trialMode,time:new Date().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'}),createdAt:serverTimestamp()})});lastCode=code;localStorage.setItem('cmm21167_my_entry',JSON.stringify({id:entryId,name,code,role:roleId,studentId}));closeModal('signupModal');document.getElementById('successText').innerHTML=(state.trialMode?'<b>🧪 นี่คือการลงตำแหน่งแบบทดลอง</b><br>':'')+`ชื่อ <b>${name}</b><br>ตำแหน่ง <b>${roleName(roleId)}</b><br>รหัสแก้ไขของคุณคือ`;document.getElementById('editCodeBox').textContent=code;show('successModal')}catch(e){toast(e.message||'เลือกไม่สำเร็จ')}}
 async function submitEdit(){const name=norm(document.getElementById('editName').value),code=document.getElementById('editCode').value.trim().toUpperCase(),newRole=document.getElementById('editRole').value;try{await runTransaction(db,async(tx)=>{const snaps=await getDocs(entryCol()),docs=snaps.docs.map(d=>({id:d.id,...d.data()})).filter(x=>!x.removed),e=docs.find(x=>norm(x.name)===name&&x.code===code);if(!e)throw new Error('ชื่อหรือรหัสแก้ไขไม่ถูกต้อง');if(lockedStudentId(e.role)&&lockedStudentId(e.role)===e.studentId)throw new Error('ตำแหน่งนี้ถูกล็อกไว้ ไม่สามารถแก้ไขได้');if(isRoleLocked(newRole))throw new Error('ตำแหน่งนี้ถูกล็อกไว้ ไม่สามารถย้ายเข้าได้');if(e.edited)throw new Error('ใช้สิทธิ์แก้ไขไปแล้ว');if(newRole!==e.role&&docs.filter(x=>x.role===newRole).length>=roleMax(newRole))throw new Error('ตำแหน่งใหม่เต็มแล้ว');tx.update(entryDoc(e.id),{role:newRole,edited:true,authCode:code,time:new Date().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})})});closeModal('editModal');toast('แก้ไขสำเร็จ ใช้สิทธิ์แก้ไขครบแล้ว')}catch(e){toast(e.message||'แก้ไขไม่สำเร็จ')}}
 function fillMyEdit(name,code){document.getElementById('editName').value=name;document.getElementById('editCode').value=code;show('editModal')}
 function loginAdmin(fromModal=false){const key=(fromModal?document.getElementById('adminKey2').value:document.getElementById('adminKey').value).trim();if(key===ADMIN_KEY){isAdmin=true;document.body.classList.add('admin-on');closeModal('adminModal');try{localStorage.setItem('cmm21167_admin_on','1')}catch(e){}toast('เข้าสู่ระบบ Admin แล้ว')}else toast('Admin Key ไม่ถูกต้อง')}function logoutAdmin(){isAdmin=false;document.body.classList.remove('admin-on');try{localStorage.removeItem('cmm21167_admin_on')}catch(e){}toast('ออกจากระบบ Admin แล้ว')}
@@ -343,8 +381,10 @@ async function adminLockRole(){if(!isAdmin)return toast('ต้องเข้�
 async function adminUnlockRole(roleId){if(!isAdmin)return toast('ต้องเข้าสู่ระบบ Admin ก่อน');const lockedRoles={...(state.lockedRoles||{})};delete lockedRoles[roleId];state.lockedRoles=lockedRoles;render();await setDoc(settingsDoc(),{lockedRoles:{[roleId]:deleteField()},authCode:ADMIN_KEY},{merge:true});toast('ปลดล็อก '+roleName(roleId)+' แล้ว')}
 async function saveSchedule(){if(!isAdmin)return toast('ต้องเข้าสู่ระบบ Admin ก่อน');const scheduleStart=document.getElementById('scheduleStart').value,scheduleEnd=document.getElementById('scheduleEnd').value;if(scheduleStart&&scheduleEnd&&new Date(scheduleEnd)<=new Date(scheduleStart))return toast('เวลาปิดต้องอยู่หลังเวลาเปิด');state.scheduleStart=scheduleStart;state.scheduleEnd=scheduleEnd;scheduleDirty=false;render();await setDoc(settingsDoc(),{scheduleStart,scheduleEnd,authCode:ADMIN_KEY},{merge:true});toast('บันทึกเวลาแล้ว')}async function clearSchedule(){if(!isAdmin)return toast('ต้องเข้าสู่ระบบ Admin ก่อน');state.scheduleStart='';state.scheduleEnd='';scheduleDirty=false;syncScheduleInputs(true);render();await setDoc(settingsDoc(),{scheduleStart:'',scheduleEnd:'',authCode:ADMIN_KEY},{merge:true});toast('ล้างเวลาแล้ว')}
 async function changeRoleCap(roleId,delta){if(!isAdmin)return toast('ต้องเข้าสู่ระบบ Admin ก่อน');const current=roleMax(roleId),used=state.entries.filter(e=>e.role===roleId).length,next=Math.max(used,current+delta);state.roleCaps={...(state.roleCaps||{}),[roleId]:next};render();await setDoc(settingsDoc(),{roleCaps:state.roleCaps,authCode:ADMIN_KEY},{merge:true});toast('อัปเดตจำนวนช่องแล้ว')}
-function syncAnnouncementInput(){const el=document.getElementById('announcementInput');if(el&&document.activeElement!==el)el.value=state.announcement||''}function syncCallSheetInputs(){const cs=state.callSheet||{};const d=document.getElementById('csDate'),ct=document.getElementById('csCallTime'),wt=document.getElementById('csWrapTime'),loc=document.getElementById('csLocation'),nt=document.getElementById('csNotes');if(d&&document.activeElement!==d)d.value=cs.date||'';if(ct&&document.activeElement!==ct)ct.value=cs.callTime||'';if(wt&&document.activeElement!==wt)wt.value=cs.wrapTime||'';if(loc&&document.activeElement!==loc)loc.value=cs.location||'';if(nt&&document.activeElement!==nt)nt.value=cs.notes||'';}async function saveCallSheetInfo(){if(!isAdmin)return toast('ต้องเข้าสู่ระบบ Admin ก่อน');const callSheet={date:document.getElementById('csDate').value,callTime:document.getElementById('csCallTime').value,wrapTime:document.getElementById('csWrapTime').value,location:document.getElementById('csLocation').value.trim(),notes:document.getElementById('csNotes').value.trim()};state.callSheet=callSheet;render();await setDoc(settingsDoc(),{callSheet,authCode:ADMIN_KEY},{merge:true});toast('บันทึก Call Sheet แล้ว')}
-async function saveAnnouncement(){if(!isAdmin)return toast('ต้องเข้าสู่ระบบ Admin ก่อน');const announcement=document.getElementById('announcementInput').value.trim();state.announcement=announcement;render();await setDoc(settingsDoc(),{announcement,authCode:ADMIN_KEY},{merge:true});toast('เผยแพร่ประกาศแล้ว')}async function clearAnnouncement(){if(!isAdmin)return toast('ต้องเข้าสู่ระบบ Admin ก่อน');state.announcement='';syncAnnouncementInput();render();await setDoc(settingsDoc(),{announcement:'',authCode:ADMIN_KEY},{merge:true});toast('ล้างประกาศแล้ว')}
+function syncCallSheetInputs(){const cs=state.callSheet||{};const d=document.getElementById('csDate'),ct=document.getElementById('csCallTime'),wt=document.getElementById('csWrapTime'),loc=document.getElementById('csLocation'),nt=document.getElementById('csNotes');if(d&&document.activeElement!==d)d.value=cs.date||'';if(ct&&document.activeElement!==ct)ct.value=cs.callTime||'';if(wt&&document.activeElement!==wt)wt.value=cs.wrapTime||'';if(loc&&document.activeElement!==loc)loc.value=cs.location||'';if(nt&&document.activeElement!==nt)nt.value=cs.notes||'';}async function saveCallSheetInfo(){if(!isAdmin)return toast('ต้องเข้าสู่ระบบ Admin ก่อน');const callSheet={date:document.getElementById('csDate').value,callTime:document.getElementById('csCallTime').value,wrapTime:document.getElementById('csWrapTime').value,location:document.getElementById('csLocation').value.trim(),notes:document.getElementById('csNotes').value.trim()};state.callSheet=callSheet;render();await setDoc(settingsDoc(),{callSheet,authCode:ADMIN_KEY},{merge:true});toast('บันทึก Call Sheet แล้ว')}
+async function addAnnouncement(){if(!isAdmin)return toast('ต้องเข้าสู่ระบบ Admin ก่อน');const el=document.getElementById('announcementInput'),text=el.value.trim();if(!text)return toast('กรุณาพิมพ์ข้อความประกาศ');const announcements=[...(state.announcements||[]),text];state.announcements=announcements;el.value='';render();await setDoc(settingsDoc(),{announcements,authCode:ADMIN_KEY},{merge:true});toast('เพิ่มประกาศแล้ว')}
+async function removeAnnouncement(idx){if(!isAdmin)return toast('ต้องเข้าสู่ระบบ Admin ก่อน');const announcements=(state.announcements||[]).filter((_,i)=>i!==idx);state.announcements=announcements;render();await setDoc(settingsDoc(),{announcements,authCode:ADMIN_KEY},{merge:true});toast('ลบประกาศแล้ว')}
+async function clearAnnouncement(){if(!isAdmin)return toast('ต้องเข้าสู่ระบบ Admin ก่อน');state.announcements=[];render();await setDoc(settingsDoc(),{announcements:[],authCode:ADMIN_KEY},{merge:true});toast('ล้างประกาศทั้งหมดแล้ว')}
 function openAdminEdit(id){if(!isAdmin)return toast('ต้องเข้าสู่ระบบ Admin ก่อน');const e=state.entries.find(x=>x.id===id);if(!e)return toast('ไม่พบข้อมูล');document.getElementById('adminEditId').value=id;document.getElementById('adminEditName').value=e.name||'';document.getElementById('adminEditRole').value=e.role||roles[0].id;document.getElementById('adminEditCode').value=e.code||'';show('adminEditModal')}
 async function saveAdminEdit(){if(!isAdmin)return toast('ต้องเข้าสู่ระบบ Admin ก่อน');const id=document.getElementById('adminEditId').value,name=document.getElementById('adminEditName').value.trim(),role=document.getElementById('adminEditRole').value;if(!name)return toast('กรุณากรอกชื่อ');const docs=state.entries.filter(e=>e.id!==id);if(docs.some(e=>norm(e.name)===norm(name)))return toast('ชื่อนี้มีอยู่แล้ว');const current=state.entries.find(e=>e.id===id);if(!current)return toast('ไม่พบข้อมูล');if(role!==current.role&&state.entries.filter(e=>e.role===role).length>=roleMax(role))return toast('ตำแหน่งใหม่เต็มแล้ว');await setDoc(entryDoc(id),{...current,name,role,authCode:ADMIN_KEY,time:new Date().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})},{merge:true});closeModal('adminEditModal');toast('บันทึกข้อมูลแล้ว')}
 function buildMembersHTML(filter){
@@ -377,7 +417,7 @@ function csbGroupRows(ids){const rows=[];ids.forEach(id=>{const r=roles.find(x=>
 function formatThaiDateOnly(v){if(!v)return'-';return new Date(v+'T00:00:00').toLocaleDateString('th-TH',{day:'numeric',month:'long',year:'numeric'})}
 function buildCallSheetHTML(){
   const GROUPS=[
-    [{name:'กำกับ / โปรดักชั่น',ids:['producer','pm','director','script','runner','ad2']},{name:'ไฟ / ไฟฟ้า',ids:['gaffer','bestboy']}],
+    [{name:'กำกับ / โปรดักชั่น',ids:['producer','pm','locman','director','script','runner','ad2']},{name:'ไฟ / ไฟฟ้า',ids:['gaffer','bestboy']}],
     [{name:'ฝ่ายกล้อง',ids:['dop','camoperator','focuspuller','camassist']},{name:'เสียง',ids:['sound']}],
     [{name:'ศิลป์',ids:['proddesign','art','artprop']},{name:'แต่งหน้า / คอสตูม',ids:['makeup']}],
     [{name:'ตัดต่อ',ids:['editor']},{name:'',ids:[]}]
@@ -399,7 +439,7 @@ function openMembers(){const s=document.getElementById('membersSearch');if(s)s.v
 function openQR(){const url=location.href;document.getElementById('qrImg').src='https://api.qrserver.com/v1/create-qr-code/?size=300x300&data='+encodeURIComponent(url);show('qrModal')}
 function copyPageLink(){navigator.clipboard?.writeText(location.href);toast('คัดลอกลิงก์เว็บแล้ว')}function copyText(text){navigator.clipboard?.writeText(text);toast('คัดลอกแล้ว')}function copyAdminEditCode(){copyText(document.getElementById('adminEditCode').value)}function copyCode(){navigator.clipboard?.writeText(lastCode);toast('คัดลอกรหัสแล้ว')}
 function exportCSV(){const csv='name,role,time,editCode\n'+state.entries.map(e=>`${e.name},${roleName(e.role)},${e.time||''},${e.code}`).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='cmm21167-positions.csv';a.click()}
-function exportJSON(){const data={exportedAt:new Date().toISOString(),settings:{open:state.open,scheduleStart:state.scheduleStart,scheduleEnd:state.scheduleEnd,announcement:state.announcement,roleCaps:state.roleCaps},entries:state.entries};const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));a.download='cmm21167-backup.json';a.click()}
+function exportJSON(){const data={exportedAt:new Date().toISOString(),settings:{open:state.open,scheduleStart:state.scheduleStart,scheduleEnd:state.scheduleEnd,announcements:state.announcements,roleCaps:state.roleCaps},entries:state.entries};const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));a.download='cmm21167-backup.json';a.click()}
 function openAdmin(){show('adminModal')}function openEdit(){show('editModal')}function showRules(){show('rulesModal')}
 function updateCountdown(){const st=getOpenStatus(),openText=document.getElementById('openText'),dot=document.querySelector('.status-dot'),scheduleLabel=document.getElementById('scheduleLabel'),countdownText=document.getElementById('countdownText'),scheduleInfo=document.getElementById('scheduleInfo');if(openText)openText.textContent=st.label;if(dot)dot.style.background=st.open?'var(--green)':(state.open?'var(--yellow)':'var(--red)');if(scheduleLabel)scheduleLabel.textContent=st.label;if(countdownText)countdownText.textContent=st.count;if(scheduleInfo)scheduleInfo.textContent=st.info;
   const tc=document.getElementById('topCountdown'),tcLabel=document.getElementById('topCountdownLabel'),tcText=document.getElementById('topCountdownText');
@@ -413,7 +453,7 @@ function repositionProfile(){
   else { if(aside.firstElementChild!==box) aside.insertAdjacentElement('afterbegin',box); }
 }
 window.addEventListener('resize',repositionProfile);
-Object.assign(window,{openSignup,confirmSignup,submitEdit,loginAdmin,adminDelete,resetAll,toggleOpen,saveSchedule,clearSchedule,exportCSV,exportJSON,openAdmin,openEdit,showRules,closeModal,copyCode,markScheduleDirty,changeRoleCap,saveAnnouncement,clearAnnouncement,openAdminEdit,saveAdminEdit,copyText,copyAdminEditCode,openMembers,openCallSheet,printCallSheet,copyPageLink,openQR,fillMyEdit,logoutAdmin,saveCallSheetInfo,renderMembersList,toggleTrialMode,clearTrialData,adminQuickAdd,adminLockRole,adminUnlockRole});
+Object.assign(window,{openSignup,confirmSignup,submitEdit,loginAdmin,adminDelete,resetAll,toggleOpen,saveSchedule,clearSchedule,exportCSV,exportJSON,openAdmin,openEdit,showRules,closeModal,copyCode,markScheduleDirty,changeRoleCap,addAnnouncement,removeAnnouncement,clearAnnouncement,openAdminEdit,saveAdminEdit,copyText,copyAdminEditCode,openMembers,openCallSheet,printCallSheet,copyPageLink,openQR,fillMyEdit,logoutAdmin,saveCallSheetInfo,renderMembersList,toggleTrialMode,clearTrialData,adminQuickAdd,adminLockRole,adminUnlockRole});
 setInterval(updateCountdown,1000);repositionProfile();show('rulesModal');render();
 </script>
 </body>
