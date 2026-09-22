@@ -39,8 +39,11 @@ button.secondary{background:#fff;color:var(--ink);border:1px solid var(--line);b
 .status-strip{background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);border-radius:16px;padding:10px 14px;margin:12px 0;width:fit-content;max-width:100%}
 .status-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
 .status-progress{flex:1;min-width:220px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.status-progress .progress-text-group{display:flex;flex-direction:column;gap:1px}
 .status-progress .progress-text{font-size:13px;font-weight:800;color:var(--ink);white-space:nowrap}
 .status-progress .progress-text b{font-size:15px;color:var(--pink)}
+.status-progress .progress-text-sub{font-size:11px;font-weight:700;color:var(--muted);white-space:nowrap}
+.status-progress .progress-text-sub b{font-size:12px;color:var(--dark)}
 .dot-grid{display:flex;flex-wrap:wrap;gap:6px;max-width:220px}
 .dot-grid .dot{width:14px;height:14px;border-radius:50%;background:var(--pink2);border:1.5px solid var(--line);transition:background .3s ease,border-color .3s ease;flex-shrink:0}
 .dot-grid .dot.filled{background:var(--pink);border-color:var(--pink)}
@@ -111,7 +114,10 @@ select option{color:var(--ink);font-size:16px;padding:8px}
     <div class="status-row">
       <div class="status-progress">
         <div class="dot-grid" id="dotGrid"></div>
-        <div class="progress-text"><b id="joined">0</b>/<span id="totalSlots">18</span> คนลงตำแหน่งแล้ว</div>
+        <div class="progress-text-group">
+          <div class="progress-text"><b id="joined">0</b>/<span id="totalSlots">18</span> คนลงตำแหน่งแล้ว</div>
+          <div class="progress-text-sub"><b id="filledRoles">0</b>/<span id="totalRoles">0</span> ตำแหน่งมีคนแล้ว</div>
+        </div>
       </div>
       <div class="avatar-stack" id="avatarStack"></div>
       <div class="top-countdown" id="topCountdown" style="display:none"><span id="topCountdownLabel"></span><b id="topCountdownText">--:--:--</b></div>
@@ -132,7 +138,7 @@ select option{color:var(--ink);font-size:16px;padding:8px}
 
       <div class="panel admin-box"><div class="admin-box-head"><h2>⚙️ Admin Panel</h2><button class="ghost" onclick="logoutAdmin()">⬅️ ออกจากระบบ</button></div><div class="admin-actions"><button onclick="toggleOpen()" class="secondary">🔒 เปิด/ปิดลงตำแหน่ง</button><button onclick="exportCSV()" class="secondary">📥 CSV</button><button onclick="exportJSON()" class="secondary">📦 JSON</button><button onclick="resetAll()" class="danger">รีเซ็ตทั้งหมด</button></div>
       <div class="admin-section"><h3>➕ เพิ่มคนลงตำแหน่งโดยตรง</h3><p class="small" style="margin:0 0 10px">สำหรับ Admin ใส่ให้เลย ไม่ต้องรอให้เจ้าตัวมากดเอง</p><div class="field"><label>เลือกชื่อ</label><select id="quickAddName"></select></div><div class="field"><label>เลือกตำแหน่ง</label><select id="quickAddRole"></select></div><div class="admin-actions"><button onclick="adminQuickAdd()">เพิ่มเข้าตำแหน่ง</button></div></div>
-      <div class="admin-section"><h3>🔒 ล็อกตำแหน่ง (กั้กไว้)</h3><p class="small" style="margin:0 0 10px">กั้กตำแหน่งไว้ให้คนใดคนหนึ่งโดยเฉพาะ คนอื่นจะเลือกตำแหน่งนี้ไม่ได้จนกว่าจะปลดล็อก</p><div class="field"><label>เลือกตำแหน่งที่จะล็อก</label><select id="lockRoleSelect"></select></div><div class="field"><label>ล็อกไว้ให้ใคร</label><select id="lockNameSelect"></select></div><div class="admin-actions"><button onclick="adminLockRole()">🔒 ล็อกตำแหน่ง</button></div><div id="lockedRolesList" class="mini-list" style="margin-top:12px"></div></div>
+      <div class="admin-section"><h3>🔒 ล็อกตำแหน่ง</h3><p class="small" style="margin:0 0 10px">เลือก "ปิดตำแหน่ง (ไม่ระบุคน)" เพื่อปิดตำแหน่งนี้ไม่ให้ใครเลือกได้เลย หรือเลือกชื่อคนถ้าต้องการกั้กไว้ให้คนใดคนหนึ่งโดยเฉพาะ</p><div class="field"><label>เลือกตำแหน่งที่จะล็อก</label><select id="lockRoleSelect"></select></div><div class="field"><label>ล็อกไว้ให้ใคร (ไม่เลือก = ปิดตำแหน่ง)</label><select id="lockNameSelect"></select></div><div class="admin-actions"><button onclick="adminLockRole()">🔒 ล็อก/ปิดตำแหน่ง</button></div><div id="lockedRolesList" class="mini-list" style="margin-top:12px"></div></div>
       <div class="admin-section"><h3>🧪 โหมดทดลอง</h3><p class="small" style="margin:0 0 10px">เปิดไว้ให้ทีมกดลองเลือกตำแหน่งเล่นๆ ก่อนของจริง ระบบจะแท็กข้อมูลที่ลงตอนนี้ไว้ ลบทิ้งทีหลังได้โดยไม่กระทบข้อมูลจริง</p><div class="admin-actions"><button onclick="toggleTrialMode()" id="trialToggleBtn" class="secondary">🧪 เปิด/ปิดโหมดทดลอง</button><button onclick="clearTrialData()" class="danger">🗑️ ล้างข้อมูลทดลองทั้งหมด</button></div></div>
       <div class="admin-section"><h3>📢 ประกาศหน้าเว็บ</h3><div class="field"><label>ข้อความประกาศ</label><input id="announcementInput" placeholder="เช่น ขอให้ทุกคนลงตำแหน่งก่อน 20:00"></div><div class="admin-actions"><button onclick="saveAnnouncement()">Publish</button><button onclick="clearAnnouncement()" class="secondary">ล้างประกาศ</button></div></div>
       <div class="admin-section"><h3>👥 จำนวนช่องตำแหน่ง</h3><div id="roleAdminControls" class="time-grid"></div></div>
@@ -185,28 +191,33 @@ const ADMIN_KEY = "Focus3256"; // เปลี่ยนรหัสผู้ด�
 // รายการตำแหน่ง — แก้ชื่อ/จำนวน (max) ได้ตามจริงของวิชา CMM21167
 const roles=[
   {id:'producer',emoji:'🗂️',name:'Producer',max:1},
+  {id:'pm',emoji:'📅',name:'Production Manager',max:1},
   {id:'director',emoji:'🎬',name:'Director',max:1},
   {id:'script',emoji:'📝',name:'Scriptwriter',max:1},
-  {id:'runner',emoji:'📋',name:'AD1',max:1},
+  {id:'runner',emoji:'📋',name:'Assistant Director 1',max:1},
+  {id:'ad2',emoji:'📋',name:'Assistant Director 2',max:1},
   {id:'dop',emoji:'📷',name:'DOP',max:1},
   {id:'camoperator',emoji:'🎥',name:'Camera Operator',max:1},
-  {id:'focuspuller',emoji:'🎯',name:'Focus Puller',max:1},
-  {id:'camop',emoji:'🧰',name:'Cam Assistant',max:1},
+  {id:'focuspuller',emoji:'🔎',name:'Focus Puller',max:1},
+  {id:'camassist',emoji:'🎬',name:'Cam Assistant',max:1},
   {id:'gaffer',emoji:'💡',name:'Gaffer',max:1},
   {id:'bestboy',emoji:'🔌',name:'Best Boy Electric',max:1},
   {id:'sound',emoji:'🎤',name:'Sound',max:2},
+  {id:'proddesign',emoji:'🖌️',name:'Production Design',max:1},
   {id:'art',emoji:'🎨',name:'Art Director',max:1},
   {id:'artprop',emoji:'🪑',name:'Art/Prop',max:2},
   {id:'makeup',emoji:'💄',name:'Makeup & Costume',max:2},
+  {id:'editor',emoji:'✂️',name:'Editor',max:1},
 ];
 // จัดกลุ่มตำแหน่งเป็นหมวดหมู่แผนก สำหรับแสดงผลเป็นส่วนๆ
 const DEPARTMENTS=[
-  {name:'กำกับ / โปรดักชั่น',ids:['producer','director','script','runner']},
-  {name:'ฝ่ายกล้อง',ids:['dop','camoperator','focuspuller','camop']},
+  {name:'กำกับ / โปรดักชั่น',ids:['producer','pm','director','script','runner','ad2']},
+  {name:'ฝ่ายกล้อง',ids:['dop','camoperator','focuspuller','camassist']},
   {name:'ไฟ / ไฟฟ้า',ids:['gaffer','bestboy']},
   {name:'เสียง',ids:['sound']},
-  {name:'ศิลป์',ids:['art','artprop']},
+  {name:'ศิลป์',ids:['proddesign','art','artprop']},
   {name:'แต่งหน้า / คอสตูม',ids:['makeup']},
+  {name:'ตัดต่อ',ids:['editor']},
 ];
 const DEPT_ICON={'กำกับ / โปรดักชั่น':'🎬','ฝ่ายกล้อง':'📷','ไฟ / ไฟฟ้า':'💡','เสียง':'🎤','ศิลป์':'🎨','แต่งหน้า / คอสตูม':'💄'};
 // รายชื่อทีม 18 คน — ไม่มีรหัสนักศึกษา จึงใช้ชื่อ-นามสกุลเป็นตัวอ้างอิงกันคนเดียวลงหลายตำแหน่ง (จับคู่แบบ normalize ชื่อ)
@@ -232,7 +243,9 @@ const ROSTER=[
 ];
 // ไม่มีตำแหน่งล็อก — เปิดให้ทุกคนแย่งกันลงอย่างอิสระ
 // ตำแหน่งที่ถูกล็อก/กั้กไว้ล่วงหน้า — แอดมินตั้งค่าได้จากแผง Admin (เก็บใน Firestore แทนการเขียนโค้ดตายตัว)
-function lockedStudentId(roleId){return state.lockedRoles?.[roleId]||null}
+function lockedStudentId(roleId){const v=state.lockedRoles?.[roleId];return v&&v!=='*'?v:null}
+function isRoleClosed(roleId){return state.lockedRoles?.[roleId]==='*'}
+function isRoleLocked(roleId){return !!state.lockedRoles?.[roleId]}
 function lockedName(roleId){const sid=lockedStudentId(roleId);return sid?(ROSTER.find(p=>p.id===sid)?.name||''):''}
 let db=null,isAdmin=false,lastCode='',selectedRoleId='';
 let state={open:true,scheduleStart:'',scheduleEnd:'',announcement:'',roleCaps:{},lockedRoles:{},entries:[],callSheet:{},trialMode:false};
@@ -258,6 +271,9 @@ function renderLiveBanner(){
   const total=ROSTER.length, joined=state.entries.length, pct=total?Math.min(100,Math.round(joined/total*100)):0;
   document.getElementById('joined').textContent=joined;
   document.getElementById('totalSlots').textContent=total;
+  const filledRoles=roles.filter(r=>state.entries.some(e=>e.role===r.id)).length;
+  document.getElementById('filledRoles').textContent=filledRoles;
+  document.getElementById('totalRoles').textContent=roles.length;
   const dotGrid=document.getElementById('dotGrid');
   if(dotGrid)dotGrid.innerHTML=Array.from({length:total}).map((_,i)=>`<span class="dot ${i<joined?'filled':''}"></span>`).join('');
   const avatarStack=document.getElementById('avatarStack');
@@ -268,13 +284,14 @@ function renderLiveBanner(){
 }
 function renderCards(){
   const cardHTML=r=>{
-    const max=roleMax(r.id),entries=state.entries.filter(e=>e.role===r.id),full=entries.length>=max;const locked=!!lockedStudentId(r.id);
+    const max=roleMax(r.id),entries=state.entries.filter(e=>e.role===r.id),full=entries.length>=max;const locked=isRoleLocked(r.id);const closed=isRoleClosed(r.id);
     const slotsHTML=max===1
       ? (entries[0]?`<div class="slot taken"><div><div class="name">${entries[0].name}</div><div class="small">เลือกเวลา ${entries[0].time||'-'}</div></div>✅</div>`
                     :`<div class="slot"><div><div class="name">ว่าง</div><div class="small">รอคนกดเลือก</div></div>🟢</div>`)
       : Array.from({length:max}).map((_,i)=>{const e=entries[i];return`<div class="slot ${e?'taken':''}"><div><div class="name">${e?e.name:'ว่าง'}</div><div class="small">${e?'เลือกเวลา '+(e.time||'-'):'รอคนกดเลือก'}</div></div>${e?'✅':'🟢'}</div>`}).join('');
-    const btnLabel=full?(locked?'🔒 จองแล้ว':'เต็มแล้ว'):(locked?'🔒 ล็อกไว้':'ลงตำแหน่งนี้');
-    return`<article class="card ${full?'full':''} ${locked?'locked':''}"><div class="role-title"><div class="role-title-main"><h3>${r.emoji} ${r.name}</h3>${locked?'<span class="lock-badge">🔒 ล็อกไว้</span>':''}</div><span class="count">${entries.length}/${max}</span></div><div class="slots">${slotsHTML}</div><button ${full||!effectiveOpen()||!isConfigured()?'disabled':''} onclick="openSignup('${r.id}')">${btnLabel}</button></article>`;
+    const btnLabel=closed?'🚫 ปิดตำแหน่งนี้':(full?(locked?'🔒 จองแล้ว':'เต็มแล้ว'):(locked?'🔒 ล็อกไว้':'ลงตำแหน่งนี้'));
+    const badge=closed?'<span class="lock-badge">🚫 ปิดตำแหน่ง</span>':(locked?'<span class="lock-badge">🔒 ล็อกไว้</span>':'');
+    return`<article class="card ${full?'full':''} ${locked?'locked':''}"><div class="role-title"><div class="role-title-main"><h3>${r.emoji} ${r.name}</h3>${badge}</div><span class="count">${entries.length}/${max}</span></div><div class="slots">${slotsHTML}</div><button ${full||!effectiveOpen()||!isConfigured()||closed?'disabled':''} onclick="openSignup('${r.id}')">${btnLabel}</button></article>`;
   };
   document.getElementById('roleCards').innerHTML=DEPARTMENTS.map(dept=>{
     const deptRoles=dept.ids.map(id=>roles.find(r=>r.id===id)).filter(Boolean);
@@ -283,7 +300,7 @@ function renderCards(){
     const total=deptRoles.reduce((s,r)=>s+roleMax(r.id),0);
     return `<div class="dept-block"><div class="dept-heading">${DEPT_ICON[dept.name]||'🎬'} ${dept.name}<span class="dept-count">${filled}/${total} คน</span></div><div class="cards">${deptRoles.map(cardHTML).join('')}</div></div>`;
   }).join('');
-  const roleOptions=roles.map(r=>`<option value="${r.id}" ${lockedStudentId(r.id)||roleFree(r.id)<=0?'disabled':''}>${r.name} ${lockedStudentId(r.id)?'🔒 ล็อกไว้':(roleFree(r.id)>0?'ว่าง '+roleFree(r.id):'เต็ม')}</option>`).join('');
+  const roleOptions=roles.map(r=>`<option value="${r.id}" ${isRoleLocked(r.id)||roleFree(r.id)<=0?'disabled':''}>${r.name} ${isRoleLocked(r.id)?(isRoleClosed(r.id)?'🚫 ปิดตำแหน่ง':'🔒 ล็อกไว้'):(roleFree(r.id)>0?'ว่าง '+roleFree(r.id):'เต็ม')}</option>`).join('');
   document.getElementById('editRole').innerHTML=roleOptions;
   const adminEditRole=document.getElementById('adminEditRole');if(adminEditRole)adminEditRole.innerHTML=roles.map(r=>`<option value="${r.id}">${r.name}</option>`).join('');
 }
@@ -298,24 +315,24 @@ function renderAdmin(){const roleCtl=document.getElementById('roleAdminControls'
   const qaRole=document.getElementById('quickAddRole');
   if(qaRole){qaRole.innerHTML=roles.map(r=>`<option value="${r.id}" ${roleFree(r.id)<=0?'disabled':''}>${r.name} ${roleFree(r.id)>0?'ว่าง '+roleFree(r.id):'เต็ม'}</option>`).join('')}
   const lockRoleSel=document.getElementById('lockRoleSelect');
-  if(lockRoleSel){lockRoleSel.innerHTML=roles.map(r=>`<option value="${r.id}" ${lockedStudentId(r.id)?'disabled':''}>${r.name}${lockedStudentId(r.id)?' (ล็อกอยู่แล้ว)':''}</option>`).join('')}
+  if(lockRoleSel){lockRoleSel.innerHTML=roles.map(r=>`<option value="${r.id}" ${isRoleLocked(r.id)?'disabled':''}>${r.name}${isRoleLocked(r.id)?' (ล็อกอยู่แล้ว)':''}</option>`).join('')}
   const lockNameSel=document.getElementById('lockNameSelect');
-  if(lockNameSel){lockNameSel.innerHTML=ROSTER.map(p=>`<option value="${p.id}">${p.name}</option>`).join('')}
+  if(lockNameSel){lockNameSel.innerHTML='<option value="">— ปิดตำแหน่ง (ไม่ระบุคน) —</option>'+ROSTER.map(p=>`<option value="${p.id}">${p.name}</option>`).join('')}
   const lockedList=document.getElementById('lockedRolesList');
-  if(lockedList){const locked=roles.filter(r=>lockedStudentId(r.id));lockedList.innerHTML=locked.length?locked.map(r=>`<div class="mini-row"><div><div class="name">🔒 ${r.name}</div><div class="small">ล็อกไว้ให้ ${lockedName(r.id)}</div></div><button class="ghost" onclick="adminUnlockRole('${r.id}')">ปลดล็อก</button></div>`).join(''):'<div class="small">ยังไม่มีตำแหน่งที่ล็อกไว้</div>'}
+  if(lockedList){const locked=roles.filter(r=>isRoleLocked(r.id));lockedList.innerHTML=locked.length?locked.map(r=>`<div class="mini-row"><div><div class="name">${isRoleClosed(r.id)?'🚫':'🔒'} ${r.name}</div><div class="small">${isRoleClosed(r.id)?'ปิดตำแหน่ง (ไม่ระบุคน)':'ล็อกไว้ให้ '+lockedName(r.id)}</div></div><button class="ghost" onclick="adminUnlockRole('${r.id}')">ปลดล็อก</button></div>`).join(''):'<div class="small">ยังไม่มีตำแหน่งที่ล็อกไว้</div>'}
 }
 function buildNameOptions(roleId){const taken=new Set(state.entries.map(e=>e.studentId).filter(Boolean));const lockedFor=roleId?lockedStudentId(roleId):null;const list=lockedFor?ROSTER.filter(p=>p.id===lockedFor):ROSTER;return '<option value="">— เลือกชื่อ —</option>'+list.map(p=>`<option value="${p.id}" ${taken.has(p.id)?'disabled':''}>${p.name}${taken.has(p.id)?' (เลือกไปแล้ว)':''}</option>`).join('')}
-function openSignup(roleId){selectedRoleId=roleId;const r=roles.find(x=>x.id===roleId);const lockedFor=lockedStudentId(roleId);document.getElementById('signupTitle').textContent=`${r.emoji} ${r.name}`;document.getElementById('signupInfo').textContent=lockedFor?'🔒 ตำแหน่งนี้ถูกล็อกไว้':`เหลือ ${Math.max(0,roleFree(roleId))} ที่ จากทั้งหมด ${roleMax(roleId)} ที่`;document.getElementById('signupName').innerHTML=buildNameOptions(roleId);show('signupModal')}
+function openSignup(roleId){selectedRoleId=roleId;const r=roles.find(x=>x.id===roleId);const closed=isRoleClosed(roleId);const lockedFor=lockedStudentId(roleId);document.getElementById('signupTitle').textContent=`${r.emoji} ${r.name}`;document.getElementById('signupInfo').textContent=closed?'🚫 ตำแหน่งนี้ถูกปิดไว้':(lockedFor?'🔒 ตำแหน่งนี้ถูกล็อกไว้':`เหลือ ${Math.max(0,roleFree(roleId))} ที่ จากทั้งหมด ${roleMax(roleId)} ที่`);document.getElementById('signupName').innerHTML=buildNameOptions(roleId);show('signupModal')}
 async function confirmSignup(){const studentId=document.getElementById('signupName').value;if(!selectedRoleId)return toast('กรุณาเลือกตำแหน่ง');if(!studentId)return toast('กรุณาเลือกชื่อก่อน');const person=ROSTER.find(p=>p.id===studentId);await selectRole(selectedRoleId,person.name,studentId)}
-async function selectRole(roleId,name,studentId){if(!db)return toast('ยังไม่ได้ตั้งค่า Firebase');if(!effectiveOpen())return toast(getOpenStatus().label);if(!name)return toast('กรุณาเลือกชื่อก่อน');if(lockedStudentId(roleId)&&lockedStudentId(roleId)!==studentId)return toast('ตำแหน่งนี้ถูกล็อกไว้สำหรับ '+lockedName(roleId)+' แล้ว');const code=makeCode(),entryId=crypto.randomUUID();try{await runTransaction(db,async(tx)=>{const snaps=await getDocs(entryCol()),entries=snaps.docs.map(d=>d.data()).filter(e=>!e.removed);if(studentId&&entries.some(e=>e.studentId===studentId))throw new Error('คุณเลือกตำแหน่งไปแล้ว');if(!studentId&&entries.some(e=>norm(e.name)===norm(name)))throw new Error('ชื่อนี้เลือกตำแหน่งไปแล้ว');if(entries.filter(e=>e.role===roleId).length>=roleMax(roleId))throw new Error('ตำแหน่งนี้เต็มแล้ว');tx.set(entryDoc(entryId),{name,studentId:studentId||null,role:roleId,code,edited:false,trial:!!state.trialMode,time:new Date().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'}),createdAt:serverTimestamp()})});lastCode=code;localStorage.setItem('cmm21167_my_entry',JSON.stringify({id:entryId,name,code,role:roleId,studentId}));closeModal('signupModal');document.getElementById('successText').innerHTML=(state.trialMode?'<b>🧪 นี่คือการลงตำแหน่งแบบทดลอง</b><br>':'')+`ชื่อ <b>${name}</b><br>ตำแหน่ง <b>${roleName(roleId)}</b><br>รหัสแก้ไขของคุณคือ`;document.getElementById('editCodeBox').textContent=code;show('successModal')}catch(e){toast(e.message||'เลือกไม่สำเร็จ')}}
-async function submitEdit(){const name=norm(document.getElementById('editName').value),code=document.getElementById('editCode').value.trim().toUpperCase(),newRole=document.getElementById('editRole').value;try{await runTransaction(db,async(tx)=>{const snaps=await getDocs(entryCol()),docs=snaps.docs.map(d=>({id:d.id,...d.data()})).filter(x=>!x.removed),e=docs.find(x=>norm(x.name)===name&&x.code===code);if(!e)throw new Error('ชื่อหรือรหัสแก้ไขไม่ถูกต้อง');if(lockedStudentId(e.role)&&lockedStudentId(e.role)===e.studentId)throw new Error('ตำแหน่งนี้ถูกล็อกไว้ ไม่สามารถแก้ไขได้');if(lockedStudentId(newRole))throw new Error('ตำแหน่งนี้ถูกล็อกไว้ ไม่สามารถย้ายเข้าได้');if(e.edited)throw new Error('ใช้สิทธิ์แก้ไขไปแล้ว');if(newRole!==e.role&&docs.filter(x=>x.role===newRole).length>=roleMax(newRole))throw new Error('ตำแหน่งใหม่เต็มแล้ว');tx.update(entryDoc(e.id),{role:newRole,edited:true,authCode:code,time:new Date().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})})});closeModal('editModal');toast('แก้ไขสำเร็จ ใช้สิทธิ์แก้ไขครบแล้ว')}catch(e){toast(e.message||'แก้ไขไม่สำเร็จ')}}
+async function selectRole(roleId,name,studentId){if(!db)return toast('ยังไม่ได้ตั้งค่า Firebase');if(!effectiveOpen())return toast(getOpenStatus().label);if(!name)return toast('กรุณาเลือกชื่อก่อน');if(isRoleClosed(roleId))return toast('ตำแหน่งนี้ถูกปิดไว้');if(lockedStudentId(roleId)&&lockedStudentId(roleId)!==studentId)return toast('ตำแหน่งนี้ถูกล็อกไว้สำหรับ '+lockedName(roleId)+' แล้ว');const code=makeCode(),entryId=crypto.randomUUID();try{await runTransaction(db,async(tx)=>{const snaps=await getDocs(entryCol()),entries=snaps.docs.map(d=>d.data()).filter(e=>!e.removed);if(studentId&&entries.some(e=>e.studentId===studentId))throw new Error('คุณเลือกตำแหน่งไปแล้ว');if(!studentId&&entries.some(e=>norm(e.name)===norm(name)))throw new Error('ชื่อนี้เลือกตำแหน่งไปแล้ว');if(entries.filter(e=>e.role===roleId).length>=roleMax(roleId))throw new Error('ตำแหน่งนี้เต็มแล้ว');tx.set(entryDoc(entryId),{name,studentId:studentId||null,role:roleId,code,edited:false,trial:!!state.trialMode,time:new Date().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'}),createdAt:serverTimestamp()})});lastCode=code;localStorage.setItem('cmm21167_my_entry',JSON.stringify({id:entryId,name,code,role:roleId,studentId}));closeModal('signupModal');document.getElementById('successText').innerHTML=(state.trialMode?'<b>🧪 นี่คือการลงตำแหน่งแบบทดลอง</b><br>':'')+`ชื่อ <b>${name}</b><br>ตำแหน่ง <b>${roleName(roleId)}</b><br>รหัสแก้ไขของคุณคือ`;document.getElementById('editCodeBox').textContent=code;show('successModal')}catch(e){toast(e.message||'เลือกไม่สำเร็จ')}}
+async function submitEdit(){const name=norm(document.getElementById('editName').value),code=document.getElementById('editCode').value.trim().toUpperCase(),newRole=document.getElementById('editRole').value;try{await runTransaction(db,async(tx)=>{const snaps=await getDocs(entryCol()),docs=snaps.docs.map(d=>({id:d.id,...d.data()})).filter(x=>!x.removed),e=docs.find(x=>norm(x.name)===name&&x.code===code);if(!e)throw new Error('ชื่อหรือรหัสแก้ไขไม่ถูกต้อง');if(lockedStudentId(e.role)&&lockedStudentId(e.role)===e.studentId)throw new Error('ตำแหน่งนี้ถูกล็อกไว้ ไม่สามารถแก้ไขได้');if(isRoleLocked(newRole))throw new Error('ตำแหน่งนี้ถูกล็อกไว้ ไม่สามารถย้ายเข้าได้');if(e.edited)throw new Error('ใช้สิทธิ์แก้ไขไปแล้ว');if(newRole!==e.role&&docs.filter(x=>x.role===newRole).length>=roleMax(newRole))throw new Error('ตำแหน่งใหม่เต็มแล้ว');tx.update(entryDoc(e.id),{role:newRole,edited:true,authCode:code,time:new Date().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})})});closeModal('editModal');toast('แก้ไขสำเร็จ ใช้สิทธิ์แก้ไขครบแล้ว')}catch(e){toast(e.message||'แก้ไขไม่สำเร็จ')}}
 function fillMyEdit(name,code){document.getElementById('editName').value=name;document.getElementById('editCode').value=code;show('editModal')}
 function loginAdmin(fromModal=false){const key=(fromModal?document.getElementById('adminKey2').value:document.getElementById('adminKey').value).trim();if(key===ADMIN_KEY){isAdmin=true;document.body.classList.add('admin-on');closeModal('adminModal');toast('เข้าสู่ระบบ Admin แล้ว')}else toast('Admin Key ไม่ถูกต้อง')}function logoutAdmin(){isAdmin=false;document.body.classList.remove('admin-on');toast('ออกจากระบบ Admin แล้ว')}
 async function adminDelete(id){if(!isAdmin)return toast('ต้องเข้าสู่ระบบ Admin ก่อน');await setDoc(entryDoc(id),{removed:true,authCode:ADMIN_KEY},{merge:true});toast('ลบแล้ว')}async function resetAll(){if(!isAdmin)return toast('ต้องเข้าสู่ระบบ Admin ก่อน');if(!confirm('รีเซ็ตทั้งหมด? (ตำแหน่งที่ล็อกไว้จะไม่ถูกลบ)'))return;const snaps=await getDocs(entryCol()),batch=writeBatch(db);snaps.forEach(d=>{const data=d.data();if(lockedStudentId(data.role)&&lockedStudentId(data.role)===data.studentId)return;batch.update(d.ref,{removed:true,authCode:ADMIN_KEY})});await batch.commit();toast('รีเซ็ตแล้ว (เก็บตำแหน่งที่ล็อกไว้)')}async function toggleOpen(){if(!isAdmin)return toast('ต้องเข้าสู่ระบบ Admin ก่อน');await setDoc(settingsDoc(),{open:!state.open,authCode:ADMIN_KEY},{merge:true})}
 async function toggleTrialMode(){if(!isAdmin)return toast('ต้องเข้าสู่ระบบ Admin ก่อน');const next=!state.trialMode;await setDoc(settingsDoc(),{trialMode:next,authCode:ADMIN_KEY},{merge:true});toast(next?'เปิดโหมดทดลองแล้ว':'ปิดโหมดทดลองแล้ว')}
 async function clearTrialData(){if(!isAdmin)return toast('ต้องเข้าสู่ระบบ Admin ก่อน');if(!confirm('ล้างข้อมูลทดลองทั้งหมด? (ไม่กระทบข้อมูลจริง)'))return;const snaps=await getDocs(entryCol()),batch=writeBatch(db);let count=0;snaps.forEach(d=>{const data=d.data();if(data.trial){batch.update(d.ref,{removed:true,authCode:ADMIN_KEY});count++}});if(count===0)return toast('ไม่มีข้อมูลทดลองให้ล้าง');await batch.commit();toast('ล้างข้อมูลทดลอง '+count+' รายการแล้ว')}
 async function adminQuickAdd(){if(!isAdmin)return toast('ต้องเข้าสู่ระบบ Admin ก่อน');const studentId=document.getElementById('quickAddName').value,roleId=document.getElementById('quickAddRole').value;if(!studentId)return toast('กรุณาเลือกชื่อ');const person=ROSTER.find(p=>p.id===studentId);if(!person)return toast('ไม่พบชื่อนี้');const code=makeCode(),entryId=crypto.randomUUID();try{await runTransaction(db,async(tx)=>{const snaps=await getDocs(entryCol()),entries=snaps.docs.map(d=>d.data()).filter(e=>!e.removed);if(entries.some(e=>e.studentId===studentId))throw new Error('คนนี้เลือกตำแหน่งไปแล้ว');if(entries.filter(e=>e.role===roleId).length>=roleMax(roleId))throw new Error('ตำแหน่งนี้เต็มแล้ว');tx.set(entryDoc(entryId),{name:person.name,studentId,role:roleId,code,edited:false,trial:false,authCode:ADMIN_KEY,time:new Date().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'}),createdAt:serverTimestamp()})});toast('เพิ่ม '+person.name+' เข้าตำแหน่งแล้ว รหัสแก้ไข: '+code)}catch(e){toast(e.message||'เพิ่มไม่สำเร็จ')}}
-async function adminLockRole(){if(!isAdmin)return toast('ต้องเข้าสู่ระบบ Admin ก่อน');const roleId=document.getElementById('lockRoleSelect').value,studentId=document.getElementById('lockNameSelect').value;if(!roleId||!studentId)return toast('กรุณาเลือกตำแหน่งและชื่อ');const person=ROSTER.find(p=>p.id===studentId);if(!person)return toast('ไม่พบชื่อนี้');const lockedRoles={...(state.lockedRoles||{}),[roleId]:studentId};state.lockedRoles=lockedRoles;render();await setDoc(settingsDoc(),{lockedRoles,authCode:ADMIN_KEY},{merge:true});toast('ล็อก '+roleName(roleId)+' ให้ '+person.name+' แล้ว')}
+async function adminLockRole(){if(!isAdmin)return toast('ต้องเข้าสู่ระบบ Admin ก่อน');const roleId=document.getElementById('lockRoleSelect').value,studentId=document.getElementById('lockNameSelect').value;if(!roleId)return toast('กรุณาเลือกตำแหน่งที่จะล็อก');const person=studentId?ROSTER.find(p=>p.id===studentId):null;if(studentId&&!person)return toast('ไม่พบชื่อนี้');const lockedRoles={...(state.lockedRoles||{}),[roleId]:studentId||'*'};state.lockedRoles=lockedRoles;render();await setDoc(settingsDoc(),{lockedRoles,authCode:ADMIN_KEY},{merge:true});toast(person?('ล็อก '+roleName(roleId)+' ให้ '+person.name+' แล้ว'):('ปิด '+roleName(roleId)+' แล้ว (ไม่ระบุคน)'))}
 async function adminUnlockRole(roleId){if(!isAdmin)return toast('ต้องเข้าสู่ระบบ Admin ก่อน');const lockedRoles={...(state.lockedRoles||{})};delete lockedRoles[roleId];state.lockedRoles=lockedRoles;render();await setDoc(settingsDoc(),{lockedRoles,authCode:ADMIN_KEY},{merge:true});toast('ปลดล็อก '+roleName(roleId)+' แล้ว')}
 async function saveSchedule(){if(!isAdmin)return toast('ต้องเข้าสู่ระบบ Admin ก่อน');const scheduleStart=document.getElementById('scheduleStart').value,scheduleEnd=document.getElementById('scheduleEnd').value;if(scheduleStart&&scheduleEnd&&new Date(scheduleEnd)<=new Date(scheduleStart))return toast('เวลาปิดต้องอยู่หลังเวลาเปิด');state.scheduleStart=scheduleStart;state.scheduleEnd=scheduleEnd;scheduleDirty=false;render();await setDoc(settingsDoc(),{scheduleStart,scheduleEnd,authCode:ADMIN_KEY},{merge:true});toast('บันทึกเวลาแล้ว')}async function clearSchedule(){if(!isAdmin)return toast('ต้องเข้าสู่ระบบ Admin ก่อน');state.scheduleStart='';state.scheduleEnd='';scheduleDirty=false;syncScheduleInputs(true);render();await setDoc(settingsDoc(),{scheduleStart:'',scheduleEnd:'',authCode:ADMIN_KEY},{merge:true});toast('ล้างเวลาแล้ว')}
 async function changeRoleCap(roleId,delta){if(!isAdmin)return toast('ต้องเข้าสู่ระบบ Admin ก่อน');const current=roleMax(roleId),used=state.entries.filter(e=>e.role===roleId).length,next=Math.max(used,current+delta);state.roleCaps={...(state.roleCaps||{}),[roleId]:next};render();await setDoc(settingsDoc(),{roleCaps:state.roleCaps,authCode:ADMIN_KEY},{merge:true});toast('อัปเดตจำนวนช่องแล้ว')}
@@ -353,9 +370,10 @@ function csbGroupRows(ids){const rows=[];ids.forEach(id=>{const r=roles.find(x=>
 function formatThaiDateOnly(v){if(!v)return'-';return new Date(v+'T00:00:00').toLocaleDateString('th-TH',{day:'numeric',month:'long',year:'numeric'})}
 function buildCallSheetHTML(){
   const GROUPS=[
-    [{name:'กำกับ / โปรดักชั่น',ids:['producer','director','script','runner']},{name:'ไฟ / ไฟฟ้า',ids:['gaffer','bestboy']}],
-    [{name:'ฝ่ายกล้อง',ids:['dop','camoperator','focuspuller','camop']},{name:'เสียง',ids:['sound']}],
-    [{name:'ศิลป์',ids:['art','artprop']},{name:'แต่งหน้า / คอสตูม',ids:['makeup']}]
+    [{name:'กำกับ / โปรดักชั่น',ids:['producer','pm','director','script','runner','ad2']},{name:'ไฟ / ไฟฟ้า',ids:['gaffer','bestboy']}],
+    [{name:'ฝ่ายกล้อง',ids:['dop','camoperator','focuspuller','camassist']},{name:'เสียง',ids:['sound']}],
+    [{name:'ศิลป์',ids:['proddesign','art','artprop']},{name:'แต่งหน้า / คอสตูม',ids:['makeup']}],
+    [{name:'ตัดต่อ',ids:['editor']},{name:'',ids:[]}]
   ];
   const cs=state.callSheet||{};
   const info=`<div class="csb-info"><div><label>วันที่ถ่ายทำ</label><b>${formatThaiDateOnly(cs.date)}</b></div><div><label>Call Time</label><b>${cs.callTime||'-'}</b></div><div><label>เลิกกอง (โดยประมาณ)</label><b>${cs.wrapTime||'-'}</b></div><div><label>สถานที่ถ่ายทำ</label><b>${cs.location||'-'}</b></div></div>`;
