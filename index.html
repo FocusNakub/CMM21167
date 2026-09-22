@@ -55,14 +55,17 @@ button.secondary{background:#fff;color:var(--ink);border:1px solid var(--line);b
 .avatar-stack .stack-avatar.stack-more{background:var(--pink);color:#fff;font-size:11px}
 .top-countdown{display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--pink),#ffc7dd);color:#fff;border-radius:999px;padding:8px 16px;font-weight:800;font-size:13px;white-space:nowrap;box-shadow:0 8px 18px color-mix(in srgb,var(--pink) 35%,transparent)}
 .top-countdown b{font-size:16px;color:#fff;font-variant-numeric:tabular-nums}
-.top-hero-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,240px);gap:18px;margin:4px 0 0;align-items:start;justify-content:start}
-.announce-card{background:linear-gradient(135deg,#fff0f6,#ffe0ec);border:1px solid var(--pink);border-left:6px solid var(--pink);border-radius:14px;padding:8px 14px;margin:0;display:flex;gap:9px;align-items:center;box-shadow:var(--shadow);animation:announceIn .3s ease;min-width:0;width:fit-content;max-width:100%}
+.top-hero-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,310px);gap:18px;margin:4px 0 0;align-items:start;justify-content:start}
+.announce-card{background:linear-gradient(135deg,#fff0f6,#ffe0ec);border:1px solid var(--pink);border-left:6px solid var(--pink);border-radius:14px;padding:8px 14px;margin:0;display:flex;gap:9px;align-items:center;box-shadow:var(--shadow);min-width:0;width:fit-content;max-width:100%;transition:opacity .45s cubic-bezier(.4,0,.2,1),transform .45s cubic-bezier(.4,0,.2,1),width .4s cubic-bezier(.4,0,.2,1),height .4s cubic-bezier(.4,0,.2,1)}
+.announce-card.hide{opacity:0;transform:translateY(-8px) scale(.97)}
+.announce-card.pulse-fade{opacity:.35}
 .announce-card .announce-icon{flex-shrink:0;width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--dark));color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;box-shadow:0 3px 7px rgba(194,61,112,.35)}
-.announce-card .announce-body{flex:1;min-width:0;display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.announce-card .announce-body{flex:1;min-width:0;display:flex;align-items:baseline;gap:6px;flex-wrap:nowrap}
 .announce-card .announce-label{font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;color:var(--dark);flex-shrink:0}
-.announce-card .announce-text{font-size:14px;font-weight:700;color:var(--ink);overflow-wrap:anywhere;line-height:1.4;transition:opacity .35s ease,transform .35s ease}
-.announce-card .announce-text.fade-out{opacity:0;transform:translateY(-4px)}
-.roles-ticker{position:relative;background:#fff;border:2px solid var(--dark);border-radius:14px;padding:10px 12px 8px;margin:0 0 0 auto;display:flex;flex-direction:column;align-items:stretch;gap:4px;box-shadow:var(--shadow);width:230px;max-width:100%;height:132px;justify-content:center;text-align:center;overflow:hidden}
+/* เดิม flex-wrap:wrap + overflow-wrap:anywhere ทำให้พอพื้นที่แคบลง (หลังขยายกล่องตำแหน่งทั้งหมด) ป้ายกำกับ "ประกาศ" ขึ้นบรรทัดเดียว แล้วข้อความทั้งก้อนตกลงบรรทัดถัดไป ดูเหมือนหลุด — บนจอปกติให้อยู่บรรทัดเดียวแล้วตัดจบด้วย ... แทน */
+.announce-card .announce-text{font-size:14px;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0;line-height:1.4;transition:opacity .45s cubic-bezier(.4,0,.2,1),transform .45s cubic-bezier(.4,0,.2,1)}
+.announce-card .announce-text.fade-out{opacity:0;transform:translateY(-6px)}
+.roles-ticker{position:relative;background:#fff;border:2px solid var(--dark);border-radius:14px;padding:10px 12px 8px;margin:0 0 0 auto;display:flex;flex-direction:column;align-items:stretch;gap:4px;box-shadow:var(--shadow);width:300px;max-width:100%;height:132px;justify-content:center;text-align:center;overflow:hidden}
 .roles-ticker .ticker-accent{position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--pink),var(--dark));transition:background .3s ease}
 .roles-ticker .ticker-accent.st-open{background:linear-gradient(90deg,#2fb673,#1f8a4c)}
 .roles-ticker .ticker-accent.st-full{background:linear-gradient(90deg,#6366f1,#4338ca)}
@@ -132,6 +135,9 @@ select option{color:var(--ink);font-size:16px;padding:8px}
   .announce-card{padding:8px 12px;width:100%}
   .announce-card .announce-icon{width:24px;height:24px;font-size:12px}
   .announce-card .announce-label{display:none}
+  /* มือถือกว้างเต็มจออยู่แล้ว ไม่ติดปัญหาพื้นที่แคบเหมือน desktop เลยให้ข้อความยาวๆ ขึ้นบรรทัดใหม่ได้ตามปกติแทนการตัดจบด้วย ... */
+  .announce-card .announce-body{flex-wrap:wrap}
+  .announce-card .announce-text{white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere}
   .top-hero-row{grid-template-columns:1fr}
   /* มือถือ: กล่อง "ตำแหน่งทั้งหมด" เรียงเป็นแถวเดี่ยวอยู่ใต้กล่องสถานะแล้ว ไม่ต้องบังคับสูงเท่ากันอีก
      เดิมใช้ height คงที่ 120px + overflow:hidden (สืบทอดจาก desktop) ผสมกับไอคอน/ตัวอักษรที่ขยายใหญ่ขึ้นบนมือถือ
@@ -359,13 +365,32 @@ function renderLiveBanner(){
   renderRolesTicker();
   const tb=document.getElementById('trialBanner');if(tb)tb.style.display=state.trialMode?'block':'none';
 }
-let annIndex=0,annTimer=null,annLastKey='';
+let annIndex=0,annTimer=null,annLastKey='',annHideTimer=null,annSizeTimer=null;
 function renderAnnounceCard(){
   const bar=document.getElementById('announceBar'),txt=document.getElementById('announceText');
   if(!bar||!txt)return;
   const anns=(state.announcements||[]).filter(Boolean);
-  if(!anns.length){bar.style.display='none';if(annTimer){clearInterval(annTimer);annTimer=null}annIndex=0;annLastKey='';return}
-  bar.style.display='flex';
+  if(!anns.length){
+    // เฟดกรอบประกาศออกก่อน ค่อยซ่อนจริง (display:none) หลังทรานซิชันจบ แทนที่จะหายวับไปทันที
+    if(bar.style.display!=='none'){
+      bar.classList.add('hide');
+      clearTimeout(annHideTimer);
+      annHideTimer=setTimeout(()=>{if(bar.classList.contains('hide'))bar.style.display='none'},450);
+    }
+    if(annTimer){clearInterval(annTimer);annTimer=null}
+    annIndex=0;annLastKey='';
+    return;
+  }
+  if(bar.style.display==='none'||!bar.style.display){
+    clearTimeout(annHideTimer);
+    bar.style.display='flex';
+    bar.classList.add('hide');
+    void bar.offsetWidth; // บังคับให้เบราว์เซอร์คำนวณสไตล์ก่อน แล้วค่อยเอาคลาส hide ออก เพื่อให้ทรานซิชันเฟดเข้าทำงานจริง
+    bar.classList.remove('hide');
+  } else {
+    clearTimeout(annHideTimer);
+    bar.classList.remove('hide');
+  }
   const key=anns.join('|');
   if(key!==annLastKey){annLastKey=key;annIndex=0;txt.textContent=anns[0];txt.classList.remove('fade-out')}
   if(anns.length>1){
@@ -373,9 +398,18 @@ function renderAnnounceCard(){
       annTimer=setInterval(()=>{
         const cur=(state.announcements||[]).filter(Boolean);
         if(cur.length<=1){clearInterval(annTimer);annTimer=null;return}
-        txt.classList.add('fade-out');
-        setTimeout(()=>{annIndex=(annIndex+1)%cur.length;txt.textContent=cur[annIndex];txt.classList.remove('fade-out')},350);
-      },4000);
+        // ไม่เฟดข้อความ/กรอบแล้ว — สลับข้อความทันที แต่ให้กล่องไล่ขนาด (กว้าง/สูง) จากขนาดเดิมไปขนาดใหม่แบบนุ่มนวลแทน (FLIP technique)
+        const oldRect=bar.getBoundingClientRect();
+        annIndex=(annIndex+1)%cur.length;txt.textContent=cur[annIndex];
+        bar.style.width='';bar.style.height=''; // เคลียร์ค่าที่ตั้งไว้ก่อนหน้า เพื่อวัดขนาดตาม CSS จริง (fit-content/100%) ไม่ใช่ 'auto' ที่ทำให้กล่องพองเต็มแถว
+        const newRect=bar.getBoundingClientRect();
+        bar.style.overflow='hidden'; // กันข้อความใหม่ (ถ้าสูง/ยาวกว่าเดิม) ล้นออกนอกกล่องช่วงที่ยังล็อกขนาดเดิมไว้ก่อนเริ่มไล่ขนาด (บัค "ตัวหนังสือตก")
+        bar.style.width=oldRect.width+'px';bar.style.height=oldRect.height+'px';
+        void bar.offsetWidth; // บังคับ reflow ให้จำขนาดเดิมไว้ก่อนเริ่มทรานซิชัน
+        bar.style.width=newRect.width+'px';bar.style.height=newRect.height+'px';
+        clearTimeout(annSizeTimer);
+        annSizeTimer=setTimeout(()=>{bar.style.width='';bar.style.height='';bar.style.overflow=''},470); // ทรานซิชันจบแล้วคืนเป็นค่าปกติจาก CSS เพื่อให้ responsive ตามจอ
+      },4200);
     }
   } else if(annTimer){clearInterval(annTimer);annTimer=null}
 }
