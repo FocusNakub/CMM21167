@@ -62,7 +62,7 @@ button.secondary{background:#fff;color:var(--ink);border:1px solid var(--line);b
 .announce-card .announce-label{font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;color:var(--dark);flex-shrink:0}
 .announce-card .announce-text{font-size:14px;font-weight:700;color:var(--ink);overflow-wrap:anywhere;line-height:1.4;transition:opacity .35s ease,transform .35s ease}
 .announce-card .announce-text.fade-out{opacity:0;transform:translateY(-4px)}
-.roles-ticker{position:relative;background:#fff;border:2px solid var(--dark);border-radius:14px;padding:10px 12px 8px;margin:0 0 0 auto;display:flex;flex-direction:column;align-items:stretch;gap:4px;box-shadow:var(--shadow);width:230px;max-width:100%;height:116px;justify-content:center;text-align:center;overflow:hidden}
+.roles-ticker{position:relative;background:#fff;border:2px solid var(--dark);border-radius:14px;padding:10px 12px 8px;margin:0 0 0 auto;display:flex;flex-direction:column;align-items:stretch;gap:4px;box-shadow:var(--shadow);width:230px;max-width:100%;height:132px;justify-content:center;text-align:center;overflow:hidden}
 .roles-ticker .ticker-accent{position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--pink),var(--dark));transition:background .3s ease}
 .roles-ticker .ticker-accent.st-open{background:linear-gradient(90deg,#2fb673,#1f8a4c)}
 .roles-ticker .ticker-accent.st-full{background:linear-gradient(90deg,#6366f1,#4338ca)}
@@ -133,7 +133,10 @@ select option{color:var(--ink);font-size:16px;padding:8px}
   .announce-card .announce-icon{width:24px;height:24px;font-size:12px}
   .announce-card .announce-label{display:none}
   .top-hero-row{grid-template-columns:1fr}
-  .roles-ticker{padding:10px 14px;width:100%;height:120px;margin:0}
+  /* มือถือ: กล่อง "ตำแหน่งทั้งหมด" เรียงเป็นแถวเดี่ยวอยู่ใต้กล่องสถานะแล้ว ไม่ต้องบังคับสูงเท่ากันอีก
+     เดิมใช้ height คงที่ 120px + overflow:hidden (สืบทอดจาก desktop) ผสมกับไอคอน/ตัวอักษรที่ขยายใหญ่ขึ้นบนมือถือ
+     ทำให้เนื้อหาแถวล่าง (แผนก/จำนวนคน) สูงเกินกล่องแล้วถูกตัดขาดครึ่งหนึ่ง — แก้โดยให้กล่องสูงตามเนื้อหาจริงแทน */
+  .roles-ticker{padding:10px 14px;width:100%;height:auto;min-height:120px;margin:0;overflow:visible}
   .roles-ticker .ticker-icon{width:32px;height:32px;font-size:16px}
   .roles-ticker .ticker-text{font-size:16px}
 }
