@@ -98,8 +98,16 @@ button.secondary{background:#fff;color:var(--ink);border:1px solid var(--line);b
 .dept-block .card{box-shadow:none;background:var(--bg)}
 .dept-block .card:hover{box-shadow:0 14px 30px rgba(23,79,120,.12)}
 .card{background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:var(--radius);padding:16px;position:relative;overflow:hidden;transition:.2s ease;min-width:0}.card:hover{transform:translateY(-3px);box-shadow:0 22px 46px rgba(23,79,120,.16)}.card.full:after{content:"เต็มแล้ว";position:absolute;right:-34px;top:18px;background:var(--red);color:#fff;transform:rotate(35deg);padding:6px 42px;font-size:12px;font-weight:950}.role-title{display:flex;justify-content:space-between;gap:10px;align-items:center;min-width:0;flex-wrap:wrap}.role-title-main{display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-width:0}.role-title h3{margin:0;font-size:18px;min-width:0;overflow-wrap:anywhere}.lock-badge{display:inline-flex;align-items:center;gap:3px;background:linear-gradient(135deg,#ff8fb8,var(--dark));color:#fff;padding:3px 11px;border-radius:999px;font-size:11px;font-weight:800;box-shadow:0 3px 8px rgba(194,61,112,.3);white-space:nowrap}
-.card.closed-card{opacity:.6;background:#faf5f7}.closed-msg{margin-top:10px;font-size:13px;font-weight:800;color:var(--muted);text-align:center;padding:14px 8px;background:#fdeef4;border-radius:14px;border:1px dashed var(--line)}.count{font-size:13px;color:var(--muted);font-weight:900;flex:0 0 auto}.slots{margin:13px 0;display:grid;gap:8px;min-width:0}.slot{background:#fdeef4;border:1px dashed var(--line);border-radius:14px;padding:10px;display:flex;justify-content:space-between;gap:10px;align-items:center;min-width:0}.slot>div{min-width:0}.slot.taken{background:#f7fff9;border-style:solid;border-color:#bfeccf}.name{font-weight:950;overflow-wrap:anywhere;word-break:break-word}.small{font-size:12px;color:var(--muted);font-weight:700;overflow-wrap:anywhere;word-break:break-word}
-.panel{background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);border-radius:var(--radius);padding:16px;min-width:0}.panel h2{margin:0 0 12px;font-size:16px}.stat{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;min-width:0}.stat div{background:#fdeef4;border:1px solid var(--line);border-radius:16px;padding:12px;min-width:0}.stat b{font-size:26px}.field{display:grid;gap:6px;margin:10px 0;min-width:0}.field label{font-size:13px;color:var(--muted);font-weight:900}input,select{width:100%;max-width:100%;padding:12px;border-radius:14px;border:1px solid var(--line);font-size:16px;background:#fff;color:var(--ink);min-width:0;font-family:inherit}
+/* ตำแหน่งที่ปิดไว้: ทำให้เตี้ย/กระชับกว่าการ์ดตำแหน่งปกติ (เดิมสูงเท่ากันทำให้ต้องเลื่อนผ่านเยอะ) แสดงแค่ชื่อ+ป้าย 🚫 ในแถวเดียว ยังคงมีอยู่ให้เห็นแต่ไม่ขวางการเลื่อนดูตำแหน่งที่เปิดอยู่ */
+.card.closed-card{opacity:.55;background:#faf5f7;padding:10px 14px;display:flex;align-items:center}
+.card.closed-card .role-title{width:100%;margin:0;flex-wrap:nowrap}
+.card.closed-card h3{font-size:15px}
+.closed-tag{font-size:11px;font-weight:800;color:var(--muted);background:#fdeef4;border:1px dashed var(--line);border-radius:999px;padding:4px 10px;white-space:nowrap;flex-shrink:0}.count{font-size:13px;color:var(--muted);font-weight:900;flex:0 0 auto}.slots{margin:13px 0;display:grid;gap:8px;min-width:0}.slot{background:#fdeef4;border:1px dashed var(--line);border-radius:14px;padding:10px;display:flex;justify-content:space-between;gap:10px;align-items:center;min-width:0}.slot>div{min-width:0}.slot.taken{background:#f7fff9;border-style:solid;border-color:#bfeccf}.name{font-weight:950;overflow-wrap:anywhere;word-break:break-word}.small{font-size:12px;color:var(--muted);font-weight:700;overflow-wrap:anywhere;word-break:break-word}
+.panel{background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);border-radius:var(--radius);padding:16px;min-width:0}.panel h2{margin:0 0 12px;font-size:16px}.stat{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;min-width:0}.stat div{background:#fdeef4;border:1px solid var(--line);border-radius:16px;padding:12px;min-width:0}.stat b{font-size:26px}
+/* แถวนับตำแหน่งเปิด/ปิด/รวม แบบไม่มีพื้นหลัง กินพื้นที่น้อย อ่านง่าย แทนกล่อง .stat เดิม */
+.role-count-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:4px;font-size:10px;font-weight:700;color:var(--muted);margin-top:8px}
+.role-count-row b{font-size:11px;font-weight:950}
+.role-count-row .rc-sep{color:var(--line)}.field{display:grid;gap:6px;margin:10px 0;min-width:0}.field label{font-size:13px;color:var(--muted);font-weight:900}input,select{width:100%;max-width:100%;padding:12px;border-radius:14px;border:1px solid var(--line);font-size:16px;background:#fff;color:var(--ink);min-width:0;font-family:inherit}
 select{-webkit-appearance:none;-moz-appearance:none;appearance:none;padding-right:38px;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'><path d='M5 8l5 5 5-5' fill='none' stroke='%23e8558c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>");background-repeat:no-repeat;background-position:right 12px center;background-size:16px;cursor:pointer}
 select:focus,input:focus{outline:none;border-color:var(--pink);box-shadow:0 0 0 3px color-mix(in srgb,var(--pink) 18%,transparent)}
 select option{color:var(--ink);font-size:16px;padding:8px}
@@ -209,7 +217,7 @@ select option{color:var(--ink);font-size:16px;padding:8px}
     <section class="content-area"><div class="dept-grid" id="roleCards"></div></section>
     <aside class="side">
       <div class="panel" id="myProfileBox" style="display:none"><h2>✅ ข้อมูลของฉัน</h2><div id="myProfileContent"></div></div>
-      <div class="panel"><h2>📊 สถานะ &amp; เมนูลัด</h2><div class="schedule-status"><div class="small" id="scheduleLabel">สถานะเวลา</div><div class="countdown" id="countdownText">--:--:--</div><div class="small" id="scheduleInfo"></div></div><div class="admin-actions" style="margin-top:12px"><button class="secondary muted-btn" onclick="openMembers()">👥 สมาชิกทั้งหมด</button><button class="secondary muted-btn" onclick="openCallSheet()">📄 Call Sheet</button><button class="secondary muted-btn" onclick="copyPageLink()">🔗 คัดลอกลิงก์</button></div><hr style="border:0;border-top:1px solid var(--line);margin:14px 0"><h3 style="margin:0 0 8px">🔔 Live Activity</h3><div id="activityFeed" class="mini-list"><div class="small">ยังไม่มีข้อมูล</div></div></div>
+      <div class="panel"><h2>📊 สถานะ &amp; เมนูลัด</h2><div class="schedule-status"><div class="small" id="scheduleLabel">สถานะเวลา</div><div class="countdown" id="countdownText">--:--:--</div><div class="small" id="scheduleInfo"></div></div><div class="role-count-row"><span>🟢 ลงได้ <b id="roleOpenCount" style="color:#1f8a4c">0</b></span><span class="rc-sep">·</span><span>🚫 ปิด <b id="roleClosedCount" style="color:var(--red)">0</b></span><span class="rc-sep">·</span><span>รวม <b id="roleTotalCount">0</b></span></div><div class="admin-actions" style="margin-top:12px"><button class="secondary muted-btn" onclick="openMembers()">👥 สมาชิกทั้งหมด</button><button class="secondary muted-btn" onclick="openCallSheet()">📄 Call Sheet</button><button class="secondary muted-btn" onclick="copyPageLink()">🔗 คัดลอกลิงก์</button></div><hr style="border:0;border-top:1px solid var(--line);margin:14px 0"><h3 style="margin:0 0 8px">🔔 Live Activity</h3><div id="activityFeed" class="mini-list"><div class="small">ยังไม่มีข้อมูล</div></div></div>
 
       <div class="panel" id="adminLogin"><h2>👑 Admin</h2><p class="small">กรอก Admin Key เพื่อจัดการข้อมูล</p><div class="field"><label>Admin Key</label><input id="adminKey" type="password" placeholder="กรอกรหัสผู้ดูแล" onkeydown="if(event.key==='Enter')loginAdmin()"></div><button onclick="loginAdmin()">เข้าสู่ระบบ</button></div>
 
@@ -220,7 +228,7 @@ select option{color:var(--ink);font-size:16px;padding:8px}
       <div class="admin-section"><h3>📢 ประกาศหน้าเว็บ</h3><p class="small" style="margin:0 0 10px">เพิ่มได้หลายข้อความ ระบบจะเลื่อนสลับแสดงให้อัตโนมัติทุก 4 วินาที</p><div class="field"><label>ข้อความประกาศใหม่</label><input id="announcementInput" placeholder="เช่น ขอให้ทุกคนลงตำแหน่งก่อน 20:00" onkeydown="if(event.key==='Enter')addAnnouncement()"></div><div class="admin-actions"><button onclick="addAnnouncement()">➕ เพิ่มประกาศ</button><button onclick="clearAnnouncement()" class="secondary">ล้างทั้งหมด</button></div><div id="announcementList" class="mini-list" style="margin-top:12px"></div></div>
       <div class="admin-section"><h3>👥 จำนวนช่องตำแหน่ง</h3><div id="roleAdminControls" class="time-grid"></div></div>
       <div class="admin-section"><h3>⏰ ตั้งเวลาเปิด/ปิด</h3><div class="time-grid"><div class="field"><label>เวลาเปิดลงตำแหน่ง</label><input id="scheduleStart" type="datetime-local" oninput="markScheduleDirty()"></div><div class="field"><label>เวลาปิดลงตำแหน่ง</label><input id="scheduleEnd" type="datetime-local" oninput="markScheduleDirty()"></div><div class="admin-actions"><button onclick="saveSchedule()">บันทึกเวลา</button><button onclick="clearSchedule()" class="secondary">ล้างเวลา</button></div></div></div>
-      <div class="admin-section"><h3>📄 ข้อมูล Call Sheet</h3><div class="csb-callinfo-grid"><div class="field"><label>วันที่ถ่ายทำ</label><input id="csDate" type="date"></div><div class="field"><label>เวลา Call Time</label><input id="csCallTime" type="time"></div><div class="field"><label>เวลาเลิกกอง (โดยประมาณ)</label><input id="csWrapTime" type="time"></div><div class="field"><label>สถานที่ถ่ายทำ</label><input id="csLocation" placeholder="เช่น อาคาร SPU"></div></div><div class="field"><label>หมายเหตุ / อุปกรณ์ที่ต้องเตรียม</label><input id="csNotes" placeholder="เช่น นำกล้อง ขาตั้งกล้อง ไฟ LED"></div><div class="admin-actions"><button onclick="saveCallSheetInfo()">บันทึก Call Sheet</button></div></div><div class="admin-section"><h3>📋 รายชื่อ / รหัสแก้ไข</h3><div class="table-scroll"><table class="table"><thead><tr><th>ชื่อ</th><th>ตำแหน่ง</th><th></th></tr></thead><tbody id="adminTable"></tbody></table></div></div></div>
+      <div class="admin-section"><h3>📄 ข้อมูล Call Sheet</h3><div class="csb-callinfo-grid"><div class="field"><label>วันที่ถ่ายทำ</label><input id="csDate" type="date"></div><div class="field"><label>เวลา Call Time</label><input id="csCallTime" type="time"></div><div class="field"><label>เวลาเลิกกอง (โดยประมาณ)</label><input id="csWrapTime" type="time"></div><div class="field"><label>สถานที่ถ่ายทำ</label><input id="csLocation" placeholder="เช่น อาคาร SPU"></div></div><div class="field"><label>หมายเหตุ / อุปกรณ์ที่ต้องเตรียม</label><input id="csNotes" placeholder="เช่น นำกล้อง ขาตั้งกล้อง ไฟ LED"></div><div class="admin-actions"><button onclick="saveCallSheetInfo()">บันทึก Call Sheet</button></div></div><div class="admin-section"><h3>📋 รายชื่อ / รหัสแก้ไข</h3><div class="table-scroll"><table class="table"><thead><tr><th>ชื่อ</th><th>ตำแหน่ง</th><th></th></tr></thead><tbody id="adminTable"></tbody></table></div></div><div class="admin-section"><h3>📝 ประวัติการลงที่ไม่สำเร็จ</h3><p class="small" style="margin:0 0 10px">คนที่เริ่มลงตำแหน่งแต่ไม่กรอกเบอร์โทร/รหัสนักศึกษาให้ครบ, กดยกเลิก, ออกจากหน้าเว็บไปก่อน หรือลงไม่ทัน (เช่น ตำแหน่งเต็ม)</p><div id="attemptList" class="mini-list"></div><div class="admin-actions" style="margin-top:10px"><button class="secondary" onclick="clearAttempts()">🗑️ ล้างประวัติ</button></div></div></div>
     </aside>
   </main>
 
@@ -232,9 +240,12 @@ select option{color:var(--ink);font-size:16px;padding:8px}
   </footer>
 </div>
 
-<div class="modal" id="rulesModal"><div class="modal-card"><h2>📋 วิธีใช้งาน</h2><p><b>1.</b> เลื่อนดูตำแหน่งที่แบ่งเป็นแผนกด้านล่าง<br><b>2.</b> กด "ลงตำแหน่งนี้" ที่ตำแหน่งที่ต้องการ<br><b>3.</b> เลือกชื่อตัวเองจากลิสต์แล้วกดยืนยัน<br><b>4.</b> เก็บรหัสแก้ไข 4 ตัวที่ได้ไว้ (แคปหน้าจอ)</p><p>✅ 1 คนเลือกได้ 1 ตำแหน่ง<br>✅ ย้ายตำแหน่งได้ 1 ครั้ง (ต้องใช้รหัสแก้ไข)<br>✅ ข้อมูลอัปเดตเรียลไทม์ทุกเครื่อง<br>✅ ตำแหน่งเต็มแล้วเลือกไม่ได้ ใครกดก่อนได้ก่อน</p><button onclick="closeModal('rulesModal')">เริ่มเลือกตำแหน่ง</button></div></div>
+<div class="modal" id="rulesModal"><div class="modal-card"><h2>📋 วิธีใช้งาน</h2><p><b>1.</b> เลื่อนดูตำแหน่งที่แบ่งเป็นแผนกด้านล่าง<br><b>2.</b> กด "ลงตำแหน่งนี้" ที่ตำแหน่งที่ต้องการ<br><b>3.</b> เลือกชื่อตัวเองจากลิสต์ แล้วกด "ถัดไป"<br><b>4.</b> กรอกเบอร์โทรศัพท์ + รหัสนักศึกษา แล้วกดยืนยัน (ต้องกรอกครบถึงจะลงสำเร็จ)<br><b>5.</b> เก็บรหัสแก้ไข 4 ตัวที่ได้ไว้ (แคปหน้าจอ)</p><p>✅ 1 คนเลือกได้ 1 ตำแหน่ง<br>✅ ย้ายตำแหน่งได้ 1 ครั้ง (ต้องใช้รหัสแก้ไข)<br>✅ ข้อมูลอัปเดตเรียลไทม์ทุกเครื่อง<br>✅ ตำแหน่งเต็มแล้วเลือกไม่ได้ ใครกดก่อนได้ก่อน</p><button onclick="closeModal('rulesModal')">เริ่มเลือกตำแหน่ง</button></div></div>
 
-<div class="modal" id="signupModal"><div class="modal-card"><h2 id="signupTitle">ลงตำแหน่ง</h2><p class="small" id="signupInfo"></p><div class="field"><label>เลือกชื่อของคุณ</label><select id="signupName"></select></div><p class="small">หลังยืนยัน ระบบจะสร้างรหัสแก้ไข 4 ตัว กรุณาแคปหน้าจอไว้</p><div class="admin-actions"><button onclick="confirmSignup()">ยืนยันลงตำแหน่ง</button><button class="secondary" onclick="closeModal('signupModal')">ยกเลิก</button></div></div></div>
+<div class="modal" id="signupModal"><div class="modal-card"><h2 id="signupTitle">ลงตำแหน่ง</h2><p class="small" id="signupInfo"></p>
+<div id="signupStep1"><div class="field"><label>เลือกชื่อของคุณ</label><select id="signupName"></select></div><p class="small">ขั้นตอน 1/2 — เลือกชื่อ แล้วกด "ถัดไป" เพื่อกรอกเบอร์โทรและรหัสนักศึกษา</p><div class="admin-actions"><button onclick="signupNext()">ถัดไป ➜</button><button class="secondary" onclick="cancelSignup()">ยกเลิก</button></div></div>
+<div id="signupStep2" style="display:none"><p class="small" id="signupWho"></p><div class="field"><label>เบอร์โทรศัพท์</label><input id="signupPhone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="เช่น 0812345678" maxlength="12"></div><div class="field"><label>รหัสนักศึกษา</label><input id="signupStudentCode" inputmode="numeric" placeholder="ตัวเลขรหัสนักศึกษา" maxlength="15"></div><p class="small">ขั้นตอน 2/2 — ต้องกรอกให้ครบทั้ง 2 ช่องถึงจะลงตำแหน่งสำเร็จ (ข้อมูลนี้ไม่แสดงบนหน้าเว็บ) · หลังยืนยันจะได้รหัสแก้ไข 4 ตัว กรุณาแคปหน้าจอไว้</p><div class="admin-actions"><button onclick="confirmSignup()">ยืนยันลงตำแหน่ง</button><button class="secondary" onclick="signupBack()">⬅ ย้อนกลับ</button><button class="secondary" onclick="cancelSignup()">ยกเลิก</button></div></div>
+</div></div>
 
 <div class="modal" id="successModal"><div class="modal-card"><h2>🎉 ลงตำแหน่งสำเร็จ</h2><p id="successText"></p><div class="code" id="editCodeBox">D418</div><p class="small">📷 กรุณาแคปหน้าจอนี้ไว้ ใช้สำหรับแก้ไขข้อมูลภายหลัง</p><button onclick="copyCode()">คัดลอกรหัส</button> <button class="secondary" onclick="closeModal('successModal')">ปิด</button></div></div>
 
@@ -242,7 +253,7 @@ select option{color:var(--ink);font-size:16px;padding:8px}
 
 <div class="modal" id="adminModal"><div class="modal-card"><h2>⚙️ Management</h2><p>กรอก Admin Key ที่คุณตั้งไว้เท่านั้น</p><div class="field"><label>Admin Key</label><input id="adminKey2" type="password" onkeydown="if(event.key==='Enter')loginAdmin(true)"></div><button onclick="loginAdmin(true)">เข้าสู่ระบบ</button> <button class="secondary" onclick="closeModal('adminModal')">ปิด</button></div></div>
 
-<div class="modal" id="adminEditModal"><div class="modal-card"><h2>👑 แก้ไขโดย Admin</h2><input type="hidden" id="adminEditId"><div class="field"><label>ชื่อ</label><input id="adminEditName" placeholder="ชื่อ"></div><div class="field"><label>ตำแหน่ง</label><select id="adminEditRole"></select></div><div class="field"><label>รหัสแก้ไข</label><input id="adminEditCode" readonly></div><div class="admin-actions"><button onclick="saveAdminEdit()">💾 บันทึก</button><button onclick="copyAdminEditCode()" class="secondary">📋 Copy Code</button><button onclick="closeModal('adminEditModal')" class="secondary">ยกเลิก</button></div></div></div>
+<div class="modal" id="adminEditModal"><div class="modal-card"><h2>👑 แก้ไขโดย Admin</h2><input type="hidden" id="adminEditId"><div class="field"><label>ชื่อ</label><input id="adminEditName" placeholder="ชื่อ"></div><div class="field"><label>ตำแหน่ง</label><select id="adminEditRole"></select></div><div class="field"><label>เบอร์โทรศัพท์</label><input id="adminEditPhone" type="tel" inputmode="numeric" placeholder="เช่น 0812345678" maxlength="12"></div><div class="field"><label>รหัสนักศึกษา</label><input id="adminEditStudentCode" inputmode="numeric" placeholder="ตัวเลขรหัสนักศึกษา" maxlength="15"></div><div class="field"><label>รหัสแก้ไข</label><input id="adminEditCode" readonly></div><div class="admin-actions"><button onclick="saveAdminEdit()">💾 บันทึก</button><button onclick="copyAdminEditCode()" class="secondary">📋 Copy Code</button><button onclick="closeModal('adminEditModal')" class="secondary">ยกเลิก</button></div></div></div>
 
 <div class="modal" id="membersModal"><div class="modal-card"><h2>👥 สมาชิกทั้งหมด</h2><div class="field" style="margin:0 0 12px"><input id="membersSearch" placeholder="🔎 ค้นหาชื่อ..." oninput="renderMembersList()"></div><div id="membersList"></div><div style="margin-top:14px"><button class="secondary" onclick="closeModal('membersModal')">ปิด</button></div></div></div>
 <div class="modal" id="callSheetModal"><div class="modal-card"><div id="callSheetList"></div><div class="admin-actions" style="margin-top:14px"><button onclick="printCallSheet()">🖨️ Print / Save PDF</button><button class="secondary" onclick="closeModal('callSheetModal')">ปิด</button></div></div></div>
@@ -251,7 +262,7 @@ select option{color:var(--ink);font-size:16px;padding:8px}
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js';
-import { getFirestore, doc, collection, getDocs, onSnapshot, runTransaction, setDoc, writeBatch, serverTimestamp, deleteField, increment } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';
+import { getFirestore, doc, collection, getDocs, onSnapshot, runTransaction, setDoc, writeBatch, serverTimestamp, deleteField, increment, deleteDoc } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';
 
 // TODO: FIREBASE CONFIG — ไปสร้างโปรเจกต์ใหม่ที่ https://console.firebase.google.com
 // แล้วเปิด Firestore Database (โหมด production หรือ test ก็ได้) จากนั้นเอาค่า config มาวางแทนด้านล่างนี้
@@ -327,20 +338,41 @@ function isRoleLocked(roleId){return !!state.lockedRoles?.[roleId]}
 function lockedName(roleId){const sid=lockedStudentId(roleId);return sid?(ROSTER.find(p=>p.id===sid)?.name||''):''}
 function lockedRoleForStudent(studentId){if(!studentId)return null;const entry=Object.entries(state.lockedRoles||{}).find(([,v])=>v===studentId);return entry?entry[0]:null}
 let db=null,isAdmin=false,lastCode='',selectedRoleId='';
-let state={open:true,scheduleStart:'',scheduleEnd:'',announcements:[],roleCaps:{},lockedRoles:{},entries:[],callSheet:{},trialMode:false};
+let state={open:true,scheduleStart:'',scheduleEnd:'',announcements:[],roleCaps:{},lockedRoles:{},entries:[],callSheet:{},trialMode:false,contacts:{},attempts:[]};
 restoreAdminSession();
 const entryCol=()=>collection(db,'cmm21167','settings','entries');
 const entryDoc=(id)=>doc(db,'cmm21167','settings','entries',id);
 const settingsDoc=()=>doc(db,'cmm21167','settings');
 // เอกสารนับจำนวนคนต่อตำแหน่ง ใช้เช็ค "เต็มหรือยัง" แบบ transactional จริงๆ (กันบัคเวลาหลายคนกดพร้อมกัน)
 const roleCountDoc=(roleId)=>doc(db,'cmm21167','settings','roleCounts',roleId);
+// เบอร์โทร/รหัสนักศึกษา แยกเก็บอีกคอลเลกชัน ไม่ให้ทุกเครื่องโหลดมาพร้อมรายชื่อ (โหลดเฉพาะตอนแอดมินล็อกอิน)
+const contactCol=()=>collection(db,'cmm21167','settings','contacts');
+const contactDoc=(id)=>doc(db,'cmm21167','settings','contacts',id);
+// ประวัติการพยายามลงตำแหน่ง (ใช้ดูว่าใครเริ่มลงแต่ไม่สำเร็จ)
+const attemptCol=()=>collection(db,'cmm21167','settings','attempts');
+const attemptDoc=(id)=>doc(db,'cmm21167','settings','attempts',id);
+let currentAttemptId=null,adminUnsubs=[];
 const isConfigured=()=>!firebaseConfig.apiKey.includes('PASTE_')&&!firebaseConfig.projectId.includes('PASTE_');
 if(!isConfigured()){document.getElementById('setupWarn').style.display='block'}else{const app=initializeApp(firebaseConfig);db=getFirestore(app);initOnline();}
 
 async function initOnline(){
   onSnapshot(settingsDoc(),snap=>{const data=snap.exists()?snap.data():{};state.open=data.open!==false;const oldStart=state.scheduleStart||'',oldEnd=state.scheduleEnd||'';state.scheduleStart=data.scheduleStart||'';state.scheduleEnd=data.scheduleEnd||'';state.announcements=Array.isArray(data.announcements)?data.announcements.filter(Boolean):(data.announcement?[data.announcement]:[]);state.roleCaps=data.roleCaps||{};state.lockedRoles=data.lockedRoles||{};state.callSheet=data.callSheet||{};state.trialMode=!!data.trialMode;syncScheduleInputs(oldStart!==state.scheduleStart||oldEnd!==state.scheduleEnd);syncCallSheetInputs();render();});
   onSnapshot(entryCol(),snap=>{state.entries=snap.docs.map(d=>({id:d.id,...d.data()})).filter(e=>!e.removed);render();});
+  if(isAdmin)startAdminListeners();
 }
+// โหลดเบอร์โทร/รหัส นศ. และประวัติการลง เฉพาะตอนเป็นแอดมิน
+function startAdminListeners(){
+  if(!db||adminUnsubs.length)return;
+  adminUnsubs.push(onSnapshot(contactCol(),snap=>{const m={};snap.docs.forEach(d=>{m[d.id]=d.data()});state.contacts=m;renderAdmin()}));
+  adminUnsubs.push(onSnapshot(attemptCol(),snap=>{state.attempts=snap.docs.map(d=>({id:d.id,...d.data()}));renderAdmin()}));
+}
+function stopAdminListeners(){adminUnsubs.forEach(u=>u());adminUnsubs=[];state.contacts={};state.attempts=[]}
+// ตรวจรูปแบบเบอร์โทร/รหัสนักศึกษา
+function onlyDigits(v){return String(v||'').replace(/\D/g,'')}
+function isValidPhone(p){return /^0\d{8,9}$/.test(p)}
+function isValidStudentCode(c){return /^\d{6,15}$/.test(c)}
+function markAttempt(id,status,reason){if(!db||!id)return;setDoc(attemptDoc(id),{status,reason:reason||'',updatedAt:serverTimestamp()},{merge:true}).catch(()=>{})}
+const ATTEMPT_LABEL={started:'⏳ ยังกรอกเบอร์โทร/รหัส นศ. ไม่ครบ',cancelled:'❌ กดยกเลิก',abandoned:'🚪 ออกจากหน้าเว็บก่อนกรอกครบ',failed:'⚠️ ลงไม่สำเร็จ'};
 function norm(s){return(s||'').trim().toLowerCase()}
 // กัน HTML/attribute injection เวลาเอาชื่อ (ที่แอดมินพิมพ์เองได้) ไปแทรกใน innerHTML
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
@@ -352,7 +384,14 @@ function effectiveOpen(){return getOpenStatus().open}
 function openStatusLabel(){return state.trialMode?'ทดลองลงทะเบียน':getOpenStatus().label}function formatDuration(ms){ms=Math.max(0,ms);const h=String(Math.floor(ms/3600000)).padStart(2,'0'),m=String(Math.floor(ms%3600000/60000)).padStart(2,'0'),s=String(Math.floor(ms%60000/1000)).padStart(2,'0');return`${h}:${m}:${s}`}function formatThaiDate(v){if(!v)return'-';return new Date(v).toLocaleString('th-TH',{dateStyle:'short',timeStyle:'short'})}
 let scheduleDirty=false;function syncScheduleInputs(force=false){const a=document.getElementById('scheduleStart'),b=document.getElementById('scheduleEnd');if(!a||!b)return;if(force&&!scheduleDirty){a.value=state.scheduleStart||'';b.value=state.scheduleEnd||''}}function markScheduleDirty(){scheduleDirty=true}
 function show(id){document.getElementById(id).classList.add('show')}function closeModal(id){document.getElementById(id).classList.remove('show')}function toast(t){const el=document.getElementById('toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2500)}
-function render(){updateCountdown();renderLiveBanner();renderCards();renderSidePanels();renderAdmin();}
+function render(){updateCountdown();renderLiveBanner();renderRoleCounts();renderCards();renderSidePanels();renderAdmin();}
+// นับตำแหน่ง (ประเภทตำแหน่ง ไม่ใช่จำนวนที่นั่ง) ว่าเปิดกี่ตำแหน่ง ปิดกี่ตำแหน่ง รวมทั้งหมดเท่าไหร่ แสดงในกล่องสถานะ
+function renderRoleCounts(){
+  const openEl=document.getElementById('roleOpenCount'),closedEl=document.getElementById('roleClosedCount'),totalEl=document.getElementById('roleTotalCount');
+  if(!openEl||!closedEl||!totalEl)return;
+  const total=roles.length,closed=roles.filter(r=>isRoleClosed(r.id)).length,open=total-closed;
+  openEl.textContent=open;closedEl.textContent=closed;totalEl.textContent=total;
+}
 function renderLiveBanner(){
   const total=ROSTER.length, joined=state.entries.length, pct=total?Math.min(100,Math.round(joined/total*100)):0;
   document.getElementById('joined').textContent=joined;
@@ -456,7 +495,7 @@ function renderCards(){
   const cardHTML=r=>{
     const max=roleMax(r.id),entries=state.entries.filter(e=>e.role===r.id),full=entries.length>=max;const locked=isRoleLocked(r.id);const closed=isRoleClosed(r.id);
     if(closed){
-      return`<article class="card closed-card"><div class="role-title"><div class="role-title-main"><h3>${r.emoji} ${r.name}</h3></div></div><div class="closed-msg">🚫 ตำแหน่งนี้ไม่มีให้ลง</div></article>`;
+      return`<article class="card closed-card"><div class="role-title"><div class="role-title-main"><h3>${r.emoji} ${r.name}</h3></div><span class="closed-tag">🚫 ไม่เปิดให้ลง</span></div></article>`;
     }
     const slotsHTML=max===1
       ? (entries[0]?`<div class="slot taken"><div><div class="name">${esc(entries[0].name)}</div><div class="small">เลือกเวลา ${esc(entries[0].time||'-')}</div></div>✅</div>`
@@ -467,7 +506,8 @@ function renderCards(){
     return`<article class="card ${full?'full':''} ${locked?'locked':''}"><div class="role-title"><div class="role-title-main"><h3>${r.emoji} ${r.name}</h3>${badge}</div><span class="count">${entries.length}/${max}</span></div><div class="slots">${slotsHTML}</div><button ${full||!effectiveOpen()||!isConfigured()?'disabled':''} onclick="openSignup('${r.id}')">${btnLabel}</button></article>`;
   };
   document.getElementById('roleCards').innerHTML=DEPARTMENTS.map(dept=>{
-    const deptRoles=dept.ids.map(id=>roles.find(r=>r.id===id)).filter(Boolean);
+    // เรียงตำแหน่งที่ปิดไว้ให้ไปอยู่ท้ายสุดของแต่ละแผนก กันไม่ให้ขวางการเลื่อนดูตำแหน่งที่ยังเปิดอยู่ (ยังคงแสดงอยู่ ไม่ได้ซ่อน)
+    const deptRoles=dept.ids.map(id=>roles.find(r=>r.id===id)).filter(Boolean).sort((a,b)=>(isRoleClosed(a.id)?1:0)-(isRoleClosed(b.id)?1:0));
     if(!deptRoles.length)return '';
     const filled=deptRoles.reduce((s,r)=>s+state.entries.filter(e=>e.role===r.id).length,0);
     const total=deptRoles.reduce((s,r)=>s+roleMax(r.id),0);
@@ -482,8 +522,14 @@ function renderMyProfile(){const saved=JSON.parse(localStorage.getItem('cmm21167
 // อ่านชื่อ/รหัสจาก data-attribute แทนการฝังในสตริง onclick ตรงๆ กันชื่อที่มีเครื่องหมายคำพูดทำให้ปุ่มพังหรือหลุดจากค่าที่ตั้งใจ
 function fillMyEditFromDataset(btn){fillMyEdit(btn.dataset.name,btn.dataset.code)}
 function renderActivity(){const el=document.getElementById('activityFeed'),rows=[...state.entries].sort(entrySort).slice(-5).reverse();el.innerHTML=rows.length?rows.map(e=>`<div class="mini-row"><span class="avatar">${esc(initials(e.name))}</span><div style="flex:1"><div class="name">${esc(e.name)}</div><div class="small">ลง ${esc(roleName(e.role))} · ${esc(e.time||'-')}</div></div></div>`).join(''):'<div class="small">ยังไม่มีข้อมูล</div>'}
-function renderAdmin(){const roleCtl=document.getElementById('roleAdminControls');if(roleCtl)roleCtl.innerHTML=roles.map(r=>{const max=roleMax(r.id),used=state.entries.filter(e=>e.role===r.id).length;return`<div class="slot"><div><div class="name">${r.emoji} ${r.name}</div><div class="small">ใช้แล้ว ${used}/${max}</div></div><div class="admin-actions"><button class="secondary" onclick="changeRoleCap('${r.id}',-1)" ${max<=used?'disabled':''}>-</button><button class="secondary" onclick="changeRoleCap('${r.id}',1)">+</button></div></div>`}).join('');
-  document.getElementById('adminTable').innerHTML=state.entries.map(e=>`<tr><td>${e.trial?'🧪 ':''}${esc(e.name)}<br><span class="small">รหัส: ${esc(e.code)}</span></td><td>${esc(roleName(e.role))}</td><td><button class="ghost" onclick="openAdminEdit('${e.id}')">แก้ไข</button><button class="ghost" onclick="copyText('${e.code}')">Copy</button><button class="ghost" onclick="adminDelete('${e.id}')">ลบ</button></td></tr>`).join('')||'<tr><td colspan="3" class="small">ยังไม่มีข้อมูล</td></tr>';
+function contactLine(id){const c=state.contacts?.[id];if(!c||!c.phone)return'<span class="small" style="color:var(--red)">⚠️ ยังไม่มีเบอร์/รหัส นศ.</span>';return`<span class="small">📞 ${esc(c.phone)} · 🎓 ${esc(c.studentCode||'-')}</span>`}
+function renderAttempts(){
+  const el=document.getElementById('attemptList');if(!el)return;
+  const rows=(state.attempts||[]).filter(a=>a.status!=='success').sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+  el.innerHTML=rows.length?rows.map(a=>{const st=ATTEMPT_LABEL[a.status]||ATTEMPT_LABEL.started;const later=a.studentId&&state.entries.some(e=>e.studentId===a.studentId);const t=a.createdAt?.seconds?new Date(a.createdAt.seconds*1000).toLocaleString('th-TH',{dateStyle:'short',timeStyle:'short'}):'-';return`<div class="mini-row"><div style="flex:1;min-width:0"><div class="name">${a.trial?'🧪 ':''}${esc(a.name)}</div><div class="small">${esc(roleName(a.role))} · ${esc(t)}</div><div class="small">${st}${a.reason&&a.status!=='cancelled'?' — '+esc(a.reason):''}</div>${later?'<div class="small" style="color:#1f8a4c">✅ ภายหลังลงตำแหน่งสำเร็จแล้ว</div>':''}</div></div>`}).join(''):'<div class="small">ยังไม่มีประวัติที่ไม่สำเร็จ</div>';
+}
+function renderAdmin(){renderAttempts();const roleCtl=document.getElementById('roleAdminControls');if(roleCtl)roleCtl.innerHTML=roles.map(r=>{const max=roleMax(r.id),used=state.entries.filter(e=>e.role===r.id).length;return`<div class="slot"><div><div class="name">${r.emoji} ${r.name}</div><div class="small">ใช้แล้ว ${used}/${max}</div></div><div class="admin-actions"><button class="secondary" onclick="changeRoleCap('${r.id}',-1)" ${max<=used?'disabled':''}>-</button><button class="secondary" onclick="changeRoleCap('${r.id}',1)">+</button></div></div>`}).join('');
+  document.getElementById('adminTable').innerHTML=state.entries.map(e=>`<tr><td>${e.trial?'🧪 ':''}${esc(e.name)}<br><span class="small">รหัสแก้ไข: ${esc(e.code)}</span><br>${contactLine(e.id)}</td><td>${esc(roleName(e.role))}</td><td><button class="ghost" onclick="openAdminEdit('${e.id}')">แก้ไข</button><button class="ghost" onclick="copyText('${e.code}')">Copy</button><button class="ghost" onclick="adminDelete('${e.id}')">ลบ</button></td></tr>`).join('')||'<tr><td colspan="3" class="small">ยังไม่มีข้อมูล</td></tr>';
   const trialBtn=document.getElementById('trialToggleBtn');if(trialBtn)trialBtn.textContent=state.trialMode?'🧪 ปิดโหมดทดลอง (กำลังเปิดอยู่)':'🧪 เปิดโหมดทดลอง';
   const annList=document.getElementById('announcementList');
   if(annList){const anns=state.announcements||[];annList.innerHTML=anns.length?anns.map((a,i)=>`<div class="mini-row"><div class="name" style="overflow-wrap:anywhere;font-weight:700">${esc(a)}</div><button class="ghost" onclick="removeAnnouncement(${i})">ลบ</button></div>`).join(''):'<div class="small">ยังไม่มีประกาศ</div>'}
@@ -499,14 +545,46 @@ function renderAdmin(){const roleCtl=document.getElementById('roleAdminControls'
   if(lockedList){const locked=roles.filter(r=>isRoleLocked(r.id));lockedList.innerHTML=locked.length?locked.map(r=>`<div class="mini-row"><div><div class="name">${isRoleClosed(r.id)?'🚫':'🔒'} ${r.name}</div><div class="small">${isRoleClosed(r.id)?'ปิดตำแหน่ง (ไม่ระบุคน)':'ล็อกไว้ให้ '+lockedName(r.id)}</div></div><button class="ghost" onclick="adminUnlockRole('${r.id}')">ปลดล็อก</button></div>`).join(''):'<div class="small">ยังไม่มีตำแหน่งที่ล็อกไว้</div>'}
 }
 function buildNameOptions(roleId){const taken=new Set(state.entries.map(e=>e.studentId).filter(Boolean));const lockedFor=roleId?lockedStudentId(roleId):null;const list=lockedFor?ROSTER.filter(p=>p.id===lockedFor):ROSTER.filter(p=>{const lr=lockedRoleForStudent(p.id);return !lr||lr===roleId});return '<option value="">— เลือกชื่อ —</option>'+list.map(p=>{const lr=lockedRoleForStudent(p.id);const blocked=lr&&lr!==roleId;return`<option value="${p.id}" ${taken.has(p.id)||blocked?'disabled':''}>${p.name}${taken.has(p.id)?' (เลือกไปแล้ว)':(blocked?' (ถูกล็อกไว้ตำแหน่งอื่น)':'')}</option>`}).join('')}
-function openSignup(roleId){selectedRoleId=roleId;const r=roles.find(x=>x.id===roleId);const closed=isRoleClosed(roleId);const lockedFor=lockedStudentId(roleId);document.getElementById('signupTitle').textContent=`${r.emoji} ${r.name}`;document.getElementById('signupInfo').textContent=closed?'🚫 ตำแหน่งนี้ถูกปิดไว้':(lockedFor?'🔒 ตำแหน่งนี้ถูกล็อกไว้':`เหลือ ${Math.max(0,roleFree(roleId))} ที่ จากทั้งหมด ${roleMax(roleId)} ที่`);document.getElementById('signupName').innerHTML=buildNameOptions(roleId);show('signupModal')}
-async function confirmSignup(){const studentId=document.getElementById('signupName').value;if(!selectedRoleId)return toast('กรุณาเลือกตำแหน่ง');if(!studentId)return toast('กรุณาเลือกชื่อก่อน');const person=ROSTER.find(p=>p.id===studentId);await selectRole(selectedRoleId,person.name,studentId)}
-async function selectRole(roleId,name,studentId){if(!db)return toast('ยังไม่ได้ตั้งค่า Firebase');if(!effectiveOpen())return toast(openStatusLabel());if(!name)return toast('กรุณาเลือกชื่อก่อน');if(isRoleClosed(roleId))return toast('ตำแหน่งนี้ถูกปิดไว้');if(lockedStudentId(roleId)&&lockedStudentId(roleId)!==studentId)return toast('ตำแหน่งนี้ถูกล็อกไว้สำหรับ '+lockedName(roleId)+' แล้ว');const forcedRole=studentId?lockedRoleForStudent(studentId):null;if(forcedRole&&forcedRole!==roleId)return toast('คุณถูกล็อกไว้ที่ตำแหน่ง '+roleName(forcedRole)+' เท่านั้น เลือกตำแหน่งอื่นไม่ได้');
+function openSignup(roleId){selectedRoleId=roleId;const r=roles.find(x=>x.id===roleId);const closed=isRoleClosed(roleId);const lockedFor=lockedStudentId(roleId);document.getElementById('signupTitle').textContent=`${r.emoji} ${r.name}`;document.getElementById('signupInfo').textContent=closed?'🚫 ตำแหน่งนี้ถูกปิดไว้':(lockedFor?'🔒 ตำแหน่งนี้ถูกล็อกไว้':`เหลือ ${Math.max(0,roleFree(roleId))} ที่ จากทั้งหมด ${roleMax(roleId)} ที่`);document.getElementById('signupName').innerHTML=buildNameOptions(roleId);currentAttemptId=null;showSignupStep(1);document.getElementById('signupPhone').value='';document.getElementById('signupStudentCode').value='';show('signupModal')}
+function showSignupStep(n){document.getElementById('signupStep1').style.display=n===1?'block':'none';document.getElementById('signupStep2').style.display=n===2?'block':'none'}
+// ขั้นตอน 1 -> 2: บันทึกประวัติว่า "เริ่มลงแล้ว" ถ้าไม่กรอกต่อให้ครบ แอดมินจะเห็นเป็นลงไม่สำเร็จ
+async function signupNext(){
+  const studentId=document.getElementById('signupName').value;
+  if(!selectedRoleId)return toast('กรุณาเลือกตำแหน่ง');
+  if(!studentId)return toast('กรุณาเลือกชื่อก่อน');
+  if(!effectiveOpen())return toast(openStatusLabel());
+  const person=ROSTER.find(p=>p.id===studentId);if(!person)return toast('ไม่พบชื่อนี้');
+  if(state.entries.some(e=>e.studentId===studentId))return toast('คุณเลือกตำแหน่งไปแล้ว');
+  if(roleFree(selectedRoleId)<=0)return toast('ตำแหน่งนี้เต็มแล้ว');
+  currentAttemptId=crypto.randomUUID();
+  setDoc(attemptDoc(currentAttemptId),{name:person.name,studentId,role:selectedRoleId,status:'started',reason:'',trial:!!state.trialMode,createdAt:serverTimestamp(),updatedAt:serverTimestamp()}).catch(()=>{});
+  document.getElementById('signupWho').innerHTML=`ชื่อ <b>${esc(person.name)}</b> · ตำแหน่ง <b>${esc(roleName(selectedRoleId))}</b>`;
+  showSignupStep(2);
+  document.getElementById('signupPhone').focus();
+}
+// ย้อนกลับไปเลือกชื่อใหม่: ลบประวัติรอบนี้ทิ้ง (ไม่นับว่าลงไม่สำเร็จ)
+function signupBack(){if(currentAttemptId&&db)deleteDoc(attemptDoc(currentAttemptId)).catch(()=>{});currentAttemptId=null;showSignupStep(1)}
+function cancelSignup(){if(currentAttemptId)markAttempt(currentAttemptId,'cancelled','กดยกเลิกก่อนกรอกข้อมูลให้ครบ');currentAttemptId=null;closeModal('signupModal')}
+async function confirmSignup(){
+  const studentId=document.getElementById('signupName').value;
+  if(!selectedRoleId)return toast('กรุณาเลือกตำแหน่ง');
+  if(!studentId)return toast('กรุณาเลือกชื่อก่อน');
+  const phone=onlyDigits(document.getElementById('signupPhone').value),studentCode=onlyDigits(document.getElementById('signupStudentCode').value);
+  if(!phone||!studentCode)return toast('กรุณากรอกเบอร์โทรและรหัสนักศึกษาให้ครบ');
+  if(!isValidPhone(phone))return toast('เบอร์โทรไม่ถูกต้อง (ขึ้นต้นด้วย 0 และมี 9–10 หลัก)');
+  if(!isValidStudentCode(studentCode))return toast('รหัสนักศึกษาไม่ถูกต้อง (ตัวเลข 6–15 หลัก)');
+  const person=ROSTER.find(p=>p.id===studentId);
+  await selectRole(selectedRoleId,person.name,studentId,{phone,studentCode});
+}
+async function selectRole(roleId,name,studentId,contact){
+  // ลงไม่สำเร็จ: แจ้งผู้ใช้ + บันทึกเหตุผลลงประวัติให้แอดมินเห็น
+  const fail=(msg)=>{if(currentAttemptId){markAttempt(currentAttemptId,'failed',msg);currentAttemptId=null}return toast(msg)};
+  if(!db)return toast('ยังไม่ได้ตั้งค่า Firebase');if(!effectiveOpen())return fail(openStatusLabel());if(!name)return toast('กรุณาเลือกชื่อก่อน');if(isRoleClosed(roleId))return fail('ตำแหน่งนี้ถูกปิดไว้');if(lockedStudentId(roleId)&&lockedStudentId(roleId)!==studentId)return fail('ตำแหน่งนี้ถูกล็อกไว้สำหรับ '+lockedName(roleId)+' แล้ว');const forcedRole=studentId?lockedRoleForStudent(studentId):null;if(forcedRole&&forcedRole!==roleId)return fail('คุณถูกล็อกไว้ที่ตำแหน่ง '+roleName(forcedRole)+' เท่านั้น เลือกตำแหน่งอื่นไม่ได้');
   // กันคนเผื่อชื่อไม่ได้มาจากรายชื่อ (ไม่มี studentId) — เช็คซ้ำแบบ query ก่อน (ไม่ transactional แต่ช่วยกรองเบื้องต้น)
   if(!studentId){const snaps0=await getDocs(entryCol());if(snaps0.docs.some(d=>{const e=d.data();return!e.removed&&norm(e.name)===norm(name)}))return toast('ชื่อนี้เลือกตำแหน่งไปแล้ว')}
   const code=makeCode();
   // ใช้ studentId เป็น id เอกสารโดยตรง (deterministic) เพื่อให้เช็ค "เลือกไปแล้วหรือยัง" เป็น transactional จริง ป้องกันบัคเวลาหลายคนกดพร้อมกัน
-  const entryId=studentId||crypto.randomUUID();
+  const entryId=studentId||crypto.randomUUID(),attemptId=currentAttemptId;
   try{
     await runTransaction(db,async(tx)=>{
       const entryRef=entryDoc(entryId),countRef=roleCountDoc(roleId);
@@ -516,9 +594,12 @@ async function selectRole(roleId,name,studentId){if(!db)return toast('ยัง�
       if(used>=roleMax(roleId))throw new Error('ตำแหน่งนี้เต็มแล้ว');
       tx.set(entryRef,{name,studentId:studentId||null,role:roleId,code,edited:false,trial:!!state.trialMode,time:new Date().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'}),createdAt:serverTimestamp()});
       tx.set(countRef,{count:increment(1)},{merge:true});
+      if(contact)tx.set(contactDoc(entryId),{name,studentId:studentId||null,phone:contact.phone,studentCode:contact.studentCode,trial:!!state.trialMode,updatedAt:serverTimestamp()});
+      if(attemptId)tx.set(attemptDoc(attemptId),{status:'success',reason:'',updatedAt:serverTimestamp()},{merge:true});
     });
+    currentAttemptId=null;
     lastCode=code;localStorage.setItem('cmm21167_my_entry',JSON.stringify({id:entryId,name,code,role:roleId,studentId}));closeModal('signupModal');document.getElementById('successText').innerHTML=(state.trialMode?'<b>🧪 นี่คือการลงตำแหน่งแบบทดลอง</b><br>':'')+`ชื่อ <b>${esc(name)}</b><br>ตำแหน่ง <b>${esc(roleName(roleId))}</b><br>รหัสแก้ไขของคุณคือ`;document.getElementById('editCodeBox').textContent=code;show('successModal')
-  }catch(e){toast(e.message||'เลือกไม่สำเร็จ')}
+  }catch(e){fail(e.message||'เลือกไม่สำเร็จ')}
 }
 async function submitEdit(){
   if(!effectiveOpen())return toast(openStatusLabel());
@@ -556,13 +637,14 @@ async function submitEdit(){
   }catch(e){toast(e.message||'แก้ไขไม่สำเร็จ')}
 }
 function fillMyEdit(name,code){document.getElementById('editName').value=name;document.getElementById('editCode').value=code;show('editModal')}
-function loginAdmin(fromModal=false){const key=(fromModal?document.getElementById('adminKey2').value:document.getElementById('adminKey').value).trim();if(key===ADMIN_KEY){isAdmin=true;document.body.classList.add('admin-on');closeModal('adminModal');try{localStorage.setItem('cmm21167_admin_on','1')}catch(e){}toast('เข้าสู่ระบบ Admin แล้ว')}else toast('Admin Key ไม่ถูกต้อง')}function logoutAdmin(){isAdmin=false;document.body.classList.remove('admin-on');try{localStorage.removeItem('cmm21167_admin_on')}catch(e){}toast('ออกจากระบบ Admin แล้ว')}
+function loginAdmin(fromModal=false){const key=(fromModal?document.getElementById('adminKey2').value:document.getElementById('adminKey').value).trim();if(key===ADMIN_KEY){isAdmin=true;document.body.classList.add('admin-on');closeModal('adminModal');try{localStorage.setItem('cmm21167_admin_on','1')}catch(e){}startAdminListeners();toast('เข้าสู่ระบบ Admin แล้ว')}else toast('Admin Key ไม่ถูกต้อง')}function logoutAdmin(){isAdmin=false;stopAdminListeners();document.body.classList.remove('admin-on');try{localStorage.removeItem('cmm21167_admin_on')}catch(e){}toast('ออกจากระบบ Admin แล้ว')}
 function restoreAdminSession(){try{if(localStorage.getItem('cmm21167_admin_on')==='1'){isAdmin=true;document.body.classList.add('admin-on')}}catch(e){}}
 async function adminDelete(id){
   if(!isAdmin)return toast('ต้องเข้าสู่ระบบ Admin ก่อน');
   const entry=state.entries.find(e=>e.id===id);
   const batch=writeBatch(db);
   batch.set(entryDoc(id),{removed:true,authCode:ADMIN_KEY},{merge:true});
+  batch.delete(contactDoc(id));
   if(entry?.role)batch.set(roleCountDoc(entry.role),{count:increment(-1)},{merge:true});
   await batch.commit();
   toast('ลบแล้ว')
@@ -575,9 +657,11 @@ async function resetAll(){
     const data=d.data();
     if(lockedStudentId(data.role)&&lockedStudentId(data.role)===data.studentId)return;
     batch.update(d.ref,{removed:true,authCode:ADMIN_KEY});
+    batch.delete(contactDoc(d.id));
     if(data.role)roleDeltas[data.role]=(roleDeltas[data.role]||0)+1;
   });
   Object.entries(roleDeltas).forEach(([roleId,n])=>batch.set(roleCountDoc(roleId),{count:increment(-n)},{merge:true}));
+  (await getDocs(attemptCol())).forEach(d=>batch.delete(d.ref));
   await batch.commit();
   toast('รีเซ็ตแล้ว (เก็บตำแหน่งที่ล็อกไว้)')
 }
@@ -589,12 +673,19 @@ async function clearTrialData(){
   const snaps=await getDocs(entryCol()),batch=writeBatch(db);let count=0;const roleDeltas={};
   snaps.forEach(d=>{
     const data=d.data();
-    if(data.trial){batch.update(d.ref,{removed:true,authCode:ADMIN_KEY});count++;if(data.role)roleDeltas[data.role]=(roleDeltas[data.role]||0)+1}
+    if(data.trial){batch.update(d.ref,{removed:true,authCode:ADMIN_KEY});batch.delete(contactDoc(d.id));count++;if(data.role)roleDeltas[data.role]=(roleDeltas[data.role]||0)+1}
   });
+  (await getDocs(attemptCol())).forEach(d=>{if(d.data().trial){batch.delete(d.ref);count++}});
   if(count===0)return toast('ไม่มีข้อมูลทดลองให้ล้าง');
   Object.entries(roleDeltas).forEach(([roleId,n])=>batch.set(roleCountDoc(roleId),{count:increment(-n)},{merge:true}));
   await batch.commit();
   toast('ล้างข้อมูลทดลอง '+count+' รายการแล้ว')
+}
+async function clearAttempts(){
+  if(!isAdmin)return toast('ต้องเข้าสู่ระบบ Admin ก่อน');
+  if(!confirm('ล้างประวัติการลงที่ไม่สำเร็จทั้งหมด?'))return;
+  const snaps=await getDocs(attemptCol()),batch=writeBatch(db);snaps.forEach(d=>batch.delete(d.ref));await batch.commit();
+  toast('ล้างประวัติแล้ว')
 }
 async function adminQuickAdd(){
   if(!isAdmin)return toast('ต้องเข้าสู่ระบบ Admin ก่อน');
@@ -628,7 +719,7 @@ function syncCallSheetInputs(){const cs=state.callSheet||{};const d=document.get
 async function addAnnouncement(){if(!isAdmin)return toast('ต้องเข้าสู่ระบบ Admin ก่อน');const el=document.getElementById('announcementInput'),text=el.value.trim();if(!text)return toast('กรุณาพิมพ์ข้อความประกาศ');const announcements=[...(state.announcements||[]),text];state.announcements=announcements;el.value='';render();await setDoc(settingsDoc(),{announcements,authCode:ADMIN_KEY},{merge:true});toast('เพิ่มประกาศแล้ว')}
 async function removeAnnouncement(idx){if(!isAdmin)return toast('ต้องเข้าสู่ระบบ Admin ก่อน');const announcements=(state.announcements||[]).filter((_,i)=>i!==idx);state.announcements=announcements;render();await setDoc(settingsDoc(),{announcements,authCode:ADMIN_KEY},{merge:true});toast('ลบประกาศแล้ว')}
 async function clearAnnouncement(){if(!isAdmin)return toast('ต้องเข้าสู่ระบบ Admin ก่อน');state.announcements=[];render();await setDoc(settingsDoc(),{announcements:[],authCode:ADMIN_KEY},{merge:true});toast('ล้างประกาศทั้งหมดแล้ว')}
-function openAdminEdit(id){if(!isAdmin)return toast('ต้องเข้าสู่ระบบ Admin ก่อน');const e=state.entries.find(x=>x.id===id);if(!e)return toast('ไม่พบข้อมูล');document.getElementById('adminEditId').value=id;document.getElementById('adminEditName').value=e.name||'';document.getElementById('adminEditRole').value=e.role||roles[0].id;document.getElementById('adminEditCode').value=e.code||'';show('adminEditModal')}
+function openAdminEdit(id){if(!isAdmin)return toast('ต้องเข้าสู่ระบบ Admin ก่อน');const e=state.entries.find(x=>x.id===id);if(!e)return toast('ไม่พบข้อมูล');document.getElementById('adminEditId').value=id;document.getElementById('adminEditName').value=e.name||'';document.getElementById('adminEditRole').value=e.role||roles[0].id;document.getElementById('adminEditCode').value=e.code||'';const c=state.contacts?.[id]||{};document.getElementById('adminEditPhone').value=c.phone||'';document.getElementById('adminEditStudentCode').value=c.studentCode||'';show('adminEditModal')}
 async function saveAdminEdit(){
   if(!isAdmin)return toast('ต้องเข้าสู่ระบบ Admin ก่อน');
   const id=document.getElementById('adminEditId').value,name=document.getElementById('adminEditName').value.trim(),role=document.getElementById('adminEditRole').value;
@@ -636,7 +727,11 @@ async function saveAdminEdit(){
   const docs=state.entries.filter(e=>e.id!==id);if(docs.some(e=>norm(e.name)===norm(name)))return toast('ชื่อนี้มีอยู่แล้ว');
   const current=state.entries.find(e=>e.id===id);if(!current)return toast('ไม่พบข้อมูล');
   if(role!==current.role&&state.entries.filter(e=>e.role===role).length>=roleMax(role))return toast('ตำแหน่งใหม่เต็มแล้ว');
+  const phone=onlyDigits(document.getElementById('adminEditPhone').value),studentCode=onlyDigits(document.getElementById('adminEditStudentCode').value);
+  if(phone&&!isValidPhone(phone))return toast('เบอร์โทรไม่ถูกต้อง (ขึ้นต้นด้วย 0 และมี 9–10 หลัก)');
+  if(studentCode&&!isValidStudentCode(studentCode))return toast('รหัสนักศึกษาไม่ถูกต้อง (ตัวเลข 6–15 หลัก)');
   const batch=writeBatch(db);
+  if(phone||studentCode)batch.set(contactDoc(id),{name,studentId:current.studentId||null,phone,studentCode,trial:!!current.trial,updatedAt:serverTimestamp()},{merge:true});
   batch.set(entryDoc(id),{...current,name,role,authCode:ADMIN_KEY,time:new Date().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})},{merge:true});
   if(role!==current.role){batch.set(roleCountDoc(current.role),{count:increment(-1)},{merge:true});batch.set(roleCountDoc(role),{count:increment(1)},{merge:true})}
   await batch.commit();
@@ -693,8 +788,8 @@ function buildCallSheetHTML(){
 function openMembers(){const s=document.getElementById('membersSearch');if(s)s.value='';renderMembersList();show('membersModal')}function openCallSheet(){document.getElementById('callSheetList').innerHTML=buildCallSheetHTML();show('callSheetModal')}function printCallSheet(){window.print()}
 function openQR(){const url=location.href;document.getElementById('qrImg').src='https://api.qrserver.com/v1/create-qr-code/?size=300x300&data='+encodeURIComponent(url);show('qrModal')}
 function copyPageLink(){navigator.clipboard?.writeText(location.href);toast('คัดลอกลิงก์เว็บแล้ว')}function copyText(text){navigator.clipboard?.writeText(text);toast('คัดลอกแล้ว')}function copyAdminEditCode(){copyText(document.getElementById('adminEditCode').value)}function copyCode(){navigator.clipboard?.writeText(lastCode);toast('คัดลอกรหัสแล้ว')}
-function exportCSV(){const csv='name,role,time,editCode\n'+state.entries.map(e=>`${e.name},${roleName(e.role)},${e.time||''},${e.code}`).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='cmm21167-positions.csv';a.click()}
-function exportJSON(){const data={exportedAt:new Date().toISOString(),settings:{open:state.open,scheduleStart:state.scheduleStart,scheduleEnd:state.scheduleEnd,announcements:state.announcements,roleCaps:state.roleCaps},entries:state.entries};const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));a.download='cmm21167-backup.json';a.click()}
+function exportCSV(){const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"',t=v=>v?'="'+v+'"':'';const csv='\ufeff'+'name,role,time,editCode,phone,studentCode\n'+state.entries.map(e=>{const c=state.contacts?.[e.id]||{};return[q(e.name),q(roleName(e.role)),q(e.time||''),q(e.code),t(c.phone),t(c.studentCode)].join(',')}).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='cmm21167-positions.csv';a.click()}
+function exportJSON(){const data={exportedAt:new Date().toISOString(),settings:{open:state.open,scheduleStart:state.scheduleStart,scheduleEnd:state.scheduleEnd,announcements:state.announcements,roleCaps:state.roleCaps},entries:state.entries,contacts:state.contacts,attempts:state.attempts};const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));a.download='cmm21167-backup.json';a.click()}
 function openAdmin(){show('adminModal')}function openEdit(){show('editModal')}function showRules(){show('rulesModal')}
 function statusColorKey(st){if(state.trialMode)return'st-trial';if(st.open)return'st-open';if(st.label.indexOf('รอเปิด')===0)return'st-waiting';return'st-closed'}
 function updateCountdown(){const st=getOpenStatus(),openText=document.getElementById('openText'),dot=document.querySelector('.status-dot'),pill=document.getElementById('statusPill'),scheduleLabel=document.getElementById('scheduleLabel'),countdownText=document.getElementById('countdownText'),scheduleInfo=document.getElementById('scheduleInfo');
@@ -716,7 +811,8 @@ function repositionProfile(){
   else { if(aside.firstElementChild!==box) aside.insertAdjacentElement('afterbegin',box); }
 }
 window.addEventListener('resize',repositionProfile);
-Object.assign(window,{openSignup,confirmSignup,submitEdit,loginAdmin,adminDelete,resetAll,toggleOpen,saveSchedule,clearSchedule,exportCSV,exportJSON,openAdmin,openEdit,showRules,closeModal,copyCode,markScheduleDirty,changeRoleCap,addAnnouncement,removeAnnouncement,clearAnnouncement,openAdminEdit,saveAdminEdit,copyText,copyAdminEditCode,openMembers,openCallSheet,printCallSheet,copyPageLink,openQR,fillMyEdit,fillMyEditFromDataset,logoutAdmin,saveCallSheetInfo,renderMembersList,toggleTrialMode,clearTrialData,adminQuickAdd,adminLockRole,adminUnlockRole});
+window.addEventListener('pagehide',()=>{if(currentAttemptId)markAttempt(currentAttemptId,'abandoned','ออกจากหน้าเว็บก่อนกรอกข้อมูลให้ครบ')});
+Object.assign(window,{openSignup,confirmSignup,signupNext,signupBack,cancelSignup,clearAttempts,submitEdit,loginAdmin,adminDelete,resetAll,toggleOpen,saveSchedule,clearSchedule,exportCSV,exportJSON,openAdmin,openEdit,showRules,closeModal,copyCode,markScheduleDirty,changeRoleCap,addAnnouncement,removeAnnouncement,clearAnnouncement,openAdminEdit,saveAdminEdit,copyText,copyAdminEditCode,openMembers,openCallSheet,printCallSheet,copyPageLink,openQR,fillMyEdit,fillMyEditFromDataset,logoutAdmin,saveCallSheetInfo,renderMembersList,toggleTrialMode,clearTrialData,adminQuickAdd,adminLockRole,adminUnlockRole});
 setInterval(updateCountdown,1000);repositionProfile();show('rulesModal');render();
 </script>
 </body>
