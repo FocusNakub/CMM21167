@@ -340,6 +340,15 @@ button.sm{padding:8px 11px;font-size:13px;border-radius:11px}
   .ap-form2{grid-template-columns:1fr}
   .ap-grid{grid-template-columns:1fr}
 }
+/* ===== ภาพสรุปตำแหน่ง ===== */
+.si-card{max-width:560px}
+.si-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px}.si-head h2{margin:0}
+.si-opts{display:flex;flex-wrap:wrap;gap:6px 16px;margin:6px 0 12px;font-size:14px;font-weight:800}
+.si-opts label{display:flex;align-items:center;gap:6px;cursor:pointer}.si-opts input{width:18px;height:18px;accent-color:var(--pink)}
+.si-preview{background:#fdeef4;border:1px solid var(--line);border-radius:16px;padding:10px;max-height:58vh;overflow:auto;text-align:center}
+.si-preview img{width:100%;height:auto;border-radius:10px;display:block}
+.si-tip{margin:8px 0 10px;text-align:center}
+.si-actions button{flex:1}
 @media print{body{background:#fff}.top,.status-strip,.top-hero-row,.side,.dept-grid,.trial-banner,.modal:not(#callSheetModal){display:none!important}#callSheetModal{position:static;display:block;background:#fff}.modal-card{box-shadow:none;max-width:100%;border-radius:0}}
 
 </style>
@@ -403,7 +412,7 @@ button.sm{padding:8px 11px;font-size:13px;border-radius:11px}
     <section class="content-area"><div class="dept-grid" id="roleCards"></div></section>
     <aside class="side">
       <div class="panel" id="myProfileBox" style="display:none"><h2>✅ ข้อมูลของฉัน</h2><div id="myProfileContent"></div></div>
-      <div class="panel"><h2>📊 สถานะ &amp; เมนูลัด</h2><div class="schedule-status"><div class="small" id="scheduleLabel">สถานะเวลา</div><div class="countdown" id="countdownText">--:--:--</div><div class="small" id="scheduleInfo"></div></div><div class="role-count-row"><span>🟢 ลงได้ <b id="roleOpenCount" style="color:#1f8a4c">0</b></span><span class="rc-sep">·</span><span>🚫 ปิด <b id="roleClosedCount" style="color:var(--red)">0</b></span><span class="rc-sep">·</span><span>รวม <b id="roleTotalCount">0</b></span></div><div class="admin-actions" style="margin-top:12px"><button class="secondary muted-btn" onclick="openMembers()">👥 สมาชิกทั้งหมด</button><button class="secondary muted-btn" onclick="openCallSheet()">📄 Call Sheet</button><button class="secondary muted-btn" onclick="copyPageLink()">🔗 คัดลอกลิงก์</button></div><hr style="border:0;border-top:1px solid var(--line);margin:14px 0"><h3 style="margin:0 0 8px">🔔 Live Activity</h3><div id="activityFeed" class="mini-list"><div class="small">ยังไม่มีข้อมูล</div></div></div>
+      <div class="panel"><h2>📊 สถานะ &amp; เมนูลัด</h2><div class="schedule-status"><div class="small" id="scheduleLabel">สถานะเวลา</div><div class="countdown" id="countdownText">--:--:--</div><div class="small" id="scheduleInfo"></div></div><div class="role-count-row"><span>🟢 ลงได้ <b id="roleOpenCount" style="color:#1f8a4c">0</b></span><span class="rc-sep">·</span><span>🚫 ปิด <b id="roleClosedCount" style="color:var(--red)">0</b></span><span class="rc-sep">·</span><span>รวม <b id="roleTotalCount">0</b></span></div><div class="admin-actions" style="margin-top:12px"><button class="secondary muted-btn" onclick="openMembers()">👥 สมาชิกทั้งหมด</button><button class="secondary muted-btn" onclick="openCallSheet()">📄 Call Sheet</button><button class="secondary muted-btn" onclick="copyPageLink()">🔗 คัดลอกลิงก์</button><button class="secondary muted-btn" onclick="openSummaryImage()">🖼️ ภาพสรุปตำแหน่ง</button></div><hr style="border:0;border-top:1px solid var(--line);margin:14px 0"><h3 style="margin:0 0 8px">🔔 Live Activity</h3><div id="activityFeed" class="mini-list"><div class="small">ยังไม่มีข้อมูล</div></div></div>
 
       <div class="panel" id="adminLogin"><h2>👑 Admin</h2><p class="small">กรอก Admin Key เพื่อจัดการข้อมูล</p><div class="field"><label>Admin Key</label><input id="adminKey" type="password" placeholder="กรอกรหัสผู้ดูแล" onkeydown="if(event.key==='Enter')loginAdmin()"></div><button onclick="loginAdmin()">เข้าสู่ระบบ</button></div>
 
@@ -476,7 +485,7 @@ button.sm{padding:8px 11px;font-size:13px;border-radius:11px}
 <div class="ap-box"><h3>📢 ประกาศหน้าเว็บ</h3><p class="small ap-desc">แสดงสลับกันอัตโนมัติทุก 4 วินาที</p><div class="ap-inline"><input id="announcementInput" placeholder="เช่น ขอให้ทุกคนลงตำแหน่งก่อน 20:00" onkeydown="if(event.key==='Enter')addAnnouncement()"><button onclick="addAnnouncement()">เพิ่ม</button></div><div id="announcementList" class="mini-list" style="margin-top:10px"></div><button onclick="clearAnnouncement()" class="secondary sm" style="margin-top:10px">ล้างประกาศทั้งหมด</button></div>
 <div class="ap-box"><h3>📄 ข้อมูล Call Sheet</h3><div class="ap-form2"><div class="field"><label>วันที่ถ่ายทำ</label><input id="csDate" type="date"></div><div class="field"><label>Call Time</label><input id="csCallTime" type="time"></div><div class="field"><label>เลิกกอง (โดยประมาณ)</label><input id="csWrapTime" type="time"></div><div class="field"><label>สถานที่ถ่ายทำ</label><input id="csLocation" placeholder="เช่น อาคาร SPU"></div></div><div class="field"><label>หมายเหตุ / อุปกรณ์</label><input id="csNotes" placeholder="เช่น นำกล้อง ขาตั้งกล้อง ไฟ LED"></div><div class="admin-actions"><button onclick="saveCallSheetInfo()">บันทึก Call Sheet</button><button class="secondary" onclick="openCallSheet()">ดู Call Sheet</button></div></div>
 <div class="ap-box"><h3>🧪 โหมดทดลอง</h3><p class="small ap-desc">ให้ทีมลองกดลงตำแหน่งก่อนของจริง ข้อมูลที่ลงช่วงนี้ติดแท็ก 🧪 และลบทิ้งได้ภายหลัง</p><div class="admin-actions"><button onclick="toggleTrialMode()" id="trialToggleBtn" class="secondary">🧪 เปิดโหมดทดลอง</button><button onclick="clearTrialData()" class="ap-danger-btn">ล้างข้อมูลทดลอง</button></div></div>
-<div class="ap-box"><h3>📥 ส่งออกข้อมูล</h3><p class="small ap-desc">CSV เปิดใน Excel/Google Sheets ได้ · JSON ใช้สำรองข้อมูล</p><div class="admin-actions"><button class="secondary" onclick="exportCSV()">📥 ดาวน์โหลด CSV</button><button class="secondary" onclick="exportJSON()">📦 ดาวน์โหลด JSON</button><button class="secondary" onclick="openMembers()">👥 ดูสมาชิกทั้งหมด</button></div></div>
+<div class="ap-box"><h3>📥 ส่งออกข้อมูล</h3><p class="small ap-desc">CSV เปิดใน Excel/Google Sheets ได้ · JSON ใช้สำรองข้อมูล</p><div class="admin-actions"><button class="secondary" onclick="exportCSV()">📥 ดาวน์โหลด CSV</button><button class="secondary" onclick="exportJSON()">📦 ดาวน์โหลด JSON</button><button class="secondary" onclick="openMembers()">👥 ดูสมาชิกทั้งหมด</button><button onclick="openSummaryImage()">🖼️ สร้างภาพสรุปตำแหน่ง</button></div></div>
 <div class="ap-box ap-danger"><h3>⚠️ พื้นที่อันตราย</h3><p class="small ap-desc">ลบรายชื่อที่ลงตำแหน่งทั้งหมดและประวัติ (คนที่ถูกล็อกตำแหน่งไว้จะไม่ถูกลบ) ย้อนกลับไม่ได้</p><button onclick="resetAll()" class="danger">รีเซ็ตทั้งหมด</button></div>
 </div></section>
 
@@ -489,6 +498,11 @@ button.sm{padding:8px 11px;font-size:13px;border-radius:11px}
 </div></div></div>
 <div class="modal" id="adminEditModal"><div class="modal-card"><h2>👑 แก้ไขโดย Admin</h2><input type="hidden" id="adminEditId"><div class="field"><label>ชื่อ</label><input id="adminEditName" placeholder="ชื่อ"></div><div class="field"><label>ตำแหน่ง</label><select id="adminEditRole"></select></div><div class="field"><label>เบอร์โทรศัพท์</label><input id="adminEditPhone" type="tel" inputmode="numeric" placeholder="เช่น 0812345678" maxlength="12"></div><div class="field"><label>รหัสนักศึกษา</label><input id="adminEditStudentCode" inputmode="numeric" placeholder="ตัวเลขรหัสนักศึกษา" maxlength="15"></div><div class="field"><label>รหัสแก้ไข</label><input id="adminEditCode" readonly></div><div class="admin-actions"><button onclick="saveAdminEdit()">💾 บันทึก</button><button onclick="copyAdminEditCode()" class="secondary">📋 Copy Code</button><button onclick="closeModal('adminEditModal')" class="secondary">ยกเลิก</button></div></div></div>
 
+<div class="modal" id="summaryImgModal"><div class="modal-card si-card"><div class="si-head"><h2>🖼️ ภาพสรุปตำแหน่ง</h2><button class="ap-x" onclick="closeModal('summaryImgModal')" aria-label="ปิด">✕</button></div>
+<div class="si-opts"><label><input type="checkbox" id="siOnlyFree" onchange="drawSummaryImage()"> แสดงเฉพาะตำแหน่งที่ยังว่าง</label><label><input type="checkbox" id="siNames" onchange="drawSummaryImage()"> แสดงชื่อคนที่ลงแล้ว</label></div>
+<div class="si-preview"><img id="siImg" alt="ภาพสรุปตำแหน่งที่เปิดรับ"></div>
+<p class="small si-tip">บน iPhone กดค้างที่รูปแล้วเลือก "บันทึกรูปภาพ" ได้เลย</p>
+<div class="admin-actions si-actions"><button id="siShareBtn" onclick="shareSummaryImage()">📤 แชร์รูป</button><button class="secondary" onclick="downloadSummaryImage()">⬇️ ดาวน์โหลดรูป</button></div></div></div>
 <div class="modal" id="membersModal"><div class="modal-card"><h2>👥 สมาชิกทั้งหมด</h2><div class="field" style="margin:0 0 12px"><input id="membersSearch" placeholder="🔎 ค้นหาชื่อ..." oninput="renderMembersList()"></div><div id="membersList"></div><div style="margin-top:14px"><button class="secondary" onclick="closeModal('membersModal')">ปิด</button></div></div></div>
 <div class="modal" id="callSheetModal"><div class="modal-card"><div id="callSheetList"></div><div class="admin-actions" style="margin-top:14px"><button onclick="printCallSheet()">🖨️ Print / Save PDF</button><button class="secondary" onclick="closeModal('callSheetModal')">ปิด</button></div></div></div>
 <div class="modal" id="qrModal"><div class="modal-card"><h2>📱 QR Code</h2><p class="small">สแกนเพื่อเข้าเว็บเลือกตำแหน่ง</p><div style="text-align:center"><img id="qrImg" alt="QR Code" style="width:230px;height:230px;border:1px solid var(--line);border-radius:18px;padding:10px;background:#fff"></div><div class="admin-actions" style="margin-top:14px"><button onclick="copyPageLink()">คัดลอกลิงก์</button><button class="secondary" onclick="closeModal('qrModal')">ปิด</button></div></div></div>
@@ -1134,6 +1148,62 @@ function copyPageLink(){navigator.clipboard?.writeText(location.href);toast('ค
 function exportCSV(){const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"',t=v=>v?'="'+v+'"':'';const csv='\ufeff'+'name,role,time,editCode,phone,studentCode\n'+state.entries.map(e=>{const c=state.contacts?.[e.id]||{};return[q(e.name),q(roleName(e.role)),q(e.time||''),q(e.code),t(c.phone),t(c.studentCode)].join(',')}).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='cmm21167-positions.csv';a.click()}
 function exportJSON(){const data={exportedAt:new Date().toISOString(),settings:{open:state.open,scheduleStart:state.scheduleStart,scheduleEnd:state.scheduleEnd,announcements:state.announcements,roleCaps:state.roleCaps},entries:state.entries,contacts:state.contacts,attempts:state.attempts};const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));a.download='cmm21167-backup.json';a.click()}
 function openAdmin(){show('adminModal')}function openEdit(){show('editModal')}function showRules(){openTutorial()}
+// ===== ภาพสรุปตำแหน่ง (วาดด้วย canvas จากข้อมูลล่าสุด) =====
+var siBlob=null,siUrl='';
+function openSummaryImage(){show('summaryImgModal');drawSummaryImage()}
+function siRound(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+// ตัดข้อความที่ยาวเกินความกว้าง แล้วเติม …
+function siFit(ctx,t,maxW){if(ctx.measureText(t).width<=maxW)return t;while(t.length>1&&ctx.measureText(t+'…').width>maxW)t=t.slice(0,-1);return t+'…'}
+async function drawSummaryImage(){
+  const onlyFree=document.getElementById('siOnlyFree').checked,showNames=document.getElementById('siNames').checked;
+  try{await document.fonts.ready}catch(e){}
+  const FONT='-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,"Noto Sans Thai","Leelawadee UI",Loma,sans-serif';
+  const C={bg:'#fff5f8',card:'#ffffff',line:'#f6d3e2',ink:'#5c2a3a',muted:'#b97b90',pink:'#e8558c',dark:'#c23d70',soft:'#fdeef4',green:'#1f8a4c',greenBg:'#dff5e8',gray:'#8a7a80',grayBg:'#f1eef0'};
+  // เตรียมข้อมูล: ตัดตำแหน่งที่ปิดออก
+  const depts=DEPARTMENTS.map(d=>{const items=d.ids.map(id=>roles.find(r=>r.id===id)).filter(r=>r&&!isRoleClosed(r.id)).map(r=>{const ents=state.entries.filter(e=>e.role===r.id),max=roleMax(r.id),free=Math.max(0,max-ents.length),lockFor=lockedStudentId(r.id);return{r,max,free,lockFor,names:ents.map(e=>e.name)}}).filter(x=>!onlyFree||(x.free>0&&!x.lockFor));return{name:d.name,items}}).filter(d=>d.items.length);
+  const W=1080,PAD=60,GAP=22,colW=(W-PAD*2-GAP)/2;
+  const rowH=it=>showNames&&it.names.length?92:66, cardH=d=>88+d.items.reduce((n,it)=>n+rowH(it),0)+12;
+  // แบ่ง 2 คอลัมน์: ใส่ฝ่ายถัดไปในคอลัมน์ที่เตี้ยกว่า
+  const cols=[[],[]],hs=[0,0];depts.forEach(d=>{const i=hs[0]<=hs[1]?0:1;cols[i].push(d);hs[i]+=cardH(d)+GAP});
+  const headH=230,footH=150,H=Math.max(headH+Math.max(hs[0],hs[1],120)+footH+40,700);
+  const cv=document.createElement('canvas');cv.width=W;cv.height=H;const ctx=cv.getContext('2d');
+  ctx.fillStyle=C.bg;ctx.fillRect(0,0,W,H);ctx.textBaseline='middle';
+  // หัวภาพ
+  const openRoles=depts.reduce((n,d)=>n+d.items.length,0),freeSeats=depts.reduce((n,d)=>n+d.items.reduce((m,it)=>m+(it.lockFor?0:it.free),0),0);
+  ctx.fillStyle=C.pink;ctx.font='600 24px '+FONT;ctx.fillText('CMM21167 · Crew Position',PAD,82);
+  ctx.fillStyle=C.ink;ctx.font='700 60px '+FONT;ctx.fillText(onlyFree?'ตำแหน่งที่ยังว่าง':'ตำแหน่งที่เปิดรับ',PAD,140);
+  const now=new Date().toLocaleString('th-TH',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+  ctx.fillStyle=C.muted;ctx.font='500 20px '+FONT;ctx.fillText('อัปเดต '+now+' น.',PAD,190);
+  [[openRoles,'ตำแหน่ง'],[freeSeats,'ที่ว่าง']].forEach(([v,l],i)=>{const bw=136,bx=W-PAD-bw*(2-i)-12*(1-i),by=70;ctx.fillStyle=C.card;siRound(ctx,bx,by,bw,112,22);ctx.fill();ctx.strokeStyle=C.line;ctx.lineWidth=2;ctx.stroke();ctx.textAlign='center';ctx.fillStyle=C.dark;ctx.font='700 44px '+FONT;ctx.fillText(String(v),bx+bw/2,by+46);ctx.fillStyle=C.muted;ctx.font='600 20px '+FONT;ctx.fillText(l,bx+bw/2,by+86);ctx.textAlign='left'});
+  // การ์ดแต่ละฝ่าย
+  cols.forEach((list,ci)=>{let y=headH;const x=PAD+ci*(colW+GAP);list.forEach(d=>{const h=cardH(d);
+    ctx.save();ctx.shadowColor='rgba(194,61,112,.10)';ctx.shadowBlur=24;ctx.shadowOffsetY=8;ctx.fillStyle=C.card;siRound(ctx,x,y,colW,h,26);ctx.fill();ctx.restore();
+    ctx.strokeStyle=C.line;ctx.lineWidth=2;siRound(ctx,x,y,colW,h,26);ctx.stroke();
+    ctx.fillStyle=C.ink;ctx.font='700 28px '+FONT;ctx.fillText(siFit(ctx,(DEPT_ICON[d.name]||'🎬')+' '+d.name,colW-150),x+24,y+44);
+    const seats=d.items.reduce((n,it)=>n+it.max,0),tag=seats+' คน';ctx.font='600 19px '+FONT;const tw=ctx.measureText(tag).width+26;ctx.fillStyle='#ffe3ee';siRound(ctx,x+colW-24-tw,y+28,tw,32,16);ctx.fill();ctx.fillStyle=C.dark;ctx.fillText(tag,x+colW-24-tw+13,y+44);
+    ctx.fillStyle=C.soft;ctx.fillRect(x+24,y+80,colW-48,2);
+    let ry=y+86;d.items.forEach((it,k)=>{const rh=rowH(it),cy=ry+(showNames&&it.names.length?34:rh/2);
+      ctx.fillStyle=C.soft;siRound(ctx,x+24,cy-22,44,44,13);ctx.fill();ctx.textAlign='center';ctx.font='22px '+FONT;ctx.fillText(it.r.emoji,x+46,cy+1);ctx.textAlign='left';
+      // ป้ายสถานะด้านขวา
+      const full=it.free<=0,label=it.lockFor?'ล็อกแล้ว':full?'เต็ม':(it.max>1?'ว่าง '+it.free+'/'+it.max:'ว่าง');ctx.font='700 19px '+FONT;const lw=ctx.measureText(label).width+26;
+      ctx.fillStyle=(full||it.lockFor)?C.grayBg:C.greenBg;siRound(ctx,x+colW-24-lw,cy-17,lw,34,17);ctx.fill();ctx.fillStyle=(full||it.lockFor)?C.gray:C.green;ctx.fillText(label,x+colW-24-lw+13,cy);
+      ctx.fillStyle=(full||it.lockFor)?C.muted:C.ink;ctx.font='500 25px '+FONT;ctx.fillText(siFit(ctx,it.r.name,colW-48-60-lw-12),x+82,cy);
+      if(showNames&&it.names.length){ctx.fillStyle=C.muted;ctx.font='500 19px '+FONT;ctx.fillText(siFit(ctx,'👤 '+it.names.join(', '),colW-48-60),x+82,cy+34)}
+      if(k<d.items.length-1){ctx.fillStyle=C.soft;ctx.fillRect(x+24,ry+rh-1,colW-48,2)}
+      ry+=rh});
+    y+=h+GAP})});
+  if(!depts.length){ctx.fillStyle=C.muted;ctx.font='600 30px '+FONT;ctx.textAlign='center';ctx.fillText('ไม่มีตำแหน่งที่ยังว่างแล้ว',W/2,headH+60);ctx.textAlign='left'}
+  // แถบเงื่อนไขด้านล่าง
+  const fy=H-footH-10;ctx.fillStyle=C.ink;siRound(ctx,PAD,fy,W-PAD*2,104,26);ctx.fill();
+  ctx.fillStyle='#fff';ctx.font='600 22px '+FONT;['👤 1 คน ลงได้ 1 ตำแหน่ง','⚡ ลงก่อนได้ก่อน','✏️ ย้ายได้ 1 ครั้ง'].forEach((t,i)=>{const cw=(W-PAD*2)/3;ctx.textAlign='center';ctx.fillText(t,PAD+cw*i+cw/2,fy+52)});ctx.textAlign='left';
+  ctx.fillStyle=C.muted;ctx.font='500 18px '+FONT;ctx.textAlign='center';ctx.fillText('ลงตำแหน่งได้ที่ '+location.host+location.pathname.replace(/index\.html$/,''),W/2,H-28);ctx.textAlign='left';
+  // แปลงเป็นไฟล์ภาพ
+  siBlob=await new Promise(res=>cv.toBlob(res,'image/png'));if(siUrl)URL.revokeObjectURL(siUrl);siUrl=URL.createObjectURL(siBlob);document.getElementById('siImg').src=siUrl;
+  const f=new File([siBlob],'cmm21167-positions.png',{type:'image/png'});document.getElementById('siShareBtn').style.display=(navigator.canShare&&navigator.canShare({files:[f]}))?'':'none';
+}
+function downloadSummaryImage(){if(!siUrl)return;const a=document.createElement('a');a.href=siUrl;a.download='cmm21167-positions.png';document.body.appendChild(a);a.click();a.remove()}
+async function shareSummaryImage(){if(!siBlob)return;const f=new File([siBlob],'cmm21167-positions.png',{type:'image/png'});try{await navigator.share({files:[f],title:'ตำแหน่งที่เปิดรับ CMM21167'})}catch(e){if(e.name!=='AbortError')downloadSummaryImage()}}
+
 // ===== สไลด์สอนใช้งาน =====
 var tutIdx=0,jitHint=false,jitTimer=null,hintPending=true;
 function tutSlides(){return [...document.querySelectorAll('#tutTrack .tut-slide')]}
@@ -1191,7 +1261,7 @@ function repositionProfile(){
 }
 window.addEventListener('resize',repositionProfile);
 window.addEventListener('pagehide',()=>{if(currentAttemptId)markAttempt(currentAttemptId,'abandoned','ออกจากหน้าเว็บก่อนกรอกข้อมูลให้ครบ')});
-Object.assign(window,{apSearchInput,openAdminPanel,closeAdminPanel,apSetTab,apGo,apSetFilter,apPrefillAdd,apDelete,adminCloseRole,renderAdminPeople,renderAdmin,tutGo,tutNext,tutPrev,tutClose,adminRandomAssign,openSignup,confirmSignup,signupNext,signupBack,cancelSignup,clearAttempts,submitEdit,loginAdmin,adminDelete,resetAll,toggleOpen,saveSchedule,clearSchedule,exportCSV,exportJSON,openAdmin,openEdit,showRules,closeModal,copyCode,markScheduleDirty,changeRoleCap,addAnnouncement,removeAnnouncement,clearAnnouncement,openAdminEdit,saveAdminEdit,copyText,copyAdminEditCode,openMembers,openCallSheet,printCallSheet,copyPageLink,openQR,fillMyEdit,fillMyEditFromDataset,logoutAdmin,saveCallSheetInfo,renderMembersList,toggleTrialMode,clearTrialData,adminQuickAdd,adminLockRole,adminUnlockRole});
+Object.assign(window,{openSummaryImage,drawSummaryImage,downloadSummaryImage,shareSummaryImage,apSearchInput,openAdminPanel,closeAdminPanel,apSetTab,apGo,apSetFilter,apPrefillAdd,apDelete,adminCloseRole,renderAdminPeople,renderAdmin,tutGo,tutNext,tutPrev,tutClose,adminRandomAssign,openSignup,confirmSignup,signupNext,signupBack,cancelSignup,clearAttempts,submitEdit,loginAdmin,adminDelete,resetAll,toggleOpen,saveSchedule,clearSchedule,exportCSV,exportJSON,openAdmin,openEdit,showRules,closeModal,copyCode,markScheduleDirty,changeRoleCap,addAnnouncement,removeAnnouncement,clearAnnouncement,openAdminEdit,saveAdminEdit,copyText,copyAdminEditCode,openMembers,openCallSheet,printCallSheet,copyPageLink,openQR,fillMyEdit,fillMyEditFromDataset,logoutAdmin,saveCallSheetInfo,renderMembersList,toggleTrialMode,clearTrialData,adminQuickAdd,adminLockRole,adminUnlockRole});
 setInterval(updateCountdown,1000);repositionProfile();render();tutGo(0);openTutorial(); // เปิดสไลด์สอนใช้งานทุกครั้งที่เข้าเว็บ
 </script>
 </body>
