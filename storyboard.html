@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Storyboard · CMM21167</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--yellow:#fbc400;--ink:#141414;--paper:#fffdf5;--line:#e8dfbf;--soft:#4a4533;--card:#ffffff;color-scheme:light}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--paper:#17150e;--ink:#f6f1dc;--line:#3a3520;--soft:#cbc3a3;--card:#211e12;color-scheme:dark}}
+*{box-sizing:border-box}
+html,body{max-width:100%;overflow-x:hidden}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Kanit,system-ui,sans-serif;font-size:17px;line-height:1.5}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+button{font:inherit;color:inherit}
+
+.top{background:var(--yellow);color:#141414;padding:26px 20px 0}
+.top-in{max-width:1000px;margin:auto}
+.back{color:#141414;font-weight:600;font-size:15px;text-decoration:underline;text-underline-offset:3px}
+h1{margin:8px 0 2px;font-size:clamp(38px,8vw,68px);line-height:1.05;font-weight:800;letter-spacing:-.02em}
+.sub{margin:0 0 20px;font-weight:600;font-size:18px}
+
+/* แถบฟิล์มรวมทุกคัท: กดแล้วเปิดภาพใหญ่ */
+.strip{background:#141414;margin:0 -20px;padding:14px 20px;overflow-x:auto;display:flex;gap:8px;scrollbar-width:thin}
+.strip button{flex:0 0 auto;border:0;padding:0;background:none;cursor:pointer;position:relative;border-radius:4px}
+.strip img{display:block;height:92px;width:auto;border-radius:4px;opacity:.9}
+.strip button:hover img{opacity:1}
+.strip i{position:absolute;left:4px;bottom:4px;background:var(--yellow);color:#141414;font-style:normal;font-weight:800;font-size:11px;line-height:1;padding:3px 5px;border-radius:3px}
+.strip button:focus-visible{outline-color:var(--yellow)}
+
+.main{max-width:1000px;margin:0 auto;padding:34px 20px 60px}
+.scene{margin:0 0 46px}
+.scene-h{display:flex;align-items:baseline;gap:14px;margin:0 0 6px}
+.scene-n{font-weight:800;font-size:clamp(44px,8vw,68px);line-height:1;color:var(--yellow);-webkit-text-stroke:2px var(--ink);paint-order:stroke fill}
+.scene-h h2{margin:0;font-size:clamp(20px,3.2vw,26px);font-weight:800;line-height:1.3}
+.scene-h small{display:block;color:var(--soft);font-weight:400;font-size:15px}
+
+.shots{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px;margin-top:14px}
+.shot{background:var(--card);border:2px solid var(--ink);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.frame{position:relative;border:0;padding:0;background:#fff;cursor:zoom-in;display:block;width:100%;aspect-ratio:9/16}
+.frame img{display:block;width:100%;height:100%;object-fit:cover}
+.badge{position:absolute;left:10px;top:10px;background:var(--ink);color:var(--yellow);font-weight:800;font-size:14px;padding:3px 10px;border-radius:999px}
+.cap{padding:11px 13px 14px;border-top:2px solid var(--ink)}
+.size{display:inline-block;background:var(--yellow);color:#141414;font-weight:800;font-size:13.5px;line-height:1.2;padding:3px 10px;border-radius:999px}
+.cap p{margin:7px 0 0;font-size:16px;line-height:1.45}
+
+dialog{border:0;padding:0;background:transparent;max-width:100vw;max-height:100vh;color:#fff;overflow:visible}
+dialog::backdrop{background:rgba(0,0,0,.82)}
+.lb{display:flex;flex-direction:column;align-items:center;gap:10px;padding:14px}
+.lb-img{background:#fff;border-radius:10px;max-height:72vh;max-width:min(88vw,420px);width:auto;height:auto}
+.lb-cap{max-width:min(88vw,420px);text-align:center;font-size:17px}
+.lb-cap b{color:var(--yellow)}
+.lb-nav{display:flex;gap:10px}
+.lb-nav button{background:var(--yellow);color:#141414;border:0;border-radius:999px;font-weight:800;padding:9px 20px;cursor:pointer;min-width:84px}
+.lb-nav .x{background:#fff}
+
+@media (max-width:560px){
+  .shots{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .cap{padding:9px 10px 12px}
+  .cap p{font-size:15px}
+  .strip img{height:78px}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <a class="back" href="index.html">← กลับหน้าหลัก</a>
+    <h1>Storyboard</h1>
+    <p class="sub">5 ฉาก · 13 คัท · กดภาพเพื่อดูใหญ่</p>
+    <div class="strip" id="strip" aria-label="ภาพรวมทุกคัท"></div>
+  </div>
+</header>
+
+<main class="main" id="scenes"></main>
+
+<dialog id="lb" aria-label="ดูภาพ Storyboard">
+  <div class="lb">
+    <img class="lb-img" id="lbImg" alt="">
+    <div class="lb-cap" id="lbCap"></div>
+    <div class="lb-nav">
+      <button type="button" id="prev">← ก่อนหน้า</button>
+      <button type="button" id="next">ถัดไป →</button>
+      <button type="button" class="x" id="close">ปิด</button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+// ข้อมูลทุกคัท: เพิ่มหรือแก้ได้ที่นี่ที่เดียว (img อยู่ในโฟลเดอร์ storyboard/)
+const SCENES = [
+  { n:1, title:'เปิดเรื่อง', note:'เซ็ทอัพห้องสตูดิโอ', shots:[
+    { img:'s1c1', size:'ทั้งตัว', text:'เปิดเรื่องเซ็ทอัพห้องสตูดิโอ ลีประกอบอุปกรณ์' },
+    { img:'s1c2', size:'ครึ่งตัวใกล้', text:'ลีปาดเหงื่อพร้อมรีเซ็ทลมหายใจ' },
+    { img:'s1c3', size:'ครึ่งตัว', text:'ลีหันมาพูดกับกล้อง' }
+  ]},
+  { n:2, title:'ตัดไปหาบาส', note:'', shots:[
+    { img:'s2c1', size:'ครึ่งตัว', text:'ตัดภาพมาหาบาสกำลังเดินถ่ายรูปด้วยกล้องถ่ายภาพ' },
+    { img:'s2c2', size:'ครึ่งตัว', text:'เห็นมาหากล้องแล้วพูด' }
+  ]},
+  { n:3, title:'โอ้ตในห้องน้ำ', note:'', shots:[
+    { img:'s3c1', size:'เต็มตัว มุมสูง', text:'โอ้ตหนังอยู่ในห้องน้ำ แล้วก็พูด' }
+  ]},
+  { n:4, title:'ลีนั่งกินข้าว', note:'ถ่ายคนเดียวกัน 3 มุม', shots:[
+    { img:'s4c1', size:'ครึ่งตัว · มุมซ้าย', text:'ลีที่กำลังนั่งกินข้าวอย่างเอร็ดอร่อย' },
+    { img:'s4c2', size:'ครึ่งตัว · มุมขวา', text:'ลีพูดด้วยน้ำเสียง elegant Project based learning' },
+    { img:'s4c3', size:'ครึ่งตัว · มุมหน้า', text:'ลีพูดต่อจากนั้นให้จบ' }
+  ]},
+  { n:5, title:'ทุกคนมารวมกัน', note:'', shots:[
+    { img:'s5c1', size:'ครึ่งตัว', text:'บาสเดินมาจากทางซ้าย' },
+    { img:'s5c2', size:'ครึ่งตัว', text:'โอ้ตเดินมาทางขวา' },
+    { img:'s5c3', size:'ครึ่งตัว', text:'ลีเดินมาจากทางตรง' },
+    { img:'s5c4', size:'ทั้งตัว', text:'ทุกคนเดินมารวมกันแล้วก็พูดพร้อมกัน' }
+  ]}
+];
+
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+// เรียงทุกคัทเป็นลำดับเดียว เพื่อใช้กับแถบฟิล์มและปุ่มก่อนหน้า/ถัดไป
+const ALL = [];
+SCENES.forEach(sc => sc.shots.forEach((s,i) => ALL.push({ ...s, scene: sc.n, cut: i+1, idx: ALL.length })));
+const label = s => `ฉาก ${s.scene} · คัท ${s.cut}`;
+
+document.getElementById('strip').innerHTML = ALL.map(s =>
+  `<button type="button" data-i="${s.idx}" aria-label="เปิด ${label(s)}"><img src="storyboard/${s.img}.png" alt="" loading="lazy"><i>${s.scene}.${s.cut}</i></button>`).join('');
+
+document.getElementById('scenes').innerHTML = SCENES.map(sc => `
+  <section class="scene" aria-labelledby="sc${sc.n}">
+    <div class="scene-h">
+      <span class="scene-n" aria-hidden="true">${sc.n}</span>
+      <h2 id="sc${sc.n}">ฉาก ${sc.n} · ${esc(sc.title)}${sc.note ? `<small>${esc(sc.note)}</small>` : ''}</h2>
+    </div>
+    <div class="shots">${ALL.filter(s => s.scene === sc.n).map(s => `
+      <article class="shot">
+        <button type="button" class="frame" data-i="${s.idx}" aria-label="ขยายภาพ ${label(s)}">
+          <img src="storyboard/${s.img}.png" alt="${esc(label(s) + ' ' + s.text)}" loading="lazy">
+          <span class="badge">คัท ${s.cut}</span>
+        </button>
+        <div class="cap"><span class="size">${esc(s.size)}</span><p>${esc(s.text)}</p></div>
+      </article>`).join('')}
+    </div>
+  </section>`).join('');
+
+// ดูภาพใหญ่
+const lb = document.getElementById('lb'), lbImg = document.getElementById('lbImg'), lbCap = document.getElementById('lbCap');
+let cur = 0;
+function openShot(i){
+  cur = (i + ALL.length) % ALL.length;
+  const s = ALL[cur];
+  lbImg.src = `storyboard/${s.img}.png`; lbImg.alt = label(s) + ' ' + s.text;
+  lbCap.innerHTML = `<b>${esc(label(s))}</b> · ${esc(s.size)}<br>${esc(s.text)}`;
+  if (!lb.open) lb.showModal();
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-i]');
+  if (b) openShot(+b.dataset.i);
+});
+document.getElementById('prev').onclick = () => openShot(cur - 1);
+document.getElementById('next').onclick = () => openShot(cur + 1);
+document.getElementById('close').onclick = () => lb.close();
+lb.addEventListener('click', e => { if (e.target === lb) lb.close(); });
+document.addEventListener('keydown', e => {
+  if (!lb.open) return;
+  if (e.key === 'ArrowLeft') openShot(cur - 1);
+  if (e.key === 'ArrowRight') openShot(cur + 1);
+});
+</script>
+</body>
+</html>
