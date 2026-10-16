@@ -356,7 +356,7 @@ button.sm{padding:8px 11px;font-size:13px;border-radius:11px}
 .closed-head span{font-size:12px;font-weight:800}
 .closed-chips{display:flex;flex-wrap:wrap;gap:6px}
 .closed-chip{font-size:12px;font-weight:700;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:999px;padding:4px 10px;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
-@media print{body{background:#fff}.top,.status-strip,.top-hero-row,.side,.dept-grid,.trial-banner,.modal:not(#callSheetModal){display:none!important}#callSheetModal{position:static;display:block;background:#fff}.modal-card{box-shadow:none;max-width:100%;border-radius:0}}
+@media print{body{background:#fff}.top,.status-strip,.top-hero-row,.side,.dept-grid,.trial-banner,.modal:not(#callSheetModal){display:none!important}#callSheetModal{position:static;display:block;background:#fff}.site-footer,#callSheetModal .admin-actions,#csImgBox{display:none!important}.modal-card{box-shadow:none;max-width:100%;border-radius:0}}
 
 /* ===== สีและไอคอนประจำแผนก ===== */
 .dept-block{border-top:4px solid var(--dc,#e8558c)}
@@ -513,7 +513,7 @@ button.sm{padding:8px 11px;font-size:13px;border-radius:11px}
 <p class="small si-tip">บน iPhone กดค้างที่รูปแล้วเลือก "บันทึกรูปภาพ" ได้เลย</p>
 <div class="admin-actions si-actions"><button id="siShareBtn" onclick="shareSummaryImage()">📤 แชร์รูป</button><button class="secondary" onclick="downloadSummaryImage()">⬇️ ดาวน์โหลดรูป</button></div></div></div>
 <div class="modal" id="membersModal"><div class="modal-card"><h2>👥 สมาชิกทั้งหมด</h2><div class="field" style="margin:0 0 12px"><input id="membersSearch" placeholder="🔎 ค้นหาชื่อ..." oninput="renderMembersList()"></div><div id="membersList"></div><div style="margin-top:14px"><button class="secondary" onclick="closeModal('membersModal')">ปิด</button></div></div></div>
-<div class="modal" id="callSheetModal"><div class="modal-card"><div id="callSheetList"></div><div class="admin-actions" style="margin-top:14px"><button onclick="printCallSheet()">🖨️ Print / Save PDF</button><button class="secondary" onclick="closeModal('callSheetModal')">ปิด</button></div></div></div>
+<div class="modal" id="callSheetModal"><div class="modal-card"><div id="callSheetList"></div><div id="csImgBox" style="display:none"><img id="csImg" alt="Call Sheet" style="width:100%;height:auto;border:1px solid var(--line);border-radius:12px"><p class="small" style="margin:8px 0 0">ถ้าปุ่มบันทึกไม่ทำงานในแอป ให้กดค้างที่รูปแล้วเลือกบันทึกรูปภาพ</p></div><div class="admin-actions" style="margin-top:14px"><button onclick="downloadCallSheetImage()">💾 บันทึกเป็นรูป</button><button onclick="shareCallSheetImage()">📤 แชร์</button><button class="secondary" onclick="printCallSheet()">🖨️ Print / PDF</button><button class="secondary" onclick="closeModal('callSheetModal')">ปิด</button></div></div></div>
 <div class="modal" id="qrModal"><div class="modal-card"><h2>📱 QR Code</h2><p class="small">สแกนเพื่อเข้าเว็บเลือกตำแหน่ง</p><div style="text-align:center"><img id="qrImg" alt="QR Code" style="width:230px;height:230px;border:1px solid var(--line);border-radius:18px;padding:10px;background:#fff"></div><div class="admin-actions" style="margin-top:14px"><button onclick="copyPageLink()">คัดลอกลิงก์</button><button class="secondary" onclick="closeModal('qrModal')">ปิด</button></div></div></div>
 <div class="toast" id="toast"></div>
 
@@ -1131,13 +1131,14 @@ function renderMembersList(){const el=document.getElementById('membersList');if(
 
 function csbGroupRows(ids){const rows=[];ids.forEach(id=>{const r=roles.find(x=>x.id===id);if(!r)return;const max=roleMax(id),ent=state.entries.filter(e=>e.role===id);for(let i=0;i<max;i++)rows.push({label:r.name+(max>1?' '+(i+1):''),name:ent[i]?ent[i].name:''});});return rows}
 function formatThaiDateOnly(v){if(!v)return'-';return new Date(v+'T00:00:00').toLocaleDateString('th-TH',{day:'numeric',month:'long',year:'numeric'})}
+const CS_GROUPS=[
+  [{name:'กำกับ / โปรดักชั่น',ids:['producer','director','creative','pm','runner','ad2','locman','script']},{name:'ฝ่ายกล้อง',ids:['dop','camoperator','focuspuller','camassist','bts']}],
+  [{name:'ไฟ / ไฟฟ้า',ids:['gaffer','bestboy']},{name:'เสียง',ids:['sound']}],
+  [{name:'ศิลป์',ids:['proddesign','art','artprop']},{name:'แต่งหน้า / คอสตูม',ids:['makeup']}],
+  [{name:'ตัดต่อ',ids:['editor']},{name:'',ids:[]}]
+];
 function buildCallSheetHTML(){
-  const GROUPS=[
-    [{name:'กำกับ / โปรดักชั่น',ids:['producer','director','creative','pm','runner','ad2','locman','script']},{name:'ฝ่ายกล้อง',ids:['dop','camoperator','focuspuller','camassist','bts']}],
-    [{name:'ไฟ / ไฟฟ้า',ids:['gaffer','bestboy']},{name:'เสียง',ids:['sound']}],
-    [{name:'ศิลป์',ids:['proddesign','art','artprop']},{name:'แต่งหน้า / คอสตูม',ids:['makeup']}],
-    [{name:'ตัดต่อ',ids:['editor']},{name:'',ids:[]}]
-  ];
+  const GROUPS=CS_GROUPS;
   const cs=state.callSheet||{};
   const info=`<div class="csb-info"><div><label>วันที่ถ่ายทำ</label><b>${esc(formatThaiDateOnly(cs.date))}</b></div><div><label>Call Time</label><b>${esc(cs.callTime||'-')}</b></div><div><label>เลิกกอง (โดยประมาณ)</label><b>${esc(cs.wrapTime||'-')}</b></div><div><label>สถานที่ถ่ายทำ</label><b>${esc(cs.location||'-')}</b></div></div>`;
   const groupsHTML=GROUPS.map(pair=>{
@@ -1151,7 +1152,72 @@ function buildCallSheetHTML(){
   const notes=cs.notes?`<div class="csb-foot"><b>หมายเหตุ:</b> ${esc(cs.notes)}</div>`:'';
   return `<div class="csb-page"><div class="csb-head"><div><h1>CMM21167 — Crew Position System</h1><div class="csb-sub">Sripatum University · CMM21167</div></div><div class="csb-day">CALL SHEET — Day 1/1</div></div>${info}${groupsHTML}${notes}</div>`;
 }
-function openMembers(){const s=document.getElementById('membersSearch');if(s)s.value='';renderMembersList();show('membersModal')}function openCallSheet(){document.getElementById('callSheetList').innerHTML=buildCallSheetHTML();show('callSheetModal')}function printCallSheet(){window.print()}
+// ===== Call Sheet เป็นรูปภาพ (ไม่ต้องพึ่งหน้าต่างพิมพ์ของเบราว์เซอร์) =====
+async function drawCallSheetCanvas(){
+  try{await document.fonts.ready}catch(e){}
+  const FONT='-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,"Noto Sans Thai","Leelawadee UI",Loma,sans-serif';
+  const cs=state.callSheet||{};
+  const W=1080,PAD=48,IW=W-PAD*2,ROW=52,HEAD=54,GAPY=24,headH=130,infoH=100;
+  const blocks=CS_GROUPS.map(pair=>{const[gA,gB]=pair,rA=csbGroupRows(gA.ids),rB=csbGroupRows(gB.ids);return{gA,gB,rA,rB,n:Math.max(rA.length,rB.length,1)}});
+  const notes=cs.notes||'';
+  const H=PAD+headH+infoH+30+blocks.reduce((t,b)=>t+HEAD+b.n*ROW+GAPY,0)+(notes?90:0)+PAD-GAPY;
+  const cv=document.createElement('canvas');cv.width=W;cv.height=H;const ctx=cv.getContext('2d');
+  ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);ctx.textBaseline='middle';
+  // หัว
+  ctx.fillStyle='#111';ctx.font='700 40px '+FONT;ctx.textAlign='left';ctx.fillText('CMM21167 — Crew Position System',PAD,PAD+28);
+  ctx.fillStyle='#555';ctx.font='500 22px '+FONT;ctx.fillText('Sripatum University · CMM21167',PAD,PAD+68);
+  const tag='CALL SHEET — Day 1/1';ctx.font='700 24px '+FONT;const tw=ctx.measureText(tag).width+36;
+  ctx.fillStyle='#111';siRound(ctx,W-PAD-tw,PAD+4,tw,48,8);ctx.fill();ctx.fillStyle='#fff';ctx.fillText(tag,W-PAD-tw+18,PAD+29);
+  ctx.fillStyle='#111';ctx.fillRect(PAD,PAD+headH-24,IW,4);
+  // กล่องข้อมูล
+  const infos=[['วันที่ถ่ายทำ',formatThaiDateOnly(cs.date)],['CALL TIME',cs.callTime||'-'],['เลิกกอง (โดยประมาณ)',cs.wrapTime||'-'],['สถานที่ถ่ายทำ',cs.location||'-']];
+  const iy=PAD+headH,bw=IW/4;
+  ctx.strokeStyle='#111';ctx.lineWidth=2;ctx.strokeRect(PAD,iy,IW,infoH);
+  infos.forEach(([l,v],i)=>{const x=PAD+i*bw;if(i)ctx.fillRect(x,iy,1,infoH);ctx.fillStyle='#666';ctx.font='700 17px '+FONT;ctx.fillText(l,x+14,iy+30);ctx.fillStyle='#111';ctx.font='700 26px '+FONT;ctx.fillText(siFit(ctx,v,bw-28),x+14,iy+68);ctx.fillStyle='#111'});
+  // ตารางแต่ละฝ่าย
+  let y=iy+infoH+30;
+  const xA=PAD,xB=PAD+IW/2,roleW=IW*0.25-18,nameX=IW*0.25;
+  blocks.forEach(b=>{
+    ctx.fillStyle='#111';ctx.fillRect(PAD,y,IW,HEAD);ctx.fillStyle='#fff';ctx.font='700 22px '+FONT;
+    ctx.fillText(b.gA.name,xA+14,y+HEAD/2);if(b.gB.name)ctx.fillText(b.gB.name,xB+14,y+HEAD/2);
+    y+=HEAD;
+    for(let i=0;i<b.n;i++){
+      ctx.fillStyle='#ccc';ctx.fillRect(PAD,y+ROW-1,IW,1);
+      [[b.rA[i],xA],[b.rB[i],xB]].forEach(([r,x])=>{
+        if(!r)return;
+        ctx.fillStyle='#111';ctx.font='700 21px '+FONT;ctx.fillText(siFit(ctx,r.label,roleW),x+14,y+ROW/2);
+        ctx.font='400 22px '+FONT;ctx.fillStyle=r.name?'#222':'#bbb';ctx.fillText(siFit(ctx,r.name||'ว่าง',IW*0.25-14),x+nameX,y+ROW/2);
+      });
+      y+=ROW;
+    }
+    y+=GAPY;
+  });
+  if(notes){ctx.fillStyle='#111';ctx.fillRect(PAD,y-8,IW,2);ctx.font='700 22px '+FONT;ctx.fillText('หมายเหตุ:',PAD,y+28);ctx.font='400 22px '+FONT;ctx.fillText(siFit(ctx,notes,IW-130),PAD+120,y+28)}
+  return cv;
+}
+var csBlob=null,csUrl='';
+async function makeCallSheetImage(){
+  const cv=await drawCallSheetCanvas();
+  csBlob=await new Promise(r=>cv.toBlob(r,'image/png'));
+  if(csUrl)URL.revokeObjectURL(csUrl);csUrl=URL.createObjectURL(csBlob);
+  // แสดงรูปในกล่อง เผื่อแอปที่โหลดไฟล์ไม่ได้ ให้กดค้างบันทึกเอง
+  document.getElementById('csImg').src=csUrl;
+  document.getElementById('callSheetList').style.display='none';
+  document.getElementById('csImgBox').style.display='block';
+}
+async function downloadCallSheetImage(){
+  try{await makeCallSheetImage();const a=document.createElement('a');a.href=csUrl;a.download='cmm21167-callsheet.png';document.body.appendChild(a);a.click();a.remove();toast('กำลังบันทึกรูป Call Sheet')}
+  catch(e){toast('สร้างรูปไม่สำเร็จ ลองใหม่อีกครั้ง')}
+}
+async function shareCallSheetImage(){
+  try{
+    await makeCallSheetImage();
+    const f=new File([csBlob],'cmm21167-callsheet.png',{type:'image/png'});
+    if(navigator.canShare&&navigator.canShare({files:[f]}))await navigator.share({files:[f],title:'Call Sheet CMM21167'});
+    else toast('เครื่องนี้แชร์ตรงไม่ได้ กดค้างที่รูปเพื่อบันทึก');
+  }catch(e){if(e&&e.name!=='AbortError')toast('แชร์ไม่สำเร็จ กดค้างที่รูปเพื่อบันทึก')}
+}
+function openMembers(){const s=document.getElementById('membersSearch');if(s)s.value='';renderMembersList();show('membersModal')}function openCallSheet(){const l=document.getElementById('callSheetList');l.innerHTML=buildCallSheetHTML();l.style.display='';document.getElementById('csImgBox').style.display='none';show('callSheetModal')}function printCallSheet(){window.print()}
 function openQR(){const url=location.href;document.getElementById('qrImg').src='https://api.qrserver.com/v1/create-qr-code/?size=300x300&data='+encodeURIComponent(url);show('qrModal')}
 function copyPageLink(){navigator.clipboard?.writeText(location.href);toast('คัดลอกลิงก์เว็บแล้ว')}function copyText(text){navigator.clipboard?.writeText(text);toast('คัดลอกแล้ว')}function copyAdminEditCode(){copyText(document.getElementById('adminEditCode').value)}function copyCode(){navigator.clipboard?.writeText(lastCode);toast('คัดลอกรหัสแล้ว')}
 function exportCSV(){const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"',t=v=>v?'="'+v+'"':'';const csv='\ufeff'+'name,role,time,editCode,phone,studentCode\n'+state.entries.map(e=>{const c=state.contacts?.[e.id]||{};return[q(e.name),q(roleName(e.role)),q(e.time||''),q(e.code),t(c.phone),t(c.studentCode)].join(',')}).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='cmm21167-positions.csv';a.click()}
@@ -1270,7 +1336,7 @@ function repositionProfile(){
 }
 window.addEventListener('resize',repositionProfile);
 window.addEventListener('pagehide',()=>{if(currentAttemptId)markAttempt(currentAttemptId,'abandoned','ออกจากหน้าเว็บก่อนกรอกข้อมูลให้ครบ')});
-Object.assign(window,{openSummaryImage,drawSummaryImage,downloadSummaryImage,shareSummaryImage,apSearchInput,openAdminPanel,closeAdminPanel,apSetTab,apGo,apSetFilter,apPrefillAdd,apDelete,adminCloseRole,renderAdminPeople,renderAdmin,tutGo,tutNext,tutPrev,tutClose,adminRandomAssign,openSignup,confirmSignup,signupNext,signupBack,cancelSignup,clearAttempts,submitEdit,loginAdmin,adminDelete,resetAll,toggleOpen,saveSchedule,clearSchedule,exportCSV,exportJSON,openAdmin,openEdit,showRules,closeModal,copyCode,markScheduleDirty,changeRoleCap,addAnnouncement,removeAnnouncement,clearAnnouncement,openAdminEdit,saveAdminEdit,copyText,copyAdminEditCode,openMembers,openCallSheet,printCallSheet,copyPageLink,openQR,fillMyEdit,fillMyEditFromDataset,logoutAdmin,saveCallSheetInfo,renderMembersList,toggleTrialMode,clearTrialData,adminQuickAdd,adminLockRole,adminUnlockRole});
+Object.assign(window,{openSummaryImage,drawSummaryImage,downloadSummaryImage,shareSummaryImage,apSearchInput,openAdminPanel,closeAdminPanel,apSetTab,apGo,apSetFilter,apPrefillAdd,apDelete,adminCloseRole,renderAdminPeople,renderAdmin,tutGo,tutNext,tutPrev,tutClose,adminRandomAssign,openSignup,confirmSignup,signupNext,signupBack,cancelSignup,clearAttempts,submitEdit,loginAdmin,adminDelete,resetAll,toggleOpen,saveSchedule,clearSchedule,exportCSV,exportJSON,openAdmin,openEdit,showRules,closeModal,copyCode,markScheduleDirty,changeRoleCap,addAnnouncement,removeAnnouncement,clearAnnouncement,openAdminEdit,saveAdminEdit,copyText,copyAdminEditCode,openMembers,openCallSheet,printCallSheet,downloadCallSheetImage,shareCallSheetImage,copyPageLink,openQR,fillMyEdit,fillMyEditFromDataset,logoutAdmin,saveCallSheetInfo,renderMembersList,toggleTrialMode,clearTrialData,adminQuickAdd,adminLockRole,adminUnlockRole});
 setInterval(updateCountdown,1000);repositionProfile();render();tutGo(0);openTutorial(); // เปิดสไลด์สอนใช้งานทุกครั้งที่เข้าเว็บ
 </script>
 </body>
