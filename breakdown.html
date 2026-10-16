@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Breakdown · CMM21167</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--yellow:#fbc400;--ink:#141414;--paper:#fffdf5;--line:#e8dfbf;--soft:#4a4533;--card:#ffffff;--tint:#faf3d6;color-scheme:light}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--paper:#17150e;--ink:#f6f1dc;--line:#3a3520;--soft:#cbc3a3;--card:#211e12;--tint:#2c2812;color-scheme:dark}}
+*{box-sizing:border-box}
+html,body{max-width:100%;overflow-x:hidden}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Kanit,system-ui,sans-serif;font-size:17px;line-height:1.5}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+
+.top{background:var(--yellow);color:#141414;padding:26px 20px 28px}
+.top-in{max-width:960px;margin:auto}
+.back{color:#141414;font-weight:600;font-size:15px;text-decoration:underline;text-underline-offset:3px}
+h1{margin:8px 0 4px;font-size:clamp(34px,7vw,60px);line-height:1.05;font-weight:800;letter-spacing:-.02em}
+.sub{margin:0;font-weight:600}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.meta span{background:#141414;color:#fff;border-radius:999px;padding:6px 14px;font-size:15px;font-weight:600}
+
+.main{max-width:960px;margin:0 auto;padding:30px 20px 60px}
+.scene{background:var(--card);border:2px solid var(--ink);border-radius:14px;margin:0 0 22px;overflow:hidden}
+.scene-h{display:flex;align-items:center;gap:14px;padding:14px 18px;background:var(--tint);border-bottom:2px solid var(--ink)}
+.scene-n{font-weight:800;font-size:34px;line-height:1;color:var(--yellow);-webkit-text-stroke:1.5px var(--ink);paint-order:stroke fill;min-width:34px}
+.scene-h h2{margin:0;font-size:clamp(19px,3vw,23px);font-weight:800;line-height:1.25}
+.tag{margin-left:auto;background:var(--ink);color:var(--yellow);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:700;white-space:nowrap}
+.desc{padding:14px 18px 4px;font-size:17px}
+dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 16px;margin:0;padding:12px 18px 16px;font-size:16px}
+dt{font-weight:800;color:var(--soft);white-space:nowrap}
+dd{margin:0}
+
+@media (max-width:560px){
+  dl{grid-template-columns:minmax(0,1fr);gap:2px 0}
+  dt{margin-top:8px}
+  .tag{margin-left:0}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <a class="back" href="index.html">← กลับหน้าหลัก</a>
+    <h1>Breakdown</h1>
+    <p class="sub">แยกสิ่งที่ต้องใช้ในแต่ละฉาก</p>
+    <div class="meta">
+      <span>วันถ่ายทำ 18/10/2569</span>
+      <span>5 ฉาก</span>
+      <span>นักแสดง ลี · บาส · โอ้ต</span>
+    </div>
+  </div>
+</header>
+
+<main class="main" id="scenes"></main>
+
+<script>
+// ข้อมูลจากไฟล์ SCRIPT BREAKDOWN SHEET (แก้ที่นี่ที่เดียว)
+const SCENES = [
+  { n:1, title:'Set Up Studio', where:'INT · DAY', desc:'ลีประกอบอุปกรณ์ไฟทีละขั้นตอนอย่างทะมัดทะแมง ลีปาดเหงื่อแล้วค่อยพูดในสตูดิโอ',
+    cast:'ลี', props:'กล้อง ไฟ อุปกรณ์ถ่ายทำ', sound:'—', makeup:'ลี: Natural Look', wardrobe:'ชุดนักศึกษา', notes:'เตรียมอุปกรณ์ก่อนถ่ายทำ' },
+  { n:2, title:'Hand on learning', where:'INT · DAY', desc:'บาสเดินถ่ายภาพในอาคาร',
+    cast:'บาส', props:'กล้อง ขาตั้งกล้องแบบถือ', sound:'—', makeup:'บาส: Natural Look', wardrobe:'ชุดนักศึกษา', notes:'—' },
+  { n:3, title:'Experiential learning', where:'INT · DAY', desc:'โอ้ตกำลังนั่งปลดทุกข์ในห้องน้ำ',
+    cast:'โอ้ต', props:'—', sound:'เสียงปลดทุกข์ · เสียงพูดโอ้ต', makeup:'โอ้ต: Natural Look', wardrobe:'ชุดนักศึกษา', notes:'—' },
+  { n:4, title:'Project based learning', where:'INT · DAY', desc:'ลีกำลังนั่งกินข้าวอย่างเอร็ดอร่อยในโรงอาหาร',
+    cast:'ลี', props:'อาหาร โต๊ะ กระดาษทิชชู่ ไอแพด เอกสาร', sound:'เสียงพูดลี', makeup:'ลี: Natural Look', wardrobe:'ชุดนักศึกษา', notes:'เตรียมสถานที่และอุปกรณ์ประกอบฉาก' },
+  { n:5, title:'Ready to learning', where:'EXT · DAY', desc:'บาส โอ้ต ลี มารวมตัวกันหน้าโลโก SPU แล้วพูดพร้อมกัน',
+    cast:'บาส · โอ้ต · ลี', props:'กล้อง เอกสาร', sound:'เสียงพูดพร้อมกัน', makeup:'บาส · โอ้ต · ลี: Natural Look', wardrobe:'ชุดนักศึกษา', notes:'—' }
+];
+
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+document.getElementById('scenes').innerHTML = SCENES.map(s => `
+  <section class="scene" aria-labelledby="s${s.n}">
+    <div class="scene-h">
+      <span class="scene-n" aria-hidden="true">${s.n}</span>
+      <h2 id="s${s.n}">${esc(s.title)}</h2>
+      <span class="tag">${esc(s.where)}</span>
+    </div>
+    <p class="desc">${esc(s.desc)}</p>
+    <dl>
+      <dt>นักแสดง</dt><dd>${esc(s.cast)}</dd>
+      <dt>อุปกรณ์</dt><dd>${esc(s.props)}</dd>
+      <dt>เสียง</dt><dd>${esc(s.sound)}</dd>
+      <dt>แต่งหน้า</dt><dd>${esc(s.makeup)}</dd>
+      <dt>เครื่องแต่งกาย</dt><dd>${esc(s.wardrobe)}</dd>
+      <dt>หมายเหตุ</dt><dd>${esc(s.notes)}</dd>
+    </dl>
+  </section>`).join('');
+</script>
+</body>
+</html>

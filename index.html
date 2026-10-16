@@ -43,6 +43,9 @@ h2::after{content:"";display:block;width:90px;height:8px;background:var(--yellow
 .later{color:var(--soft);font-size:16px;border:1.5px solid var(--line);border-radius:999px;padding:6px 16px;white-space:nowrap}
 a.item.live .n{background:var(--yellow);color:#141414}
 a.item.live:hover h3{text-decoration:underline;text-decoration-thickness:4px;text-decoration-color:var(--yellow);text-underline-offset:5px}
+/* รายการที่ถูกตัดออก: ป้ายสีแดง เลขจาง */
+.item.cut .n{opacity:.45}
+.item.cut .later{color:#d7261e;border-color:#d7261e;font-weight:600}
 
 @media (max-width:560px){
   .item{grid-template-columns:44px minmax(0,1fr);gap:12px}
@@ -79,8 +82,9 @@ a.item.live:hover h3{text-decoration:underline;text-decoration-thickness:4px;tex
 const MODULES = [
   { title:'เลือกตำแหน่งกองถ่าย', desc:'ลงชื่อเลือกตำแหน่ง ใครกดก่อนได้ก่อน', href:'picker.html' },
   { title:'Storyboard', desc:'ภาพร่างทั้ง 5 ฉาก 13 คัท', href:'storyboard.html' },
-  { title:'Breakdown', desc:'แยกสิ่งที่ต้องใช้ในแต่ละฉาก' },
-  { title:'Shot list', desc:'ช็อตที่ต้องถ่าย' },
+  { title:'Breakdown', desc:'แยกนักแสดง อุปกรณ์ และเสียงในแต่ละฉาก', href:'breakdown.html' },
+  { title:'Shot list', desc:'ตัดออกจากขอบเขตงานนี้ ไม่ต้องจัดทำ', status:'ถูกตัดออก', cut:true },
+  { title:'รายชื่อสมาชิก', desc:'ชื่อและรหัสนักศึกษาทั้ง 18 คน', href:'members.html' },
   { title:'ตารางถ่ายทำ', desc:'วัน เวลา สถานที่' },
   { title:'เช็กลิสต์ก่อนส่ง', desc:'เช็กว่าครบก่อนส่ง' },
   { title:'ไลก์ แชร์ คอมเมนต์', desc:'งานกลุ่มอื่นอย่างน้อย 5 ชิ้น' }
@@ -90,7 +94,7 @@ document.getElementById('list').innerHTML = MODULES.map((m,i) => {
   const inner = `<span class="n">${i+1}</span><div><h3>${esc(m.title)}</h3><p>${esc(m.desc)}</p></div>`;
   return m.href
     ? `<li><a class="item live" href="${esc(m.href)}">${inner}<span class="btn">เข้าใช้งาน →</span></a></li>`
-    : `<li><div class="item">${inner}<span class="later">ยังไม่ได้ทำ</span></div></li>`;
+    : `<li><div class="item${m.cut ? ' cut' : ''}">${inner}<span class="later">${esc(m.status || 'ยังไม่ได้ทำ')}</span></div></li>`;
 }).join('');
 
 const DEADLINE = new Date('2026-10-23T23:59:00+07:00');

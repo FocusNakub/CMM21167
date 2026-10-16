@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>รายชื่อสมาชิก · CMM21167</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--yellow:#fbc400;--ink:#141414;--paper:#fffdf5;--line:#e8dfbf;--soft:#5a5440;--card:#ffffff;--tint:#faf3d6;--ok:#146c2e;--head-bg:#141414;--head-fg:#fbc400;color-scheme:light}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--paper:#17150e;--ink:#f6f1dc;--line:#3a3520;--soft:#cbc3a3;--card:#211e12;--tint:#2c2812;--ok:#7ddc96;--head-bg:#fbc400;--head-fg:#141414;color-scheme:dark}}
+*{box-sizing:border-box}
+html,body{max-width:100%}
+body{overflow-x:clip} /* ใช้ clip แทน hidden เพื่อไม่ให้แถบค้นหาที่ติดขอบบน (sticky) พัง */
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Kanit,system-ui,sans-serif;font-size:16px;line-height:1.45}
+:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+button,input{font:inherit;color:inherit}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* หัวหน้า: เล็กลงให้เห็นรายชื่อเร็ว */
+.top{background:var(--yellow);color:#141414;padding:16px 16px 18px}
+.top-in{max-width:720px;margin:auto}
+.back{color:#141414;font-weight:600;font-size:14px;text-decoration:underline;text-underline-offset:3px}
+h1{margin:4px 0 0;font-size:clamp(28px,6vw,38px);line-height:1.15;font-weight:800}
+.sub{margin:2px 0 0;font-weight:600;font-size:15px}
+
+/* แถบค้นหาติดขอบบน เลื่อนรายชื่อแล้วยังเห็น */
+.bar{position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:1px solid var(--line);padding:10px 16px}
+.bar-in{max-width:720px;margin:auto;display:flex;gap:8px}
+.search{flex:1;min-width:0;height:44px;padding:0 16px;border:2px solid var(--ink);border-radius:999px;background:var(--card)}
+.copyall{flex:none;height:44px;padding:0 16px;border:2px solid var(--ink);border-radius:999px;background:var(--ink);color:var(--yellow);font-weight:600;cursor:pointer;white-space:nowrap}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .copyall{background:var(--yellow);color:#141414}}
+
+.main{max-width:720px;margin:0 auto;padding:14px 16px 40px}
+.meta{display:flex;justify-content:space-between;gap:8px;margin:0 2px 8px;color:var(--soft);font-size:14px}
+table{width:100%;border-collapse:separate;border-spacing:0;border:2px solid var(--ink);border-radius:12px;overflow:hidden;background:var(--card)}
+th{background:var(--head-bg);color:var(--head-fg);font-size:14px;font-weight:600;text-align:left;padding:8px 12px}
+td{padding:8px 12px;border-top:1px solid var(--line);vertical-align:middle}
+tbody tr:first-child td{border-top:0}
+tbody tr{height:56px} /* ทุกแถวสูงเท่ากัน แม้ไม่มีชื่อเล่น */
+.c-no{width:44px;color:var(--soft);font-weight:600;text-align:center}
+th.c-no{text-align:center;color:var(--head-fg)}
+.c-id{width:130px;text-align:right}
+th.c-id{text-align:right}
+.full{display:block;font-weight:600;line-height:1.3}
+.nick{display:block;color:var(--soft);font-size:14px;line-height:1.3}
+.idbtn{border:1.5px dashed var(--soft);background:var(--tint);border-radius:8px;padding:4px 10px;font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:.02em;cursor:pointer;min-height:36px}
+.idbtn:hover{border-style:solid;border-color:var(--ink)}
+.idbtn.done{border-style:solid;border-color:var(--ok);color:var(--ok)}
+.empty{text-align:center;color:var(--soft);padding:22px 12px}
+.hint{margin:10px 2px 0;color:var(--soft);font-size:14px}
+
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 18px;border-radius:999px;font-weight:600;font-size:15px;opacity:0;pointer-events:none;transition:opacity .15s;z-index:10;max-width:calc(100vw - 32px);text-align:center}
+.toast.show{opacity:1}
+
+@media (max-width:480px){
+  .c-no{width:34px;padding-left:4px;padding-right:4px}
+  td,th{padding-left:8px;padding-right:8px}
+  .c-id{width:96px}
+  .full{font-size:15px}
+  .idbtn{padding:4px 6px;font-size:15px;letter-spacing:0}
+  .copyall{padding:0 12px;font-size:15px}
+}
+@media (prefers-reduced-motion: reduce){.toast{transition:none}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <a class="back" href="index.html">← กลับหน้าหลัก</a>
+    <h1>รายชื่อสมาชิก</h1>
+    <p class="sub">ทีม CMM21167 · 18 คน</p>
+  </div>
+</header>
+
+<div class="bar">
+  <div class="bar-in">
+    <input class="search" id="q" type="search" placeholder="ค้นหาชื่อหรือรหัส" aria-label="ค้นหาสมาชิก" autocomplete="off">
+    <button class="copyall" id="copyAll" type="button">คัดลอกทั้งหมด</button>
+  </div>
+</div>
+
+<main class="main">
+  <div class="meta"><span id="count"></span><span>แตะรหัสเพื่อคัดลอก</span></div>
+  <table>
+    <caption class="sr">รายชื่อสมาชิกและรหัสนักศึกษา</caption>
+    <thead><tr><th class="c-no" scope="col">ที่</th><th scope="col">ชื่อ-นามสกุล</th><th class="c-id" scope="col">รหัสนักศึกษา</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+  <p class="hint">คัดลอกทั้งหมดจะได้บรรทัดละคน รูปแบบ รหัส ชื่อ-นามสกุล ไว้วางลงฟอร์มหรือ Canva</p>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+// รายชื่อ 18 คน เรียงตามหน้าเลือกตำแหน่ง (ชื่อเล่นอยู่ในวงเล็บ)
+const MEMBERS = [
+  { name:'ปานชีวา เปลี่ยนศรี (ปริม)', id:'68084693' },
+  { name:'หิรัญ ดิษฐสกุล (โฟกัส)', id:'68018544' },
+  { name:'รวีโรจน์ เชื้อแฉ่ง (มูน)', id:'68104276' },
+  { name:'พรนิพา ดอนเมือง (ดัชมิลล์)', id:'68027908' },
+  { name:'ธัญพิสิษฐ์ พูนพานิช (เน็น)', id:'68006622' },
+  { name:'วิโรจน์ สวนสระแก้ว (ออโต้)', id:'68007970' },
+  { name:'ฐิติยา คำสีเขียว (ปาย)', id:'68028233' },
+  { name:'ศิริวัฒน์ เดชอุดม (ทีเจ)', id:'68018328' },
+  { name:'ชนิดาภา ทองหนูน (ต้นส้ม)', id:'68028404' },
+  { name:'พิเชฐ ตรงเพชร (ตอริก/จ๊อย)', id:'68027081' },
+  { name:'วัชรพล ดำสมอ (เอ๊าะ)', id:'68011018' },
+  { name:'กัณญาพัฒน์ จันทร์เกษมสุข', id:'68005278' },
+  { name:'พรพรรณ พุ่มเจริญ (จ๋า)', id:'68037198' },
+  { name:'มหรณพ ปู่เปี่ยมช้าง (ณพ)', id:'68084871' },
+  { name:'ปัญญากร ศรีอัดฮาด (เบน)', id:'68027423' },
+  { name:'ขันเงิน สาครธนะศักดิ์ (โฟล์ค)', id:'68010397' },
+  { name:'ณรงค์เดช แสนสิทธิ์ (แม็กกี้)', id:'68010119' },
+  { name:'จิรภัทร ไกรเมฆ (TJ)', id:'68084713' }
+].map((m,i) => {
+  const t = m.name.match(/^(.*?)\s*\((.*)\)\s*$/);   // แยกชื่อจริงกับชื่อเล่น
+  return { no:i+1, id:m.id, full:t ? t[1] : m.name, nick:t ? t[2] : '' };
+});
+
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const rowsEl = document.getElementById('rows'), q = document.getElementById('q'), countEl = document.getElementById('count'), toastEl = document.getElementById('toast');
+
+function render(){
+  const k = q.value.trim().toLowerCase();
+  const list = MEMBERS.filter(m => !k || (m.full + ' ' + m.nick + ' ' + m.id).toLowerCase().includes(k));
+  rowsEl.innerHTML = list.length ? list.map(m => `
+    <tr>
+      <td class="c-no">${m.no}</td>
+      <td><span class="full">${esc(m.full)}</span>${m.nick ? `<span class="nick">${esc(m.nick)}</span>` : ''}</td>
+      <td class="c-id"><button type="button" class="idbtn" data-id="${esc(m.id)}" aria-label="คัดลอกรหัส ${esc(m.id)} ของ ${esc(m.full)}">${esc(m.id)}</button></td>
+    </tr>`).join('')
+    : '<tr><td class="empty" colspan="3">ไม่พบรายชื่อที่ค้นหา</td></tr>';
+  countEl.textContent = k ? `พบ ${list.length} จาก ${MEMBERS.length} คน` : `ทั้งหมด ${MEMBERS.length} คน`;
+}
+
+let toastTimer;
+function toast(msg){
+  toastEl.textContent = msg; toastEl.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => toastEl.classList.remove('show'), 1600);
+}
+// คัดลอก: ใช้ Clipboard API ก่อน ถ้าถูกบล็อกค่อยใช้วิธีสำรอง
+async function copyText(text){
+  try { await navigator.clipboard.writeText(text); return true; } catch(e) {}
+  try {
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.setAttribute('readonly',''); ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0';
+    document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, text.length);
+    const ok = document.execCommand('copy'); ta.remove(); return ok;
+  } catch(e) { return false; }
+}
+
+rowsEl.addEventListener('click', async e => {
+  const b = e.target.closest('.idbtn'); if (!b) return;
+  const ok = await copyText(b.dataset.id);
+  toast(ok ? `คัดลอกรหัส ${b.dataset.id} แล้ว` : 'คัดลอกไม่ได้ ลองกดค้างที่เลขเพื่อคัดลอกเอง');
+  if (ok) { b.classList.add('done'); setTimeout(() => b.classList.remove('done'), 1200); }
+});
+document.getElementById('copyAll').addEventListener('click', async () => {
+  const ok = await copyText(MEMBERS.map(m => `${m.id} ${m.full}`).join('\n'));
+  toast(ok ? `คัดลอกครบ ${MEMBERS.length} คนแล้ว` : 'คัดลอกไม่ได้ ลองใหม่อีกครั้ง');
+});
+q.addEventListener('input', render);
+render();
+</script>
+</body>
+</html>
