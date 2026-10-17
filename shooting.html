@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ตารางถ่ายทำ · CMM21167</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;800&family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--yellow:#fbc400;--ink:#141414;--paper:#fffdf5;--line:#e8dfbf;--soft:#5a5440;--card:#ffffff;--tint:#faf3d6;--ok:#146c2e;--okbg:#e4f4e8;color-scheme:light}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--paper:#17150e;--ink:#f6f1dc;--line:#3a3520;--soft:#cbc3a3;--card:#211e12;--tint:#2c2812;--ok:#7ddc96;--okbg:#1c2e20;color-scheme:dark}}
+*{box-sizing:border-box}
+html,body{max-width:100%}
+body{margin:0;overflow-x:clip;background:var(--paper);color:var(--ink);font-family:Sarabun,Kanit,system-ui,sans-serif;font-size:17px;line-height:1.5}
+:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+button,input{font:inherit;color:inherit}
+.k{font-family:Kanit,system-ui,sans-serif}
+
+.top{background:var(--yellow);color:#141414;padding:16px 16px 18px}
+.top-in{max-width:640px;margin:auto}
+.back{color:#141414;font-family:Kanit,system-ui,sans-serif;font-weight:600;font-size:14px;text-decoration:underline;text-underline-offset:3px}
+h1{margin:4px 0 0;font-family:Kanit,system-ui,sans-serif;font-size:clamp(28px,6vw,38px);line-height:1.15;font-weight:800}
+.sub{margin:4px 0 0;font-family:Kanit,system-ui,sans-serif;font-weight:600;font-size:16px}
+
+/* การ์ด ตอนนี้ / ถัดไป */
+.live{max-width:640px;margin:-12px auto 0;padding:0 16px;position:relative}
+.live-card{border:2px solid var(--ink);border-radius:14px;background:var(--card);padding:12px 16px;box-shadow:0 3px 0 var(--ink)}
+.live-card .lab{display:inline-block;font-family:Kanit,system-ui,sans-serif;font-size:13px;font-weight:800;letter-spacing:.02em;border-radius:999px;padding:2px 10px;background:var(--ink);color:var(--yellow)}
+.live-card.now .lab{background:#c4161c;color:#fff}
+.live-card .big{display:block;font-family:Kanit,system-ui,sans-serif;font-size:19px;font-weight:800;line-height:1.3;margin-top:6px}
+.live-card .small{display:block;color:var(--soft);font-size:15px;margin-top:2px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:currentColor;margin-right:6px;animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.25}}
+
+/* แถบเลือกคน ติดขอบบน */
+.bar{position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:1px solid var(--line);padding:10px 16px;margin-top:14px}
+.bar-in{max-width:640px;margin:auto}
+.chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;min-height:40px;padding:0 16px;border:2px solid var(--ink);border-radius:999px;background:var(--card);font-family:Kanit,system-ui,sans-serif;font-weight:600;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--yellow);color:#141414}
+.prog{display:flex;align-items:center;gap:10px;margin-top:8px;font-family:Kanit,system-ui,sans-serif;font-size:14px;color:var(--soft)}
+.prog .track{flex:1;height:8px;border-radius:999px;background:var(--line);overflow:hidden}
+.prog .track i{display:block;height:100%;width:0;background:var(--ok);transition:width .25s}
+
+.main{max-width:640px;margin:0 auto;padding:14px 16px 48px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin:0 2px 12px;color:var(--soft);font-size:14px}
+.legend span::before{content:"";display:inline-block;width:12px;height:12px;border-radius:3px;border:1.5px solid var(--ink);margin-right:6px;vertical-align:-1px}
+.legend .ext::before{background:var(--yellow)}
+.legend .int::before{background:var(--card)}
+
+.scene{border:2px solid var(--ink);border-radius:14px;background:var(--card);margin:0 0 10px;overflow:hidden}
+.scene-h{padding:10px 16px;font-family:Kanit,system-ui,sans-serif;border-bottom:2px solid var(--ink)}
+.scene.ext .scene-h{background:var(--yellow);color:#141414}
+.scene.int .scene-h{background:var(--tint)}
+.scene-h b{display:block;font-size:19px;font-weight:800;line-height:1.25}
+.scene-h span{display:block;font-size:15px;margin-top:1px}
+
+.cut{display:grid;grid-template-columns:92px minmax(0,1fr) 48px;gap:10px;align-items:center;padding:10px 6px 10px 16px;border-top:1px solid var(--line)}
+.scene-h + .cut{border-top:0}
+.cut.now{background:var(--tint);box-shadow:inset 5px 0 0 #c4161c}
+.cut.next{box-shadow:inset 5px 0 0 var(--yellow)}
+.cut.done .what span{color:var(--soft);text-decoration:line-through;text-decoration-thickness:1.5px}
+.time{font-family:Kanit,system-ui,sans-serif;font-weight:600;font-size:16px;font-variant-numeric:tabular-nums;color:var(--soft);line-height:1.3}
+.time small{display:block;font-size:14px}
+.what{min-width:0}
+.what b{font-family:Kanit,system-ui,sans-serif;font-size:14px;font-weight:800;background:var(--tint);border-radius:6px;padding:1px 8px;margin-right:6px;white-space:nowrap}
+.cut.now .what b{background:#c4161c;color:#fff}
+.what span{font-size:17px;line-height:1.45}
+.who{display:block;color:var(--soft);font-size:14px;margin-top:2px}
+.tick{display:grid;place-items:center;width:44px;height:44px;cursor:pointer}
+.tick input{appearance:none;-webkit-appearance:none;width:28px;height:28px;margin:0;border:2.5px solid var(--ink);border-radius:8px;background:var(--card);cursor:pointer;display:grid;place-items:center}
+.tick input:checked{background:var(--ok);border-color:var(--ok)}
+.tick input:checked::after{content:"";width:7px;height:13px;border:solid #fff;border-width:0 3px 3px 0;transform:rotate(45deg) translate(-1px,-1px)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tick input:checked::after{border-color:#141414}}
+
+.gap{margin:0 0 10px;padding:6px 12px;border:2px dashed var(--soft);border-radius:10px;text-align:center;color:var(--soft);font-size:14.5px;font-family:Kanit,system-ui,sans-serif}
+.wrap{margin:4px 0 0;padding:12px;border-radius:12px;background:var(--ink);color:var(--paper);text-align:center;font-family:Kanit,system-ui,sans-serif;font-weight:800}
+.empty{padding:22px 12px;text-align:center;color:var(--soft)}
+
+.tools{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 0}
+.btn{min-height:44px;padding:0 18px;border:2px solid var(--ink);border-radius:999px;background:var(--ink);color:var(--yellow);font-family:Kanit,system-ui,sans-serif;font-weight:600;cursor:pointer}
+.btn.alt{background:transparent;color:var(--ink)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn:not(.alt){background:var(--yellow);color:#141414}}
+.note{margin:14px 2px 0;color:var(--soft);font-size:14px}
+
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 18px;border-radius:999px;font-family:Kanit,system-ui,sans-serif;font-weight:600;font-size:15px;opacity:0;pointer-events:none;transition:opacity .15s;z-index:10;max-width:calc(100vw - 32px);text-align:center}
+.toast.show{opacity:1}
+
+@media (max-width:420px){
+  .cut{grid-template-columns:78px minmax(0,1fr) 44px;gap:8px;padding-left:12px}
+  .time{font-size:15px}
+}
+@media (prefers-reduced-motion: reduce){.dot{animation:none}.toast,.prog .track i{transition:none}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <a class="back" href="index.html">← กลับหน้าหลัก</a>
+    <h1>ตารางถ่ายทำ</h1>
+    <p class="sub">วันที่ 18 ต.ค. 2569 · เริ่ม 10:10 · เลิก 13:20 · 13 คัท</p>
+  </div>
+</header>
+
+<section class="live" aria-live="polite"><div class="live-card" id="live"></div></section>
+
+<div class="bar">
+  <div class="bar-in">
+    <div class="chips" id="chips" role="group" aria-label="กรองตามนักแสดง"></div>
+    <div class="prog"><span id="progTxt"></span><span class="track" aria-hidden="true"><i id="progBar"></i></span></div>
+  </div>
+</div>
+
+<main class="main">
+  <div class="legend"><span class="ext">กลางแจ้ง (EXT)</span><span class="int">ในอาคาร (INT)</span></div>
+  <div id="list"></div>
+  <div class="tools">
+    <button class="btn" id="copy" type="button">คัดลอกตารางส่งไลน์</button>
+    <button class="btn alt" id="reset" type="button">ล้างที่ติ๊กทั้งหมด</button>
+  </div>
+  <p class="note">ติ๊กช่องขวาเมื่อถ่ายคัทนั้นเสร็จ ระบบจำไว้ในเครื่องนี้เท่านั้น ไม่ซิงก์ให้เพื่อน เวลาเป็นเวลาโดยประมาณ ถ้ามีการเปลี่ยนแปลงให้แจ้งทีมทันที</p>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+// ข้อมูลจากไฟล์ Shooting Schedule วันที่ 1 (18/10/2569) แก้ที่นี่ที่เดียว
+// เรียงฉากตามลำดับถ่ายจริง · who = ใครอยู่ในคัทนั้น
+const DATE = '2026-10-18';
+const SCENES = [
+  { n:5, io:'EXT', where:'ปาย D Space', cuts:[
+    { t0:'10:10', t1:'10:15', cut:1, desc:'บาสเดินมาจากทางซ้าย', who:['บาส'] },
+    { t0:'10:15', t1:'10:20', cut:2, desc:'โอ้ตเดินมาทางขวา', who:['โอ้ต'] },
+    { t0:'10:20', t1:'10:25', cut:3, desc:'ลีเดินมาจากทางตรง', who:['ลี'] },
+    { t0:'10:25', t1:'10:40', cut:4, desc:'ทุกคนเดินมารวมกันแล้วก็พูดพร้อมกัน', who:['บาส','โอ้ต','ลี'] } ] },
+  { n:2, io:'EXT', where:'Street Walk หลังโรงอาหาร', cuts:[
+    { t0:'10:50', t1:'11:00', cut:1, desc:'ตัดภาพมาหาบาสกำลังเดินถ่ายรูปด้วยกล้องถ่ายภาพ', who:['บาส'] },
+    { t0:'11:00', t1:'11:15', cut:2, desc:'เห็นมาหากล้องแล้วพูด', who:['บาส'] } ] },
+  { n:3, io:'INT', where:'ห้องน้ำชั้นที่ 3', cuts:[
+    { t0:'11:25', t1:'11:45', cut:1, desc:'โอ้ตนั่งปลดทุกข์ได้และบอกว่า…', who:['โอ้ต'] } ] },
+  { n:1, io:'INT', where:'ห้อง C-302', cuts:[
+    { t0:'11:55', t1:'12:05', cut:1, desc:'ลีประกอบอุปกรณ์ไฟทีละขั้นตอนอย่างทะมัดทะแมง', who:['ลี'] },
+    { t0:'12:05', t1:'12:15', cut:2, desc:'ลีปาดเหงื่อพร้อมรีเซ็ตลมหายใจ', who:['ลี'] },
+    { t0:'12:15', t1:'12:30', cut:3, desc:'ลีหันมาพูดกับกล้อง', who:['ลี'] } ] },
+  { n:4, io:'INT', where:'โรงอาหาร', cuts:[
+    { t0:'12:40', t1:'12:50', cut:1, desc:'ลีกินข้าวอย่างเอร็ดอร่อยแบบลูกคุณหนู', who:['ลี'] },
+    { t0:'12:50', t1:'13:05', cut:2, desc:'ลีพูดด้วยน้ำเสียง elegant', who:['ลี'] },
+    { t0:'13:05', t1:'13:20', cut:3, desc:'ลีพูดต่อจนจบ', who:['ลี'] } ] }
+];
+const PEOPLE = ['ทั้งหมด','บาส','โอ้ต','ลี'];
+
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const toMin = t => { const [h,m] = t.split(':').map(Number); return h*60+m; };
+const fmtDur = m => m >= 60 ? `${Math.floor(m/60)} ชม. ${m%60 ? (m%60)+' นาที' : ''}`.trim() : `${m} นาที`;
+
+// ทุกคัทเรียงตามเวลา พร้อม id
+const ALL = [];
+SCENES.forEach(s => s.cuts.forEach(c => ALL.push({ ...c, id:`s${s.n}c${c.cut}`, scene:s, a:toMin(c.t0), b:toMin(c.t1), d:toMin(c.t1)-toMin(c.t0) })));
+ALL.sort((x,y) => x.a - y.a);
+
+// เวลาปัจจุบันตามเวลาไทย (ทดสอบได้ด้วย ?now=2026-10-18T10:17)
+function bkkNow(){
+  const q = new URLSearchParams(location.search).get('now'), m = q && q.match(/^(\d{4}-\d{2}-\d{2})T(\d{2}):(\d{2})/);
+  if (m) return { date:m[1], min:+m[2]*60 + +m[3] };
+  const p = Object.fromEntries(new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Bangkok',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date()).map(x => [x.type, x.value]));
+  return { date:`${p.year}-${p.month}-${p.day}`, min:+p.hour*60 + +p.minute };
+}
+
+// ที่ติ๊ก + คนที่กรอง เก็บในเครื่อง (ถ้าเบราว์เซอร์บล็อก ก็ยังใช้ได้ แค่ไม่จำ)
+const KEY = 'cmm21167-shoot-done', FKEY = 'cmm21167-shoot-who';
+let done = new Set(), who = 'ทั้งหมด';
+try { done = new Set(JSON.parse(localStorage.getItem(KEY) || '[]')); } catch(e) {}
+try { const w = localStorage.getItem(FKEY); if (PEOPLE.includes(w)) who = w; } catch(e) {}
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify([...done])); localStorage.setItem(FKEY, who); } catch(e) {} };
+
+// สถานะตามเวลา: ตอนนี้ / ถัดไป / ก่อนเริ่ม / หลังเลิก
+function status(){
+  const n = bkkNow(), first = ALL[0], last = ALL[ALL.length-1];
+  const dayDiff = Math.round((Date.parse(DATE+'T00:00:00Z') - Date.parse(n.date+'T00:00:00Z')) / 86400000);
+  if (dayDiff > 0) return { kind:'before-day', days:dayDiff, minsToFirst: dayDiff*1440 + first.a - n.min };
+  if (dayDiff < 0) return { kind:'after-day' };
+  if (n.min < first.a) return { kind:'before', next:first, mins:first.a - n.min };
+  if (n.min >= last.b) return { kind:'after' };
+  const cur = ALL.find(c => n.min >= c.a && n.min < c.b);
+  const next = ALL.find(c => c.a > n.min);
+  return cur ? { kind:'now', cur, next, left:cur.b - n.min } : { kind:'break', next, mins:next.a - n.min };
+}
+
+function renderLive(st){
+  const el = document.getElementById('live'), tag = c => `ฉาก ${c.scene.n} · คัท ${c.cut}`;
+  const nextLine = c => c ? `ถัดไป: ${tag(c)} เวลา ${c.t0}` : '';
+  let cls = '', html = '';
+  if (st.kind === 'now') {
+    cls = 'now';
+    html = `<span class="lab"><i class="dot"></i>กำลังถ่ายตอนนี้</span><span class="big">${tag(st.cur)} · ${esc(st.cur.desc)}</span><span class="small">${esc(st.cur.scene.where)} · เหลืออีก ${st.left} นาที (จบ ${st.cur.t1})${st.next ? '<br>' + esc(nextLine(st.next)) : ''}</span>`;
+  } else if (st.kind === 'break') {
+    html = `<span class="lab">ช่วงพัก / ย้ายกอง</span><span class="big">${tag(st.next)} เริ่ม ${st.next.t0}</span><span class="small">อีก ${fmtDur(st.mins)} · ${esc(st.next.scene.where)}</span>`;
+  } else if (st.kind === 'before') {
+    html = `<span class="lab">วันนี้วันถ่าย</span><span class="big">เริ่มถ่าย ${st.next.t0} อีก ${fmtDur(st.mins)}</span><span class="small">คัทแรก ${tag(st.next)} · ${esc(st.next.scene.where)}</span>`;
+  } else if (st.kind === 'before-day') {
+    html = `<span class="lab">ยังไม่ถึงวันถ่าย</span><span class="big">อีก ${st.days} วัน (18 ต.ค. 2569)</span><span class="small">เริ่มถ่าย ${ALL[0].t0}</span>`;
+  } else {
+    html = `<span class="lab">${st.kind === 'after' ? 'ถ่ายครบตามตารางแล้ว' : 'วันถ่ายผ่านไปแล้ว'}</span><span class="big">เลิกกอง ${ALL[ALL.length-1].t1}</span>`;
+  }
+  el.className = 'live-card ' + cls; el.innerHTML = html;
+}
+
+function render(focusId){
+  const st = status(); renderLive(st);
+  const nowId = st.kind === 'now' ? st.cur.id : '', nextId = (st.kind === 'now' || st.kind === 'break' || st.kind === 'before') && st.next ? st.next.id : '';
+  const show = c => who === 'ทั้งหมด' || c.who.includes(who);
+  const out = []; let prev = null;
+  SCENES.forEach((s, si) => {
+    const cuts = ALL.filter(c => c.scene === s && show(c));
+    if (!cuts.length) return;
+    if (who === 'ทั้งหมด' && prev) {            // ช่องว่างระหว่างฉาก = พัก/ย้ายกอง
+      const gapMin = ALL.find(c => c.scene === s).a - ALL.filter(c => c.scene === prev).slice(-1)[0].b;
+      if (gapMin > 0) out.push(`<div class="gap">พัก / ย้ายกอง ${gapMin} นาที (${ALL.filter(c => c.scene === prev).slice(-1)[0].t1}–${ALL.find(c => c.scene === s).t0})</div>`);
+    }
+    prev = s;
+    out.push(`<section class="scene ${s.io.toLowerCase()}" aria-label="ฉาก ${s.n}">
+      <div class="scene-h"><b>ฉาก ${s.n}</b><span>${esc(s.where)} · ${s.io === 'EXT' ? 'กลางแจ้ง' : 'ในอาคาร'}</span></div>
+      ${cuts.map(c => `
+      <div class="cut${done.has(c.id) ? ' done' : ''}${c.id === nowId ? ' now' : ''}${c.id === nextId && !done.has(c.id) ? ' next' : ''}">
+        <div class="time">${c.t0}–${c.t1}<small>${c.d} นาที</small></div>
+        <div class="what"><b>คัท ${c.cut}</b><span>${esc(c.desc)}</span>${who === 'ทั้งหมด' ? `<em class="who" style="font-style:normal">${esc(c.who.join(' · '))}</em>` : ''}</div>
+        <label class="tick"><input type="checkbox" data-id="${c.id}" ${done.has(c.id) ? 'checked' : ''} aria-label="ถ่ายเสร็จแล้ว ฉาก ${s.n} คัท ${c.cut}"></label>
+      </div>`).join('')}
+    </section>`);
+  });
+  if (!out.length) out.push('<div class="empty">ไม่มีคัทของคนนี้</div>');
+  else if (who === 'ทั้งหมด') out.push(`<div class="wrap">เลิกกอง ${ALL[ALL.length-1].t1}</div>`);
+  document.getElementById('list').innerHTML = out.join('');
+
+  document.getElementById('chips').innerHTML = PEOPLE.map(p => `<button type="button" class="chip" data-who="${esc(p)}" aria-pressed="${p === who}">${p === 'ทั้งหมด' ? 'ทั้งหมด' : 'เฉพาะ' + esc(p)}</button>`).join('');
+  const total = ALL.length, n = ALL.filter(c => done.has(c.id)).length;
+  document.getElementById('progTxt').textContent = `ถ่ายแล้ว ${n} จาก ${total} คัท`;
+  document.getElementById('progBar').style.width = (n/total*100) + '%';
+  if (focusId) { const f = document.querySelector(`input[data-id="${focusId}"]`); if (f) f.focus(); }
+}
+
+document.getElementById('list').addEventListener('change', e => {
+  const i = e.target.closest('input[data-id]'); if (!i) return;
+  i.checked ? done.add(i.dataset.id) : done.delete(i.dataset.id);
+  save(); render(i.dataset.id);
+});
+document.getElementById('chips').addEventListener('click', e => {
+  const b = e.target.closest('.chip'); if (!b) return;
+  who = b.dataset.who; save(); render();
+});
+document.getElementById('reset').addEventListener('click', () => { done.clear(); save(); render(); toast('ล้างที่ติ๊กแล้ว'); });
+
+let tt;
+function toast(m){ const t = document.getElementById('toast'); t.textContent = m; t.classList.add('show'); clearTimeout(tt); tt = setTimeout(() => t.classList.remove('show'), 1600); }
+async function copyText(text){
+  try { await navigator.clipboard.writeText(text); return true; } catch(e) {}
+  try { const ta = document.createElement('textarea'); ta.value = text; ta.setAttribute('readonly',''); ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0'; document.body.appendChild(ta); ta.select(); const ok = document.execCommand('copy'); ta.remove(); return ok; } catch(e) { return false; }
+}
+// ข้อความสำหรับวางในไลน์กลุ่ม
+document.getElementById('copy').addEventListener('click', async () => {
+  const lines = ['ตารางถ่ายทำ 18 ต.ค. 2569 (CMM21167)', ''];
+  SCENES.forEach(s => {
+    lines.push(`ฉาก ${s.n} · ${s.where} (${s.io === 'EXT' ? 'กลางแจ้ง' : 'ในอาคาร'})`);
+    ALL.filter(c => c.scene === s).forEach(c => lines.push(`${c.t0}-${c.t1} คัท ${c.cut} ${c.desc} [${c.who.join(', ')}]`));
+    lines.push('');
+  });
+  lines.push(`เลิกกอง ${ALL[ALL.length-1].t1}`);
+  toast(await copyText(lines.join('\n')) ? 'คัดลอกตารางแล้ว วางในไลน์ได้เลย' : 'คัดลอกไม่ได้ ลองใหม่อีกครั้ง');
+});
+
+render();
+setInterval(() => render(), 30000);                       // อัปเดต ตอนนี้/ถัดไป ทุก 30 วินาที
+document.addEventListener('visibilitychange', () => { if (!document.hidden) render(); });
+</script>
+</body>
+</html>
