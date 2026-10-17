@@ -39,6 +39,28 @@ dd{margin:0}
   dt{margin-top:8px}
   .tag{margin-left:0}
 }
+
+/* ปุ่มพิมพ์ + แผ่นพิมพ์ A4 */
+.printbtn{margin-top:14px;min-height:44px;padding:0 20px;border:2px solid #141414;border-radius:999px;background:#141414;color:var(--yellow);font:inherit;font-weight:600;cursor:pointer}
+.sheet{display:none}
+@page{size:A4 landscape;margin:10mm}
+@media print{
+  html,body{background:#fff!important;color:#000!important;overflow:visible}
+  .top,.main{display:none!important}
+  .sheet{display:block;font-family:Kanit,system-ui,sans-serif;font-size:11.5pt;line-height:1.35;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .sheet h1{margin:0;font-size:20pt;line-height:1.1;font-weight:800}
+  .sheet .hd{display:flex;justify-content:space-between;align-items:flex-end;gap:8mm;border-bottom:3px solid #fbc400;padding-bottom:3mm;margin-bottom:4mm}
+  .sheet .hd p{margin:0;font-size:10pt;text-align:right}
+  .sheet table{width:100%;border-collapse:collapse;table-layout:fixed}
+  .sheet th{background:#141414;color:#fbc400;font-weight:600;text-align:left;padding:2mm 2.5mm;font-size:9.5pt;border:1px solid #141414}
+  .sheet td{border:1px solid #141414;padding:2.5mm 2.5mm;vertical-align:top;word-break:break-word}
+  .sheet tr{break-inside:avoid}
+  .sheet .sn{font-weight:800;font-size:15pt;text-align:center;background:#fbc400}
+  .sheet .ti{font-weight:800}
+  .sheet .io{display:inline-block;margin-top:1mm;background:#141414;color:#fbc400;border-radius:3mm;padding:0 2.5mm;font-size:8.5pt;font-weight:700}
+  .sheet .de{display:block;margin-top:1mm;font-size:10.5pt}
+  .sheet .ft{margin:3mm 0 0;font-size:8.5pt;color:#444}
+}
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
 </style>
 </head>
@@ -53,10 +75,12 @@ dd{margin:0}
       <span>5 ฉาก</span>
       <span>นักแสดง ลี · บาส · โอ้ต</span>
     </div>
+    <button class="printbtn" type="button" onclick="window.print()">พิมพ์ / บันทึกเป็น PDF (A4 หน้าเดียว)</button>
   </div>
 </header>
 
 <main class="main" id="scenes"></main>
+<div class="sheet" id="sheet" aria-hidden="true"></div>
 
 <script>
 // ข้อมูลจากไฟล์ SCRIPT BREAKDOWN SHEET (แก้ที่นี่ที่เดียว)
@@ -91,6 +115,18 @@ document.getElementById('scenes').innerHTML = SCENES.map(s => `
       <dt>หมายเหตุ</dt><dd>${esc(s.notes)}</dd>
     </dl>
   </section>`).join('');
+
+// แผ่นพิมพ์ A4 แนวนอน: ตารางเดียว 5 ฉาก (ซ่อนบนหน้าจอ แสดงตอนพิมพ์)
+document.getElementById('sheet').innerHTML = `
+  <div class="hd"><h1>Breakdown · CMM21167</h1><p>วันถ่ายทำ 18/10/2569 · ${SCENES.length} ฉาก · นักแสดง ลี · บาส · โอ้ต</p></div>
+  <table>
+    <colgroup><col style="width:9mm"><col style="width:52mm"><col style="width:26mm"><col style="width:38mm"><col style="width:34mm"><col style="width:32mm"><col style="width:28mm"><col></colgroup>
+    <thead><tr><th>#</th><th>ฉาก</th><th>นักแสดง</th><th>อุปกรณ์</th><th>เสียง</th><th>แต่งหน้า</th><th>แต่งกาย</th><th>หมายเหตุ</th></tr></thead>
+    <tbody>${SCENES.map(s => `<tr>
+      <td class="sn">${s.n}</td>
+      <td><span class="ti">${esc(s.title)}</span><br><span class="io">${esc(s.where)}</span><span class="de">${esc(s.desc)}</span></td>
+      <td>${esc(s.cast)}</td><td>${esc(s.props)}</td><td>${esc(s.sound)}</td><td>${esc(s.makeup)}</td><td>${esc(s.wardrobe)}</td><td>${esc(s.notes)}</td></tr>`).join('')}</tbody>
+  </table>`;
 </script>
 </body>
 </html>
